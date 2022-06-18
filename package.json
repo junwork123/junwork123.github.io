@@ -1,9 +1,9 @@
 {
-  "name": "zoomkoding.com",
+  "name": "blog.junwork.net",
   "private": false,
   "description": "A neat blog theme for developers",
-  "version": "3.0.0",
-  "author": "zoomkoding <zoomkoding@gmail.com>",
+  "version": "0.0.1",
+  "author": "junwork <junwork123@gmail.com>",
   "dependencies": {
     "@mui/icons-material": "^5.1.0",
     "@mui/material": "^5.1.0",
@@ -47,12 +47,9 @@
   "license": "0BSD",
   "scripts": {
     "build": "gatsby clean && gatsby build",
-    "develop": "gatsby develop",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "deploy": "gatsby clean && gatsby build && gh-pages -d public -b gh-pages",
-    "start": "npm run develop",
     "serve": "gatsby serve",
-    "clean": "gatsby clean",
+    "start": "gatsby clean && gatsby build && gatsby serve",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
   },
   "repository": {
