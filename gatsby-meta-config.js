@@ -1,88 +1,119 @@
 module.exports = {
-  title: `JUNWORK.NET`,
-  description: `주녘씨의 코드공방`,
-  language: `ko`, // `ko`, `en` => currently support versions for Korean and English
-  siteUrl: `https://www.junwork.net`,
-  ogImage: `/og-image.png`, // Path to your in the 'static' folder
-  comments: {
-    utterances: {
-      repo: `https://github.com/junwork123/junwork123.github.io.git`, // `zoomkoding/zoomkoding-gatsby-blog`,
-      theme: `dark-blue`
+    title: `JUNWORK.NET`,
+    description: `주녘씨의 코드공방`,
+    language: `ko`, // `ko`, `en` => currently support versions for Korean and English
+    siteUrl: `https://www.junwork.net`,
+    ogImage: `/og-image.png`, // Path to your in the 'static' folder
+    comments: {
+        utterances: {
+            repo: `https://github.com/junwork123/junwork123.github.io.git`, // `zoomkoding/zoomkoding-gatsby-blog`,
+            theme: `dark-blue`
+        },
     },
-  },
-  ga: '0', // Google Analytics Tracking ID
-  author: {
-    name: `최준혁`,
-    bio: {
-      role: `개발자`,
-      description: ['사람에 가치를 두는', '능동적으로 일하는', '이로운 것을 만드는'],
-      thumbnail: 'sample.png', // Path to the image in the 'asset' folder
+    ga: '0', // Google Analytics Tracking ID
+    author: {
+        name: `최준혁`,
+        bio: {
+            role: `개발자`,
+            description: ['사람에 가치를 두는', '능동적으로 일하는', '이로운 것을 만드는'],
+            thumbnail: 'sample.png', // Path to the image in the 'asset' folder
+        },
+        social: {
+            github: `https://github.com/junwork123`,
+            linkedIn: ``,
+            email: `junwork123@gmail.com`,
+        },
     },
-    social: {
-      github: `https://github.com/junwork123`,
-      linkedIn: ``,
-      email: `junwork123@gmail.com`,
-    },
-  },
 
-  // metadata for About Page
-  about: {
-    timestamps: [
-      // =====       [Timestamp Sample and Structure]      =====
-      // ===== 🚫 Don't erase this sample (여기 지우지 마세요!) =====
-      {
-        date: '',
-        activity: '',
-        links: {
-          github: '',
-          post: '',
-          googlePlay: '',
-          appStore: '',
-          demo: '',
-        },
-      },
-      // ========================================================
-      // ========================================================
-      {
-        date: '2022.03 ~',
-        activity: 'OOO 통신사 E-Commerce 개발 및 운영',
-      },
-      {
-        date: '2018.03 ~ 2021.06',
-        activity: '',
-      },
-    ],
-
-    projects: [
-      // =====        [Project Sample and Structure]        =====
-      // ===== 🚫 Don't erase this sample (여기 지우지 마세요!)  =====
-      {
-        title: '',
-        description: '',
-        techStack: ['', ''],
-        thumbnailUrl: '',
-        links: {
-          post: '',
-          github: '',
-          googlePlay: '',
-          appStore: '',
-          demo: '',
-        },
-      },
-      // ========================================================
-      // ========================================================
-      {
-        title: '개발 블로그 테마 개발',
-        description:
-          '개발 블로그를 운영하는 기간이 조금씩 늘어나고 점점 많은 생각과 경험이 블로그에 쌓아가면서 제 이야기를 담고 있는 블로그를 직접 만들어보고 싶게 되었습니다. 그동안 여러 개발 블로그를 보면서 좋았던 부분과 불편했던 부분들을 바탕으로 레퍼런스를 참고하여 직접 블로그 테마를 만들게 되었습니다.',
-        techStack: ['gatsby', 'react'],
-        thumbnailUrl: 'blog.png',
-        links: {
-          post: '/gatsby-starter-zoomkoding-introduction',
-          github: 'https://github.com/zoomkoding/zoomkoding-gatsby-blog',
-          demo: 'https://www.zoomkoding.com',
-        },
-      },
-    ],
-  },
+    // metadata for About Page
+    about: {
+        certificates: [
+            {
+                date: '',
+                activity: '',
+            },
+            {
+                date: '2021.06',
+                activity: 'OPIC Intermediate High',
+            },
+            {
+                date: '2018.11',
+                activity: '정보처리기사',
+            },
+        ],
+        experiences: [
+            {
+                date: '',
+                activity: '',
+            },
+            {
+                date: '2016.09 ~ 2016.12',
+                activity: '인턴, 한국전력공사 전력연구원',
+            },
+            {
+                date: '2017.01 ~ 2017.02',
+                activity: 'IT 기술봉사 / 우즈베키스탄',
+            },
+        ],
+        timestamps: [
+            // =====       [Timestamp Sample and Structure]      =====
+            // ===== 🚫 Don't erase this sample (여기 지우지 마세요!) =====
+            {
+                date: '',
+                activity: '',
+                links: {
+                    github: '',
+                    post: '',
+                    googlePlay: '',
+                    appStore: '',
+                    demo: '',
+                },
+            },
+            // ========================================================
+            // ========================================================
+            {
+                date: '2022.03 ~',
+                activity: 'OOO 통신사 E-Commerce 개발 및 운영',
+            },
+            {
+                date: '2018.03 ~ 2021.06',
+                activity: '해군 중위 / 해군본부 정보체계관리단',
+            },
+            {
+                date: '2013.03 ~ 2018.03',
+                activity: '컴퓨터공학부(졸업) / 한국기술교육대학교 ',
+            }
+        ],
+        projects: [
+            // =====        [Project Sample and Structure]        =====
+            // ===== 🚫 Don't erase this sample (여기 지우지 마세요!)  =====
+            {
+                title: '',
+                description: '',
+                techStack: ['', ''],
+                thumbnailUrl: '',
+                links: {
+                    post: '',
+                    github: '',
+                    googlePlay: '',
+                    appStore: '',
+                    demo: '',
+                },
+            },
+            // ========================================================
+            // ========================================================
+            {
+                title: '개발 블로그 테마 개발',
+                description:
+                    '개발 블로그를 운영하는 기간이 조금씩 늘어나고 점점 많은 생각과 경험이 블로그에 쌓아가면서 제 이야기를 담고 있는 블로그를 직접 만들어보고 싶게 되었습니다. 그동안 여러 개발 블로그를 보면서 좋았던 부분과 불편했던 부분들을 바탕으로 레퍼런스를 참고하여 직접 블로그 테마를 만들게 되었습니다.',
+                techStack: ['gatsby', 'react'],
+                thumbnailUrl: 'blog.png',
+                links: {
+                    post: '/gatsby-starter-zoomkoding-introduction',
+                    github: 'https://github.com/zoomkoding/zoomkoding-gatsby-blog',
+                    demo: 'https://www.zoomkoding.com',
+                },
+            },
+        ],
+    },
 };
