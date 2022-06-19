@@ -9,12 +9,14 @@ import ProjectSection from '../components/project-section';
 function AboutPage({ data }) {
     const metaData = data.site.siteMetadata;
     const { author, about, language } = metaData;
-    const { timestamps, projects } = about;
+    const { certificates, experiences, timestamps, projects } = about;
     return (
         <Layout>
             <Seo title="About" />
       <Bio author={author} language={language} />
-      <TimeStampSec1tion timestamps={timestamps} />
+      <TimeStampSection timestamps={certificates} />
+      <TimeStampSection timestamps={experiences} />
+      <TimeStampSection timestamps={timestamps} />
       <ProjectSection projects={projects} />
     </Layout>
   );
