@@ -7,14 +7,14 @@ import TimeStampSection from '../components/timestamp-section';
 import ProjectSection from '../components/project-section';
 
 function AboutPage({ data }) {
-  const metaData = data.site.siteMetadata;
-  const { author, about, language } = metaData;
-  const { timestamps, projects } = about;
-  return (
-    <Layout>
-      <Seo title="About" />
+    const metaData = data.site.siteMetadata;
+    const { author, about, language } = metaData;
+    const { timestamps, projects } = about;
+    return (
+        <Layout>
+            <Seo title="About" />
       <Bio author={author} language={language} />
-      <TimeStampSection timestamps={timestamps} />
+      <TimeStampSec1tion timestamps={timestamps} />
       <ProjectSection projects={projects} />
     </Layout>
   );
@@ -23,54 +23,58 @@ function AboutPage({ data }) {
 export default AboutPage;
 
 export const pageQuery = graphql`
-  query {
-    site {
-      siteMetadata {
-        title
-        description
-        language
-        author {
-          name
-          bio {
-            role
-            description
-            thumbnail
-          }
-          social {
-            github
-            linkedIn
-            email
-          }
-        }
+    query {
+        site {
+            siteMetadata {
+                title
+                description
+                language
+                author {
+                    name
+                    bio {
+                        role
+                        description
+                        thumbnail
+                    }
+                    social {
+                        github
+                        linkedIn
+                        email
+                    }
+                }
 
-        about {
-          timestamps {
-            date
-            activity
-            links {
-              post
-              github
-              demo
-              googlePlay
-              appStore
-            }
-          }
+                about {
+                    experiences{
+                        date,
+                        activity
+                    }
+                    timestamps {
+                        date
+                        activity
+                        links {
+                            post
+                            github
+                            demo
+                            googlePlay
+                            appStore
+                        }
+                    }
 
-          projects {
-            title
-            description
-            techStack
-            thumbnailUrl
-            links {
-              post
-              github
-              demo
-              googlePlay
-              appStore
+                    projects {
+                        title
+                        description
+                        techStack
+                        thumbnailUrl
+                        links {
+                            post
+                            github
+                            demo
+                            googlePlay
+                            appStore
+                        }
+                    }
+                }
             }
-          }
         }
-      }
     }
-  }
 `;
