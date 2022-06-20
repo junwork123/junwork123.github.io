@@ -14,7 +14,7 @@ categories: featured
 ```
 npm install
 
-npm install gatsby
+>npm install gatsby@^4.9.3
 
 npm install gh-pages --save-dev
 
@@ -22,7 +22,9 @@ npm install copyfiles
 ```
 각각 설치하는 내용은 아래와 같다.
 
-- gatsby : 리액트(React) 기반의 정적 사이트 생성 프레임워크
+P.S 이 스킨은 4.9.3버전까지만 동작하는듯 하다. (버전을 잘 확인하자)
+
+- gatsby : 리액트(React) 기반의 정적 사이트 생성 프레임워크 
 
 - gh-pages : GitHub Repository를 이용해 웹 사이트를 무료로 호스팅해주는 서비스
 

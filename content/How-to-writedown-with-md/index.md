@@ -7,7 +7,7 @@ tags: 블로그 markdown
 categories: featured
 ---
 
-# 마크다운 작성법
+## 마크다운 작성법
 
 raw html 코드로 보면 이해가 더욱 쉽습니다.
 
