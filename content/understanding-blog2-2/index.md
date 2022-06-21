@@ -6,16 +6,8 @@ author: 주녘씨
 tags: 블로그 React 빌드 배포 자동화
 categories: featured
 ---
+## **GitHub Action을 활용한 커밋 후 자동 배포**
 
-## **개인 도메인 설정**
-
-
-<br/>
-
----
-
-
-## **package.json에 대한 이해**
 
 
 
