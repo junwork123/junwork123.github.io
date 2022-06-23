@@ -1,0 +1,41 @@
+    name: Blog Deployment
+    on: 
+        push:
+            branches: 
+                - master
+
+    jobs:
+        build: 
+            runs-on: ubuntu-latest
+            name: Checkout, Install, Build
+            steps:
+                - name: Checkout branche
+                  uses: actions/checkout@master
+
+                - name: Use Node.js
+                  uses: actions/setup-node@master
+                  with:
+                    node-version: 16.x
+
+                - name: Cache node modules
+                  uses: actions/cache@v2
+                  id: cache
+                  with:
+                    path: node_modules
+                    key: npm-packages-${{ hashFiles('**/package-lock.json') }}
+
+                - name: Install Dependencies
+                  if: steps.cache.outputs.cache-hit != 'true'
+                  run: npm Install
+
+                - name: Build
+                  run: npm run build
+                    
+                - name: copy Cname
+                  run: cp CNAME public/ 
+
+                - name: Deploy changes
+                  uses: junwork123/junwork123.github.io@v1
+                  with:
+                    github_token: ${{ secrets.GITHUB_TOKEN }}
+                    publish_dir: ./public
