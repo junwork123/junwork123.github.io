@@ -95,7 +95,7 @@ yml 스크립트를 작성해야 한다.
         #   > 도메인 복사
         #   > 배포] 순으로 진행된다.
 
-        build: 
+        deploy: 
             runs-on: ubuntu-latest
 
             name: Checkout, Install, Build
@@ -157,7 +157,7 @@ yml 스크립트를 작성해야 한다.
                 - master
 
     jobs:
-        build: 
+        deploy: 
             runs-on: ubuntu-latest
             name: Checkout, Install, Build
             steps:
@@ -182,6 +182,7 @@ yml 스크립트를 작성해야 한다.
                   uses: peaceiris/actions-gh-pages@v3
                   with:
                     github_token: ${{ secrets.GITHUB_TOKEN }}
+                    publish_dir: ./public
                     publish_branch: gh-pages # default: gh-pages
 ```
 
