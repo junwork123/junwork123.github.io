@@ -48,7 +48,7 @@ categories: 블로그-발전기
 
 결론적으로 GitHub Action을 통한 자동 배포는
 
-yml 스크립트를 작성해야 한다.
+yml 스크립트를 `.github/workflows/` 위치에 작성해야 한다.
 
 > 배울게 또 늘어나? 😵
 
