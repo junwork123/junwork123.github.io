@@ -18,7 +18,10 @@ jobs:
                 node-version: 16.x
 
             - name: Install Dependencies
-              run: npm install
+              uses: actions/setup-node@v3
+              with:
+                node-version: 16.x
+                cache: 'npm'
 
             - name: Build
               run: npm run build
