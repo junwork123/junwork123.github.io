@@ -25,7 +25,8 @@ jobs:
                   key: npm-packages-${{ hashFiles('**/package-lock.json') }}
 
             - name: Install Dependencies
-              run: npm Install
+              if: steps.cache.outputs.cache-hit != 'true'
+              run: npm install
 
             # 빌드 실행
             - name: Build
