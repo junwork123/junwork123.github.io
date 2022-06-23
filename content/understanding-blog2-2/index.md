@@ -142,6 +142,7 @@ yml 스크립트를 작성해야 한다.
                   with:
                       github_token: ${{ secrets.GITHUB_TOKEN }}
                       publish_dir: ./public
+                      publish_branch: gh-pages # default: gh-pages
 ```
 
 
