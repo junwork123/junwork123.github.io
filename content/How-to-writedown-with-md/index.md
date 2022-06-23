@@ -4,7 +4,7 @@ title: 마크다운 작성법 정리
 date: '2022-06-20 00:00:00'
 author: 주녘씨
 tags: 블로그 markdown
-categories: featured
+categories: 블로그-발전기
 ---
 
 ## 마크다운 작성법
