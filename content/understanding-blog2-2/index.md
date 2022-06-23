@@ -151,7 +151,45 @@ yml 스크립트를 작성해야 한다.
 취향껏 자동화 코드를 반영해보자!
 
 ```yml
+name: Node.js CI
 
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    # 도메인 설정파일을 빌드결과물에 복사
+    - name: copy Cname
+      run: cp CNAME public/ 
+
+    # 특정 유저의 배포 액션을 이용하여
+    # 빌드 결과물을 배포 경로에 복사한다.
+    - name: Deploy changes
+      uses: peaceiris/actions-gh-pages@v3 
+      with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages # default: gh-pages
 ```
 
 
