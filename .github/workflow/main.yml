@@ -5,30 +5,28 @@ on:
             - master
 
 jobs:
-    deploy: 
-        runs-on: ubuntu-latest
-        name: Checkout, Install, Build
-        steps:
-            - name: Checkout branche
-              uses: actions/checkout@master
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
 
-            - name: Use Node.js
-              uses: actions/setup-node@master
-              with:
-                node-version: 16.x
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
 
-            - name: Install Dependencies
-              run: npm Install
+      - name: packages install
+        run: yarn install
 
-            - name: Build
-              run: npm run build
-                
-            - name: copy Cname
-              run: cp CNAME public/ 
+      - name: gatsby build
+        run: yarn build
+        env:
+          GH_API_KEY: ${{ secrets.API_KEY }}
 
-            - name: Deploy changes
-              uses: peaceiris/actions-gh-pages@v3
-              with:
-                github_token: ${{ secrets.GITHUB_TOKEN }}
-                publish_dir: ./public
-                publish_branch: gh-pages
+      - name: CNAME copy
+        run: cp CNAME public/
+
+      - name: Deploy changes
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: ./public
+            publish_branch: gh-pages
