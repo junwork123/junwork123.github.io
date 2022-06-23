@@ -164,11 +164,11 @@ jobs:
         steps:
             - name: Checkout branche
               uses: actions/checkout@master
-
+            
             - name: Use Node.js
               uses: actions/setup-node@master
               with:
-                node-version: 16.x
+                  node-version: 16.x
 
             - name: Install Dependencies
               run: npm install
@@ -182,9 +182,9 @@ jobs:
             - name: Deploy changes
               uses: peaceiris/actions-gh-pages@v3
               with:
-                github_token: ${{ secrets.GITHUB_TOKEN }}
-                publish_dir: ./public
-                publish_branch: gh-pages
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./public
+                  publish_branch: gh-pages
 ```
 
 
