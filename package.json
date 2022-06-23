@@ -51,6 +51,7 @@
     "copy": "copyfiles CNAME public/ && echo 'CNAME file copied.'",
     "start": "npm run build && gatsby serve",
     "deploy": "npm run build && npm run copy && gh-pages -d public -b gh-pages",
+    "deployGit": "gatsby build && npm run copy && gh-pages -d public -b gh-pages",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
   },
   "repository": {
