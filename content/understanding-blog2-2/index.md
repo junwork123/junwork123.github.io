@@ -54,20 +54,21 @@ yml 스크립트를 작성해야 한다.
 
 싶겠지만(~~싫겠지만~~) 생각외로 간단하니 조금만 더 읽어보자.
 
-(바로 적용하고 싶다면 설명은 건너뛰고 [코드](#code) 위주로 보아도 좋다)
+(바로 적용하고 싶다면 설명은 건너뛰고 [실제 반영 코드](#code) 위주로 보아도 좋다)
 
 예시를 통해 각 키워드마다 의미를 빠르게 파악하고 응용하자.
 
 ```yml
-    name: blog deploy << 이 스크립트의 제목
+    name: Blog Deployment # 이 스크립트의 제목
 
     # 어떤 행동을 할때마다 실행할지
     on: 
-        # master, release/*-alpha라는 이름의 브랜치에 push가 발생할 때마다
+        # master, release/v*라는 이름의 브랜치에 push가 발생할 때마다
+        # ex) release/v0.1, release/v2.1.5
         push:
             branches: 
                 - master
-                - release/*-alpha 
+                - release/v*
         
         # gh-pages 브랜치에 pull_request가 발생할 때마다
         pull_request:
@@ -84,57 +85,116 @@ yml 스크립트를 작성해야 한다.
     # 실행할 작업을 정의
     jobs:
         # 'build'라는 이름의 job은 (job이름은 맘대로 적어도 됨)
-        # 'matrix'라는 변수를 정의하고
-        # 'npm install and build'라는 이름의 작업을
-        # 우분투 최신버전에서 동작한다.
-        # 동작내용은 [브랜치 체크아웃 > npm설치 > 빌드 > 메시지 출력]이다.
+        # 'Checkout, Install, Build'라는 이름의 작업을
+        # 우분투 최신버전에서 동작시킨다.
+        # 동작내용은 
+        # [브랜치 체크아웃 
+        #   > 패키지 설치 
+        #   > 빌드 
+        #   > 메시지 출력
+        #   > 도메인 복사
+        #   > 배포] 순으로 진행된다.
 
         build: 
-            # 환경 변수 정의
-            strategy: 
-                matrix:
-                    node-version: 16.x
-            
             runs-on: ubuntu-latest
 
-            name: npm install and build
+            name: Checkout, Install, Build
 
             # 다음 동작을 순서대로 실행
             steps:
-                # 'uses' == GitHub에 미리 정의된 workflow 사용
-                # 'master' 브랜치를 체크아웃
-                - name: checkout branche
-                    uses: actions/checkout@master 
-                  
-                - name: Install Dependencies
-                    run: |              # 여러 키워드를 동시 실행
-                        npm install
-                        npm run build --if-present
-                        echo build started 
+                # 'uses' == 누군가 미리 정의된 workflow@version 사용
+                # 'master' 브랜치를 체크아웃()
+                - name: Checkout branche
+                    uses: actions/checkout@master
                 
-        # 'cname-copy'라는 job은 'build'가 선행되어야 한다.
-        cname-copy:  
-            needs: build 
+                # 패키지 설치 동작 
+                # [node 설치 
+                #   > 의존성 캐시검사 
+                #   > (변화가 있다면) npm설치] 순으로 동작
+                - name: Use Node.js
+                    uses: actions/setup-node@master
+                    with:
+                        node-version: 16.x
 
-            # 개인 도메인 설정파일을 빌드 결과물에 복사한다.
-            run: cp CNAME public/
+                - name: Cache node modules
+                    uses: actions/cache@v2
+                    id: cache
+                    with:
+                        path: node_modules
+                        key: npm-packages-${{ hashFiles('**/package-lock.json') }}
 
-        # 'deploy'라는 작업은 [build, test]가 선행되어야 하고,
-        # steps 순서에 따라 동작한다.
-        deploy:
-            name: deploy changes
-            
-            needs: [build, cname-copy]
+                - name: Install Dependencies
+                    if: steps.cache.outputs.cache-hit != 'true'
+                    run: npm install
 
-            runs-on: ubuntu-latest
+                # 빌드 실행
+                - name: Build
+                    run: npm run build
+                    
+                # 도메인 설정파일을 빌드결과물에 복사
+                - name: copy Cname
+                    run: cp CNAME public/ 
 
-            env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                GH_PAT: ${{ secrets.API_KEY }}
-                BUILD_DIR: 'public/'
+                - name: Deploy changes
+                    uses: junwork123/junwork123.github.io@v1
+                    with:
+                        github_token: ${{ secrets.GITHUB_TOKEN }}
+                        publish_dir: ./public
 ```
 
+
+## 반영된 실제 yml 코드 <span id="code"></span> 
+
+위에 예제로 적은 코드는 bad indentation 경고가 발생하므로 일부 수정하여 반영.
+
+```yml
+    name: Blog Deployment
+    on: 
+        push:
+            branches: 
+                - master
+
+    jobs:
+        build: 
+            runs-on: ubuntu-latest
+            name: Checkout, Install, Build
+            steps:
+                - name: Checkout branche
+                  uses: actions/checkout@master
+
+                - name: Use Node.js
+                  uses: actions/setup-node@master
+                  with:
+                    node-version: 16.x
+
+                - name: Cache node modules
+                  uses: actions/cache@v2
+                  id: cache
+                  with:
+                    path: node_modules
+                    key: npm-packages-${{ hashFiles('**/package-lock.json') }}
+
+                - name: Install Dependencies
+                  if: steps.cache.outputs.cache-hit != 'true'
+                  run: npm Install
+
+                - name: Build
+                  run: npm run build
+                    
+                - name: copy Cname
+                  run: cp CNAME public/ 
+
+                - name: Deploy changes
+                  uses: junwork123/junwork123.github.io@v1
+                  with:
+                    github_token: ${{ secrets.GITHUB_TOKEN }}
+                    publish_dir: ./public
+```
+
+
 더 자세한 내용은 아래를 참조하자
+
+> [많은 도움이 된 블로그](https://dailyco.tech/share/gatsby-blog-auto-deploy/)
 
 > [카카오웹툰은 GitHub Actions를 어떻게 사용하고 있을까?](https://fe-developers.kakaoent.com/2022/220106-github-actions/)
 
@@ -143,14 +203,6 @@ yml 스크립트를 작성해야 한다.
 > [Actions의 이벤트](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows)
 
 > [cron 표현식](cron.png) // 이건 여러군데서 쓰이니 알아두면 좋을거야!
-
-
-
-## 반영할 yml 코드 <span id="code"></span> 
-
-```yml
-
-```
 
 
 ```toc
