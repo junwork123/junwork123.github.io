@@ -105,41 +105,43 @@ yml 스크립트를 작성해야 한다.
                 # 'uses' == 누군가 미리 정의된 workflow@version 사용
                 # 'master' 브랜치를 체크아웃()
                 - name: Checkout branche
-                    uses: actions/checkout@master
+                  uses: actions/checkout@master
                 
                 # 패키지 설치 동작 
                 # [node 설치 
                 #   > 의존성 캐시검사 
                 #   > (변화가 있다면) npm설치] 순으로 동작
                 - name: Use Node.js
-                    uses: actions/setup-node@master
-                    with:
-                        node-version: 16.x
+                  uses: actions/setup-node@master
+                  with:
+                      node-version: 16.x
 
                 - name: Cache node modules
-                    uses: actions/cache@v2
-                    id: cache
-                    with:
-                        path: node_modules
-                        key: npm-packages-${{ hashFiles('**/package-lock.json') }}
+                  uses: actions/cache@v2
+                  id: cache
+                  with:
+                      path: node_modules
+                      key: npm-packages-${{ hashFiles('**/package-lock.json') }}
 
                 - name: Install Dependencies
-                    if: steps.cache.outputs.cache-hit != 'true'
-                    run: npm install
+                  if: steps.cache.outputs.cache-hit != 'true'
+                  run: npm install
 
                 # 빌드 실행
                 - name: Build
-                    run: npm run build
+                  run: npm run build
                     
                 # 도메인 설정파일을 빌드결과물에 복사
                 - name: copy Cname
-                    run: cp CNAME public/ 
+                  run: cp CNAME public/ 
 
+                # 특정 유저의 배포 액션을 이용하여
+                # 빌드 결과물을 배포 경로에 복사한다.
                 - name: Deploy changes
-                    uses: junwork123/junwork123.github.io@v1
-                    with:
-                        github_token: ${{ secrets.GITHUB_TOKEN }}
-                        publish_dir: ./public
+                  uses: peaceiris/actions-gh-pages@v3 
+                  with:
+                      github_token: ${{ secrets.GITHUB_TOKEN }}
+                      publish_dir: ./public
 ```
 
 
@@ -185,7 +187,7 @@ yml 스크립트를 작성해야 한다.
                   run: cp CNAME public/ 
 
                 - name: Deploy changes
-                  uses: junwork123/junwork123.github.io@v1
+                  uses: peaceiris/actions-gh-pages@v3 
                   with:
                     github_token: ${{ secrets.GITHUB_TOKEN }}
                     publish_dir: ./public

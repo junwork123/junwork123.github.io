@@ -35,7 +35,7 @@
                   run: cp CNAME public/ 
 
                 - name: Deploy changes
-                  uses: junwork123/junwork123.github.io@v1
+                  uses: peaceiris/actions-gh-pages@v3
                   with:
                     github_token: ${{ secrets.GITHUB_TOKEN }}
                     publish_dir: ./public
