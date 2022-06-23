@@ -11,20 +11,18 @@ jobs:
         steps:
             - name: Checkout branche
               uses: actions/checkout@master
-
-            - name: Use Node.js
-              uses: actions/setup-node@master
-              with:
-                node-version: 16.x
-
-            - name: Install Dependencies
+            
+            - name: Install Node.js
               uses: actions/setup-node@v3
               with:
                 node-version: 16.x
                 cache: 'npm'
 
+            - name: Install Node.js
+              run: npm install -g gatsby-cli
+              
             - name: Build
-              run: npm run build
+              run: npm run deploy
                 
             - name: copy Cname
               run: cp CNAME public/ 
