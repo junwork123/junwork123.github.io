@@ -150,8 +150,6 @@ yml 스크립트를 `.github/workflows/` 위치에 작성해야 한다.
 
 취향껏 자동화 코드를 반영해보자!
 
-
-
 ```yml
 name: Blog Deployment
 on: 
