@@ -7,6 +7,7 @@
   "dependencies": {
     "@mui/icons-material": "^5.1.0",
     "@mui/material": "^5.1.0",
+    "copyfiles": "^2.4.1",
     "gatsby": "^4.9.3",
     "gatsby-plugin-advanced-sitemap": "^2.0.0",
     "gatsby-plugin-google-analytics": "^4.9.0",

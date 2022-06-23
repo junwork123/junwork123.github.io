@@ -14,7 +14,7 @@ categories: 블로그-발전기
 ```
 npm install
 
->npm install gatsby@^4.9.3
+npm install gatsby@^4.9.3
 
 npm install gh-pages --save-dev
 
