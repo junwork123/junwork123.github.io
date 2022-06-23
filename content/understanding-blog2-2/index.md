@@ -125,7 +125,7 @@ yml 스크립트를 `.github/workflows/` 위치에 작성해야 한다.
 
                 - name: Install Dependencies
                   if: steps.cache.outputs.cache-hit != 'true'
-                  run: npm install -g gatsby-cli
+                  run: npm install
 
                 # 빌드 실행
                 - name: Build
