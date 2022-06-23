@@ -22,7 +22,7 @@ jobs:
               run: npm install -g gatsby-cli
               
             - name: Build
-              run: npm run deploy
+              run: npm run deployGit
                 
             - name: copy Cname
               run: cp CNAME public/ 
