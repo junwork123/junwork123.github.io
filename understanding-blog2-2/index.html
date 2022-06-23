@@ -272,7 +272,6 @@
                       <span class="token key atrule">publish_branch</span><span class="token punctuation">:</span> gh<span class="token punctuation">-</span>pages <span class="token comment"># default: gh-pages</span></code></pre></div>
 <h2 id="반영된-실제-yml-코드-span-idcodespan" style="position:relative;"><a href="#%EB%B0%98%EC%98%81%EB%90%9C-%EC%8B%A4%EC%A0%9C-yml-%EC%BD%94%EB%93%9C-span-idcodespan" aria-label="반영된 실제 yml 코드 span idcodespan permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>반영된 실제 yml 코드 <span id="code"></span></h2>
 <p>취향껏 자동화 코드를 반영해보자!</p>
-<p>저는 ‘package-lock.json’을 지운 관계로 아래와 같이 적용했습니다.</p>
 <div class="gatsby-highlight" data-language="yml"><pre class="language-yml"><code class="language-yml"><span class="token key atrule">name</span><span class="token punctuation">:</span> Blog Deployment
 <span class="token key atrule">on</span><span class="token punctuation">:</span> 
     <span class="token key atrule">push</span><span class="token punctuation">:</span>
@@ -286,11 +285,11 @@
         <span class="token key atrule">steps</span><span class="token punctuation">:</span>
             <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Checkout branche
               <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/checkout@master
-
+            
             <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Use Node.js
               <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/setup<span class="token punctuation">-</span>node@master
               <span class="token key atrule">with</span><span class="token punctuation">:</span>
-                <span class="token key atrule">node-version</span><span class="token punctuation">:</span> 16.x
+                  <span class="token key atrule">node-version</span><span class="token punctuation">:</span> 16.x
 
             <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Install Dependencies
               <span class="token key atrule">run</span><span class="token punctuation">:</span> npm install
@@ -304,9 +303,9 @@
             <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy changes
               <span class="token key atrule">uses</span><span class="token punctuation">:</span> peaceiris/actions<span class="token punctuation">-</span>gh<span class="token punctuation">-</span>pages@v3
               <span class="token key atrule">with</span><span class="token punctuation">:</span>
-                <span class="token key atrule">github_token</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.GITHUB_TOKEN <span class="token punctuation">}</span><span class="token punctuation">}</span>
-                <span class="token key atrule">publish_dir</span><span class="token punctuation">:</span> ./public
-                <span class="token key atrule">publish_branch</span><span class="token punctuation">:</span> gh<span class="token punctuation">-</span>pages</code></pre></div>
+                  <span class="token key atrule">github_token</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.GITHUB_TOKEN <span class="token punctuation">}</span><span class="token punctuation">}</span>
+                  <span class="token key atrule">publish_dir</span><span class="token punctuation">:</span> ./public
+                  <span class="token key atrule">publish_branch</span><span class="token punctuation">:</span> gh<span class="token punctuation">-</span>pages</code></pre></div>
 <p>더 자세한 내용은 아래를 참조하자</p>
 <blockquote>
 <p><a href="https://dailyco.tech/share/gatsby-blog-auto-deploy/">많은 도움이 된 블로그</a></p>
