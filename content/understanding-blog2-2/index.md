@@ -147,10 +147,10 @@ yml 스크립트를 작성해야 한다.
 
 ## 반영된 실제 yml 코드 <span id="code"></span> 
 
-위에 예제로 적은 코드는 bad indentation 경고가 발생하므로 일부 수정하여 반영.
+취향껏 자동화 코드를 반영해보자!
 
 ```yml
-    name: Blog Deployment
+     name: Blog Deployment
     on: 
         push:
             branches: 
@@ -169,15 +169,7 @@ yml 스크립트를 작성해야 한다.
                   with:
                     node-version: 16.x
 
-                - name: Cache node modules
-                  uses: actions/cache@v2
-                  id: cache
-                  with:
-                    path: node_modules
-                    key: npm-packages-${{ hashFiles('**/package-lock.json') }}
-
                 - name: Install Dependencies
-                  if: steps.cache.outputs.cache-hit != 'true'
                   run: npm Install
 
                 - name: Build
@@ -187,10 +179,10 @@ yml 스크립트를 작성해야 한다.
                   run: cp CNAME public/ 
 
                 - name: Deploy changes
-                  uses: peaceiris/actions-gh-pages@v3 
+                  uses: peaceiris/actions-gh-pages@v3
                   with:
                     github_token: ${{ secrets.GITHUB_TOKEN }}
-                    publish_dir: ./public
+                    publish_branch: gh-pages # default: gh-pages
 ```
 
 
