@@ -151,40 +151,7 @@ yml 스크립트를 작성해야 한다.
 취향껏 자동화 코드를 반영해보자!
 
 ```yml
-     name: Blog Deployment
-    on: 
-        push:
-            branches: 
-                - master
 
-    jobs:
-        deploy: 
-            runs-on: ubuntu-latest
-            name: Checkout, Install, Build
-            steps:
-                - name: Checkout branche
-                  uses: actions/checkout@master
-
-                - name: Use Node.js
-                  uses: actions/setup-node@master
-                  with:
-                    node-version: 16.x
-
-                - name: Install Dependencies
-                  run: npm Install
-
-                - name: Build
-                  run: npm run build
-                    
-                - name: copy Cname
-                  run: cp CNAME public/ 
-
-                - name: Deploy changes
-                  uses: peaceiris/actions-gh-pages@v3
-                  with:
-                    github_token: ${{ secrets.GITHUB_TOKEN }}
-                    publish_dir: ./public
-                    publish_branch: gh-pages # default: gh-pages
 ```
 
 
