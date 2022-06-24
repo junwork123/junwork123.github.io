@@ -198,11 +198,17 @@ jobs:
                   publish_branch: gh-pages
 ```
 
+cache 옵션을 사용하지 않았을 때 빌드&배포 시간 : 5분
+
+cache 옵션을 사용했을 때 빌드&배포 시간 : 2분
+
+`캐시옵션의 성능은 엄청났다!`
+
 <br/><br/>
 
-아래와 같은 에러가 발생했다면
+만약 아래와 같은 에러가 발생했다면
 
-npm install `--force` 옵션을 삽입하면 문제없이 진행된다.
+npm install `--force` 명령어로 강제 설치 옵션을 주면 문제없이 진행된다.
 
 ```YML
 Run npm install
