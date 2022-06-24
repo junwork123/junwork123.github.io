@@ -15,10 +15,19 @@ jobs:
             - name: Use Node.js
               uses: actions/setup-node@master
               with:
-                node-version: 16.x
+                  node-version: 16.x
+
+            - name: Cache node modules
+              uses: actions/cache@v3
+              id: cache
+              with:
+                  path: node_modules
+                  key: npm-packages-${{ hashFiles('**/package-lock.json') }}
 
             - name: Install Dependencies
+              if: steps.cache.outputs.cache-hit != 'true'
               run: npm install
+
 
             - name: Build
               run: npm run build
