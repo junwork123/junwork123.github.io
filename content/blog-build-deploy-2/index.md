@@ -155,17 +155,11 @@ yml 스크립트를 `.github/workflows/` 위치에 작성해야 한다.
                       publish_branch: gh-pages # default: gh-pages
 ```
 
+<br/>
 
-## 반영된 실제 yml 코드 <span id="code"></span> 
+## 반영된 실제 YML 코드 <span id="code"></span> 
 
-취향껏 자동화 코드를 반영해보자!
-
-현재(2022-06-04) cache 명령어 사용시 gatsby 패키지에 문제가 있는 것 같아서
-
-아래 코드로 임시적으로 적용해놓았다.(배포 5분 걸린다...)
-
-곧 캐시를 활용해서 빠른 배포가 가능하게 수정하겠다.
-
+<br/>
 
 ```yml
 name: Blog Deployment
@@ -188,7 +182,7 @@ jobs:
                   node-version: 16.x
 
             - name: Install Dependencies
-              run: npm install
+              run: npm install --force
 
             - name: Build
               run: npm run build
@@ -204,6 +198,25 @@ jobs:
                   publish_branch: gh-pages
 ```
 
+<br/><br/>
+
+아래와 같은 에러가 발생했다면
+
+npm install `--force` 옵션을 삽입하면 문제없이 진행된다.
+
+```YML
+Run npm install
+  npm ERR! code ERESOLVE
+  npm ERR! ERESOLVE could not resolve
+  npm ERR! 
+  npm ERR! While resolving: gatsby-plugin-advanced-sitemap@2.0.0
+...
+```
+
+
+
+
+<br/><br/>
 
 더 자세한 내용은 아래를 참조하자
 
