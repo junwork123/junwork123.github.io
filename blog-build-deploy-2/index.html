@@ -356,9 +356,12 @@
                   <span class="token key atrule">github_token</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.GITHUB_TOKEN <span class="token punctuation">}</span><span class="token punctuation">}</span>
                   <span class="token key atrule">publish_dir</span><span class="token punctuation">:</span> ./public
                   <span class="token key atrule">publish_branch</span><span class="token punctuation">:</span> gh<span class="token punctuation">-</span>pages</code></pre></div>
+<p>cache 옵션을 사용하지 않았을 때 빌드&#x26;배포 시간 : 5분</p>
+<p>cache 옵션을 사용했을 때 빌드&#x26;배포 시간 : 2분</p>
+<p><code class="language-text">캐시옵션의 성능은 엄청났다!</code></p>
 <p><br/><br/></p>
-<p>아래와 같은 에러가 발생했다면</p>
-<p>npm install <code class="language-text">--force</code> 옵션을 삽입하면 문제없이 진행된다.</p>
+<p>만약 아래와 같은 에러가 발생했다면</p>
+<p>npm install <code class="language-text">--force</code> 명령어로 강제 설치 옵션을 주면 문제없이 진행된다.</p>
 <div class="gatsby-highlight" data-language="yml"><pre class="language-yml"><code class="language-yml">Run npm install
   npm ERR<span class="token tag">!</span> code ERESOLVE
   npm ERR<span class="token tag">!</span> ERESOLVE could not resolve
