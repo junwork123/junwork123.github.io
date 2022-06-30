@@ -6,7 +6,7 @@ module.exports = {
     ogImage: `/og-image.png`, // Path to your in the 'static' folder
     comments: {
         utterances: {
-            repo: `https://github.com/junwork123/junwork123.github.io.git`, // `zoomkoding/zoomkoding-gatsby-blog`,
+            repo: `junwork123/blog-comments`, // `zoomkoding/zoomkoding-gatsby-blog`,
             theme: `dark-blue`
         },
     },
