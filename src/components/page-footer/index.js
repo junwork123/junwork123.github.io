@@ -17,7 +17,7 @@ function PageFooter({ author, githubUrl }) {
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8568417989764139" crossorigin="anonymous"></script>
 
       <script src="https://utteranc.es/client.js"
-              repo="junwork123/junwork123.github.io"
+              repo="junwork123/blog-comments"
               issue-term="pathname"
               label="reply"
               theme="github-dark"
