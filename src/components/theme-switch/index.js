@@ -9,7 +9,7 @@ function ThemeSwitch() {
   const [isDarkMode, setIsDarkMode] = useState(getValueFromLocalStorage('isDarkMode'));
 
   useEffect(() => {
-    setValueToLocalStorage('isDarkMode', isDarkMode);
+    setValueToLocalStorage('isDarkMode', 'dark');
     document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
 
