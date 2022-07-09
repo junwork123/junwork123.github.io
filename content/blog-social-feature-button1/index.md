@@ -82,7 +82,7 @@ categories: 블로그-발전기
 
 우리가 알아야 할 것은 `4가지 뿐`이다.
 
-*[다음 2편]()에 계속..*
+*[다음 2편](https://www.junwork.net/blog-social-feature-button2/)에 계속..*
 
 <br/><br/>
 

@@ -1,13 +1,13 @@
 ---
 emoji: 🔮
 title: 블로그에 소셜기능 넣기 - 공유버튼 만들기(2)
-date: '2022-06-20 00:00:00'
+date: '2022-07-09 00:00:00'
 author: 주녘씨
 tags: 블로그 버튼 카카오톡 SNS
 categories: 블로그-발전기
 ---
 
-*[이전편 1편]()에서 계속..*
+*[이전편 1편](https://www.junwork.net/blog-social-feature-button1/)에서 계속..*
 
 ## **버튼 템플릿 만들기**
 
