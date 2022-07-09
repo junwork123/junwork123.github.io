@@ -8,6 +8,9 @@ categories: 블로그-발전기
 ---
 
 ## 포스팅 기본 구조
+
+파일이름 : index.md 로 설정해야 조회수 설정 등 플러그인이 작동함.
+
 - emoji : 🔮 // 필수 아님
 
 - title : 이 블로그 스킨에 대한 이해 with React, GraphQL // 필수
