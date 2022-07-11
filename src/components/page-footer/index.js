@@ -11,10 +11,7 @@ function PageFooter({ author, githubUrl }) {
           &nbsp;zoomkoding-gatsby-blog
         </a>
       </p>
-              
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4633249012841159"
-        crossorigin="anonymous"></script>
-      
+        
       <script src="https://utteranc.es/client.js"
               repo="junwork123/blog-comments"
               issue-term="pathname"
