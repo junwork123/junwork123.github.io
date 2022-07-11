@@ -6,8 +6,6 @@ function PageFooter({ author, githubUrl }) {
     <footer className="page-footer-wrapper">
       <p className="page-footer">
         © {new Date().getFullYear()}
-        &nbsp;
-        <a href={githubUrl}>{author}</a>
         &nbsp;powered by
         <a href="https://github.com/zoomKoding/zoomkoding-gatsby-blog">
           &nbsp;zoomkoding-gatsby-blog
@@ -16,7 +14,7 @@ function PageFooter({ author, githubUrl }) {
               
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4633249012841159"
         crossorigin="anonymous"></script>
-
+      
       <script src="https://utteranc.es/client.js"
               repo="junwork123/blog-comments"
               issue-term="pathname"

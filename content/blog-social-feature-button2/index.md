@@ -1,9 +1,9 @@
 ---
 emoji: 🔮
-title: 블로그에 소셜기능 넣기 - 공유버튼 만들기(2)
+title: React 블로그에 소셜기능 넣기 - 공유버튼 만들기(2)
 date: '2022-07-09 00:00:00'
 author: 주녘씨
-tags: 블로그 버튼 카카오톡 SNS
+tags: 블로그 버튼 카카오톡 SNS React
 categories: 블로그-발전기
 ---
 
