@@ -4,21 +4,6 @@ import './style.scss';
 import { useScript } from '../hooks/hooks';
 
 function PostHeader({ post, viewCount }) {
-  
-  const status = useScript("https://developers.kakao.com/sdk/js/kakao.js");
-	useEffect(() => {
-		if(status === "ready"){
-      // sdk 초기화하기
-      Kakao.Share.createCustomButton({
-        container: '#create-kakaotalk-sharing-btn',
-        templateId: '79194',
-        templateArgs: {
-          title:'#title'.text(),
-          description:'#title'.text(),
-        },
-      })
-		}
-	})
 
   return (
     <header className="post-header">
@@ -41,13 +26,6 @@ function PostHeader({ post, viewCount }) {
         {post.date}
         {viewCount && ` · ${viewCount} views`}
       </div>
-      
-      <a id="create-kakaotalk-sharing-btn" href="javascript:;">
-        <img
-          src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
-          alt="카카오톡 공유 보내기 버튼"
-        />
-      </a>
     </header>
   );
 }
