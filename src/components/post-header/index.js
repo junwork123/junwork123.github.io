@@ -26,6 +26,7 @@ function PostHeader({ post, viewCount }) {
         {post.date}
         {viewCount && ` · ${viewCount} views`}
       </div>
+      
     </header>
   );
 }
