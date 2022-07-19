@@ -20,6 +20,7 @@ function PageFooter({ author, githubUrl }) {
               crossorigin="anonymous"
               async>
       </script>
+      <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     </footer>
   );
 }
