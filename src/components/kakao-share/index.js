@@ -2,23 +2,39 @@ import React from "react";
 
 function KakaoShare(params) {
    
-  return (<a></a>);
-  const status = useScript("https://developers.kakao.com/sdk/js/kakao.js");
-	useEffect(() => {
-		if(status === "ready"){
-      // sdk 초기화하기
-      Kakao.Share.createCustomButton
-		}
-	})
-  Kakao.Share.createCustomButton({
-        container: '#create-kakaotalk-sharing-btn',
-        templateId: '79194',
-        templateArgs: {
-          title:'#title'.text(),
-          description:'#title'.text(),
+  const Explain = 
+    useEffect(() => {
+        Kakao.init("Kakao-Dev javascript 키값");
+    }, []);
+
+  const KakaoShare = () => {
+    Kakao.Link.sendDefault({
+      objectType: "feed",
+        content: {
+          title: themeData.title,
+          description: "내용!",
+          imageUrl: themeData.titleImage,
+          link: {
+            mobileWebUrl: "모바일 url!",
+            androidExecParams: "test",
+          },
         },
-      })
-    
+        buttons: [
+          {
+            title: "웹으로 이동",
+            link: {
+              mobileWebUrl: "공유할 url!",
+            },
+          },
+        ],
+    });
+  }
+
+  return (
+    <>
+      <button onClick={KakaoShare}>카카오톡 공유하기</button>
+    </>
+  )
 }
 
 export default KakaoShare;
