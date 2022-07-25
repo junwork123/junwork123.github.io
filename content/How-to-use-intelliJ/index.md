@@ -4,7 +4,7 @@ title: 인텔리제이(intelliJ) 사용법 정리
 date: '2022-07-23 00:00:00'
 author: 주녘씨
 tags: 인텔리제이 intelliJ 사용법 단축키
-categories: How-to-?
+categories: how-to
 ---
 
 # 인텔리제이(intelliJ) 사용법 정리
