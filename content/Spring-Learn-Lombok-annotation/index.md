@@ -83,9 +83,17 @@ public class sampleHotel
 
 @AllArgsConstructor : 모든 멤버변수를 파라미터로 받는 생성자를 작성한다.
 
-*출처*
 
-*[mangkyu님 블로그](https://mangkyu.tistory.com/125)*
+
+
+<br/>
+<br/>
+
+이 외에도 Controller, Service와 같이 Component를 상속받는 어노테이션, 
+
+JPA관련 어노테이션 등 다양한 어노테이션이 있다.(추후 포스팅 예정!)
+
+*출처*
 
 *[인프런 스프링 MVC 강의 1편](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-mvc-1#)*
 
