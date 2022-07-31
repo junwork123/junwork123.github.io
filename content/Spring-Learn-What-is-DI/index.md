@@ -31,26 +31,26 @@ categories: Spring
 `한 쪽이 변경되면 다른 한쪽도 변경되는 관계`로 말할 수 있다.
 
 ```java
-    public class Customer{
+    public class Customer{ // 초기모델
         private final int id; // 고유 ID
         private final String grade; // 회원 등급
         private final DiscountPolicy discountPolicy; // 할인정책
     }
 
-    public class Customer{
+    public class Customer{ // 변경 후 모델
         private final int id;
         private final String grade;
         private final VipDiscountPolicy vipPolicy; // VIP 할인정책으로 변경
     }
 ```
 
-고객 클래스마다 할인정책을 정의해준 초기 모델에서
+고객마다 할인정책을 정의해준 초기 모델에서
 
-할인 정책 클래스를 VIP 전용으로 <u>변경하고 싶다면</u>
+VIP 고객전용으로 `할인정책을 변경하고 싶다면`
 
-<u>생성자, Getter, Setter 등을 모두 변경해야 한다.</u>
+`생성자, Getter, Setter 등을 모두 수정해야 한다.`
 
-(이미 다른 서비스에서 할인율을 사용하고 있다면 더 많은 수정이 필요하다)
+(이미 다른 서비스에서도 할인율을 사용하고 있다면 더 많은 수정이 필요하다)
 
 <br/>
 
