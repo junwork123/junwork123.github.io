@@ -1,11 +1,15 @@
-import React from "react";
 
 function KakaoShare(params) {
    
   const Explain = 
     useEffect(() => {
-        Kakao.init("Kakao-Dev javascript 키값");
+        Kakao.init("d18de93c160aeef56c4f7521dbcb93b1");
     }, []);
+  
+  const handleKakaoButton = () => {
+      window.Kakao.Link.sendScrap({
+          requestUrl: currentUrl,
+      });
 
   const KakaoShare = () => {
     Kakao.Link.sendDefault({

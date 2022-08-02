@@ -1,7 +1,7 @@
 import { Link } from 'gatsby';
 import React, { useEffect } from 'react';
 import './style.scss';
-import { useScript } from '../hooks/hooks';
+import { useScript } from '../hooks/useScript';
 
 function PostHeader({ post, viewCount }) {
 
