@@ -1,44 +1,54 @@
+import React, { Component } from 'react';
 
-function KakaoShare(params) {
-   
-  const Explain = 
-    useEffect(() => {
-        Kakao.init("d18de93c160aeef56c4f7521dbcb93b1");
-    }, []);
-  
-  const handleKakaoButton = () => {
-      window.Kakao.Link.sendScrap({
-          requestUrl: currentUrl,
-      });
+class KakaoShare extends Component {
+  componentDidMount() {
+    window.Kakao.init('d18de93c160aeef56c4f7521dbcb93b1');
 
-  const KakaoShare = () => {
-    Kakao.Link.sendDefault({
-      objectType: "feed",
-        content: {
-          title: themeData.title,
-          description: "내용!",
-          imageUrl: themeData.titleImage,
+    window.Kakao.Link.createDefaultButton({
+      container: '#kakao-link-btn',
+      objectType: 'feed',
+      content: {
+        title: '딸기 치즈 케익',
+        description: '#케익 #딸기 #삼평동 #카페 #분위기 #소개팅',
+        imageUrl: 'http://mud-kage.kakao.co.kr/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png',
+        link: {
+          mobileWebUrl: 'https://cheonmro.github.io/',
+          webUrl: 'https://cheonmro.github.io/'
+        }
+      },
+      social: {
+        likeCount: 286,
+        commentCount: 45,
+        sharedCount: 845
+      },
+      buttons: [
+        {
+          title: '웹으로 보기',
           link: {
-            mobileWebUrl: "모바일 url!",
-            androidExecParams: "test",
-          },
+            mobileWebUrl: 'https://cheonmro.github.io/',
+            webUrl: 'https://cheonmro.github.io/'
+          }
         },
-        buttons: [
-          {
-            title: "웹으로 이동",
-            link: {
-              mobileWebUrl: "공유할 url!",
-            },
-          },
-        ],
+        {
+          title: '앱으로 보기',
+          link: {
+            mobileWebUrl: 'https://cheonmro.github.io/',
+            webUrl: 'https://cheonmro.github.io/'
+          }
+        }
+      ]
     });
   }
-
-  return (
-    <>
-      <button onClick={KakaoShare}>카카오톡 공유하기</button>
-    </>
-  )
+  onClickKakao = () => {
+    window.open('https://sharer.kakao.com/talk/friends/picker/link')
+  }
+  render() {
+    return (
+      <div className="Kakao">
+        <button id="kakao-link-btn" onClick={this.onClickKakao}></button>
+      </div>
+    );
+  }
 }
 
 export default KakaoShare;

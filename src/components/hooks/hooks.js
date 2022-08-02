@@ -68,4 +68,4 @@ function useScript(src) {
     return status;
 }
 
-export { useScript };
+export default useScript;
