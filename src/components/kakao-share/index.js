@@ -1,58 +1,33 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
+import kakaoBtnImg from '../../../assets/kakaotalk_sharing_btn_small.png' 
 
-class KakaoShare extends Component {
-  componentDidMount() {
+function KakaoShare(props){
+  const [title, setTitle] = useState(props.title);
+  const [link, setLink] = useState(props.link);
+
+  const initKakao=()=> {
     window.Kakao.init('d18de93c160aeef56c4f7521dbcb93b1');
+  }
 
-    window.Kakao.Link.sendScrap({
-      requestUrl: currentUrl,
-    });
-    
-    window.Kakao.Link.createDefaultButton({
-      container: '#kakao-link-btn',
-      objectType: 'feed',
-      content: {
-        title: '딸기 치즈 케익',
-        description: '#케익 #딸기 #삼평동 #카페 #분위기 #소개팅',
-        imageUrl: 'http://mud-kage.kakao.co.kr/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png',
-        link: {
-          mobileWebUrl: 'https://cheonmro.github.io/',
-          webUrl: 'https://cheonmro.github.io/'
-        }
-      },
-      social: {
-        likeCount: 286,
-        commentCount: 45,
-        sharedCount: 845
-      },
-      buttons: [
-        {
-          title: '웹으로 보기',
-          link: {
-            mobileWebUrl: 'https://cheonmro.github.io/',
-            webUrl: 'https://cheonmro.github.io/'
-          }
-        },
-        {
-          title: '앱으로 보기',
-          link: {
-            mobileWebUrl: 'https://cheonmro.github.io/',
-            webUrl: 'https://cheonmro.github.io/'
-          }
-        }
-      ]
+  const creatKakaoButton=()=>{
+    Kakao.Share.createCustomButton({
+      container: '#kakao-share-btn',
+      templateId: 79194,
+      templateArgs: {
+        title: {title}
+      }
     });
   }
-  onClickKakao = () => {
-    window.open('https://sharer.kakao.com/talk/friends/picker/link')
+  const onClickKakao = () => {
+    //window.open('https://sharer.kakao.com/talk/friends/picker/link')
+    initKakao();
+    creatKakaoButton();
   }
-  render() {
-    return (
-      <div className="Kakao">
-        <button id="kakao-link-btn" onClick={this.onClickKakao}></button>
-      </div>
-    );
-  }
+  return (
+    <div className="Kakao">
+      <button id="kakao-share-btn"><img src={kakaoBtnImg} alt="공유하기" onClick={onClickKakao} /></button>
+    </div>
+  );
 }
 
 export default KakaoShare;

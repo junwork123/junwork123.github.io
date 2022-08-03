@@ -42,7 +42,7 @@ function PostHeader({ post, viewCount }) {
         {post.date}
         {viewCount && ` · ${viewCount} views`}
       </div>
-      <KakaoShare link={post.link}/>
+      <KakaoShare title={post.title} link={post.link}/>
     </header>
   );
 }
