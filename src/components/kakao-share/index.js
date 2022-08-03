@@ -4,6 +4,10 @@ class KakaoShare extends Component {
   componentDidMount() {
     window.Kakao.init('d18de93c160aeef56c4f7521dbcb93b1');
 
+    window.Kakao.Link.sendScrap({
+      requestUrl: currentUrl,
+    });
+    
     window.Kakao.Link.createDefaultButton({
       container: '#kakao-link-btn',
       objectType: 'feed',
