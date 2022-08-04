@@ -32,7 +32,7 @@ function KakaoShare({post}){
       if (!kakao.isInitialized()) {
         kakao.init("d18de93c160aeef56c4f7521dbcb93b1");
       }
-    }
+    }   
   };
 
   const shareWithKakao=()=>{
