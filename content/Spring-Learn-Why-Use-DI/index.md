@@ -1,9 +1,9 @@
 ---
 emoji: 🔮
-title: 스프링 생성자 주입을 써야하는 이유
+title: 스프링 생성자 주입(Constructor Injection)을 써야하는 이유
 date: '2022-07-23 00:00:00'
 author: 주녘씨
-tags: 스프링 Spring DI 생성자주입
+tags: 스프링 Spring DI 생성자주입 Constructor Injection
 categories: Spring
 ---
 

@@ -1,9 +1,9 @@
 ---
 emoji: 🔮
-title: Spring MVC 객체와 버전별 차이
+title: 스프링 MVC 객체와 버전별 차이
 date: '2022-08-09 00:00:00'
 author: 주녘씨
-tags: 스프링 Spring MVC Controller
+tags: 스프링 Spring MVC Controller Model View
 categories: Spring
 ---
 
@@ -53,7 +53,6 @@ Spring에서 사용하는 MVC 모델이 발전해온 과정을
         dispatcher.forward(request, response);
     }
 ```
-
 
 ---
 
@@ -156,6 +155,7 @@ public class ModelView {
     }
 }
 ```
+
 ---
 
 <br/>
@@ -190,6 +190,7 @@ public class ModelView {
         return "save-result";**
     }
 ```
+
 ---
 
 <br/>
