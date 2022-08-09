@@ -21,8 +21,6 @@ Spring에서 사용하는 MVC 모델이 발전해온 과정을
 
 (이 글은 인프런 김영한님 강의를 바탕으로 작성되었습니다.)
 
-<br/>
-
 ---
 
 <br/>
@@ -56,7 +54,6 @@ Spring에서 사용하는 MVC 모델이 발전해온 과정을
     }
 ```
 
-<br/>
 
 ---
 
@@ -110,8 +107,6 @@ Spring에서 사용하는 MVC 모델이 발전해온 과정을
     }
 ```
 
-<br/>
-
 ---
 
 <br/>
@@ -161,9 +156,6 @@ public class ModelView {
     }
 }
 ```
-
-<br/>
-
 ---
 
 <br/>
@@ -198,9 +190,6 @@ public class ModelView {
         return "save-result";**
     }
 ```
-
-<br/>
-
 ---
 
 <br/>
