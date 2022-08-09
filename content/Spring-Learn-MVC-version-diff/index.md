@@ -1,6 +1,6 @@
 ---
 emoji: 🔮
-title: 스프링 MVC 버전 별 발전과정과 차이
+title: Spring MVC 객체와 버전별 차이
 date: '2022-08-09 00:00:00'
 author: 주녘씨
 tags: 스프링 Spring MVC Controller
@@ -11,7 +11,7 @@ categories: Spring
 
 <br/><br/>
 
-# # MVC 객체와 버전별 차이(미완)
+# # Spring MVC 객체와 버전별 차이
 
 이번 포스팅에서는
 
@@ -21,15 +21,21 @@ Spring에서 사용하는 MVC 모델이 발전해온 과정을
 
 (이 글은 인프런 김영한님 강의를 바탕으로 작성되었습니다.)
 
-<br/><br/>
+<br/>
 
-- V1
+---
 
-  - 매개변수 : request, response
+<br/>
 
-  - 반환값 : void
+## MVC 버전1
 
-  - 각 Controller가 View의 물리적인 주소를 직접 매핑하고 렌더링한다. (중복 발생)
+- 매개변수 : request, response
+
+- 반환값 : void
+
+- 각 Controller가 View의 물리적인 주소를 직접 매핑하고 렌더링한다. (중복 발생)
+
+<br/>
 
 ```java
 @Override
@@ -50,19 +56,25 @@ Spring에서 사용하는 MVC 모델이 발전해온 과정을
     }
 ```
 
-<br/><br/>
+<br/>
 
-- V2 :
+---
 
-  - 매개변수 : request, response
+<br/>
 
-  - 반환값 : <u>View</u>
+## MVC 버전2
 
-  - Controller가 Request에 값 객체를 넣고,
+- 매개변수 : request, response
 
-    물리적인 주소를 담은 View를 만들어서 전달한다.
+- 반환값 : <u>View</u>
 
-  - <u>View 객체는 렌더링을 담당한다.</u>
+- Controller가 Request에 값 객체를 넣고,
+
+  물리적인 주소를 담은 View를 만들어서 전달한다.
+
+- <u>View 객체는 렌더링을 담당한다.</u>
+
+<br/>
 
 ```java
 @Override
@@ -98,23 +110,25 @@ Spring에서 사용하는 MVC 모델이 발전해온 과정을
     }
 ```
 
-<br/><br/>
+<br/>
 
+---
 
-- V3
+<br/>
 
-  - 매개변수 : <u>Map<String, String> paramMap </u>
+## MVC 버전3
 
-  - 반환값 : <u>ModelView</u>
+- 매개변수 : <u>Map<String, String> paramMap </u>
 
-  - request 대신 Model Map을 통하여 매개변수를 전달받는다
+- 반환값 : <u>ModelView</u>
 
-  - Controller가 ModelView를 생성하여 논리적인 주소와 값 객체를 전달한다.
+- request 대신 Model Map을 통하여 매개변수를 전달받는다
 
-  - ModelView는 <u>논리적인 주소와 Model Map(값 객체 맵)</u>를 담고 있다.
-    
-    → request, response는 크기에 비해 일부만 사용하기 때문
+- Controller가 ModelView를 생성하여 논리적인 주소와 값 객체를 전달한다.
 
+- ModelView는 <u>논리적인 주소와 Model Map(값 객체 맵)</u>를 담고 있다.
+
+  → request, response는 크기에 비해 일부만 사용하기 때문
 
 ```java
     @Override
@@ -134,6 +148,8 @@ Spring에서 사용하는 MVC 모델이 발전해온 과정을
     }
 ```
 
+<br/>
+
 ```java
 @Getter @Setter
 public class ModelView {
@@ -146,18 +162,25 @@ public class ModelView {
 }
 ```
 
-<br/><br/>
+<br/>
 
-- V4
-  - 매개변수 : <u>paramMap</u> / <u>model</u>
+---
 
-  - 반환값 : <u>논리적인 주소(String)</u>
+<br/>
 
-  - V3에서 ModelView를 각각 컨트롤러가 생성하는 코드가 중복되어 제거한다.
+## MVC 버전4
 
-  - <u>Front Cotroller에서 값이 담긴 모델 맵을 각 컨트롤러에 전달</u>한다.
+- 매개변수 : <u>paramMap</u> / <u>model</u>
 
-  - 컨트롤러는 <u>값 객체에 값을 넣고, 논리적인 주소만을 전달</u>한다.
+- 반환값 : <u>논리적인 주소(String)</u>
+
+- V3에서 ModelView를 각각 컨트롤러가 생성하는 코드가 중복되어 제거한다.
+
+- <u>Front Cotroller에서 값이 담긴 모델 맵을 각 컨트롤러에 전달</u>한다.
+
+- 컨트롤러는 <u>값 객체에 값을 넣고, 논리적인 주소만을 전달</u>한다.
+
+<br/>
 
 ```java
     @Override
@@ -176,16 +199,21 @@ public class ModelView {
     }
 ```
 
-<br/><br/>
+<br/>
 
+---
 
-- V5
-  - 다양한 형태의 컨트롤러를 지원하기 위해 Adapter를 사용한다.
+<br/>
 
-  - <u>FrontController에서 컨트롤러마다 Adapter를 지정한다.</u>
-  
-    → 큰 코드변경 없이 다양한 컨트롤러를 매핑할 수 있다. (컨트롤러가 아니여도 된다)
+## MVC 버전5
 
+- 다양한 형태의 컨트롤러를 지원하기 위해 Adapter를 사용한다.
+
+- <u>FrontController에서 컨트롤러마다 Adapter를 지정한다.</u>
+
+  → 큰 코드변경 없이 다양한 컨트롤러를 매핑할 수 있다. (컨트롤러가 아니여도 된다)
+
+<br/>
 
 ```java
 @WebServlet(name = "frontControllerServletV5", urlPatterns = "/front-controller/v5/*")
@@ -260,6 +288,8 @@ private void initHandlerMappingMap() {
 }
 ```
 
+<br/>
+
 ```java
 // 어댑터 인터페이스
 public interface **MyHandlerAdapter** {
@@ -267,6 +297,8 @@ public interface **MyHandlerAdapter** {
  ModelView **handle**(HttpServletRequest request, HttpServletResponse response, Object handler) throws ServletException, IOException;
 }
 ```
+
+<br/>
 
 ```java
 public class ControllerV3HandlerAdapter implements MyHandlerAdapter {
@@ -295,6 +327,8 @@ public class ControllerV3HandlerAdapter implements MyHandlerAdapter {
     }
 }
 ```
+
+<br/>
 
 ```java
 public class ControllerV4HandlerAdapter implements MyHandlerAdapter{
@@ -325,6 +359,8 @@ public class ControllerV4HandlerAdapter implements MyHandlerAdapter{
 	}
 }
 ```
+
+<br/><br/>
 
 _출처_
 
