@@ -2,8 +2,8 @@
 emoji: 🔮
 title: 블로그에 댓글 기능 추가하기 with utterances
 date: '2022-07-02 00:00:00'
-author: 주녘씨
-tags: 블로그 댓글기능 
+author: 주녁
+tags: 블로그 댓글기능
 categories: 블로그-발전기
 ---
 
@@ -27,8 +27,6 @@ utterances를 이용해보고자 한다.
 
 [utterances 설치페이지](https://github.com/apps/utterances)를 접속해보자
 
-
-
 ![설치](install0.png)
 
 ![설치](install0-1.png)
@@ -37,7 +35,7 @@ utterances를 이용해보고자 한다.
 
 ![설치](install1.png)
 
-가격 플랜에 관한 설명이 나오지만 
+가격 플랜에 관한 설명이 나오지만
 
 `무료 앱`이기 때문에 걱정말고 설치해주자
 
@@ -55,7 +53,7 @@ utterances를 이용해보고자 한다.
 
 왜냐면, utterance는 `깃허브의 issue기능을 기반`으로 동작한다.
 
-댓글이 달리면 댓글용 레포지토리에 
+댓글이 달리면 댓글용 레포지토리에
 
 해당하는 포스트 이슈를 열고 댓글이 달리는 것처럼 내용이 연동되는 것이다.
 
@@ -81,7 +79,7 @@ utterances를 이용해보고자 한다.
 
 `크게 바꾸지 않아도 무방하다.`
 
-페이지 PATH로 연결할지 혹은 
+페이지 PATH로 연결할지 혹은
 
 URL, 타이틀, Number, 특정키워드로 연동할지 선택할 수 있다.
 
@@ -89,7 +87,7 @@ URL, 타이틀, Number, 특정키워드로 연동할지 선택할 수 있다.
 
 ![템플릿](template3.png)
 
-issue label은 utterance bot이 동작할 때 사용할 라벨이다. 
+issue label은 utterance bot이 동작할 때 사용할 라벨이다.
 
 `빈칸으로 둬도 무방하다.`
 
@@ -99,13 +97,13 @@ issue label은 utterance bot이 동작할 때 사용할 라벨이다.
 
 <br/><br/>
 
-Theme는 댓글부분의 테마다. 
+Theme는 댓글부분의 테마다.
 
 하나씩 눌러서 바꿔보고 `자신의 블로그에 맞는 테마를 고르자.`
 
 <br/><br/>
 
-Enable Utterance에서는 
+Enable Utterance에서는
 
 지금까지 설정한 내용이 스크립트로 제공된다.
 

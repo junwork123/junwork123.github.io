@@ -2,12 +2,12 @@
 emoji: 🔮
 title: React 블로그에 소셜기능 넣기 - 공유버튼 만들기(2)
 date: '2022-07-09 00:00:00'
-author: 주녘씨
+author: 주녁
 tags: 블로그 버튼 카카오톡 SNS React
 categories: 블로그-발전기
 ---
 
-*[이전편 1편](https://www.junwork.net/blog-social-feature-button1/)에서 계속..*
+_[이전편 1편](https://www.junwork.net/blog-social-feature-button1/)에서 계속.._
 
 ## **버튼 템플릿 만들기**
 
@@ -19,12 +19,11 @@ categories: 블로그-발전기
 
 우리는 일단 한가지 이미지만 사용할 예정이므로 2개정도는 삭제해주자
 
- 썸네일에 `한가지 이미지만 사용한다면(로고 삽입)`
+썸네일에 `한가지 이미지만 사용한다면(로고 삽입)`
 
 `이미지 업로드`에 이미지를 삽입해주자
 
 <br/><br/>
-
 
 ![카카오](kakao8.png)
 
@@ -44,12 +43,11 @@ categories: 블로그-발전기
 
 필자는 블로그명과 로고를 삽입했다.
 
-여기도 변수명을 적을 수 있지만 
+여기도 변수명을 적을 수 있지만
 
 로고는 쉽게 바뀌는 것은 아니므로 고정적으로 두었다.
 
 <br/><br/>
-
 
 ![카카오](kakao10.png)
 
@@ -61,10 +59,9 @@ categories: 블로그-발전기
 
 <br/><br/>
 
-
 ![카카오](kakao11.png)
 
-마지막으로 소셜 탭에서는 
+마지막으로 소셜 탭에서는
 
 좋아요, 조회수, 공유수를 설정할 수 있다.
 
@@ -76,10 +73,9 @@ categories: 블로그-발전기
 
 <br/><br/>
 
-
 ![카카오](kakao12.png)
 
-`페이지 왼쪽 미리보기`를 보면 
+`페이지 왼쪽 미리보기`를 보면
 
 설정을 완료한 `실제 화면`을 볼 수 있다.
 
@@ -89,19 +85,15 @@ categories: 블로그-발전기
 
 변수명에 실제 값을 어떻게 넣는지 배워보도록 하자.
 
-
 <br/><br/>
 
-*다음 3편에 계속..*
+_다음 3편에 계속.._
 
 ---
-
-
 
 참고자료 출처
 
 [[Github Blog] 깃허브 블로그에 카카오페이,토스 Buy me a coffee 후원버튼 달기](https://devyuseon.github.io/github%20blog/add-kakaopay-donate/)
-
 
 ```toc
 

@@ -1,5 +1,8 @@
-$font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif,
+$font-family: NanumSquareRound, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif,
   Apple Color Emoji, Segoe UI Emoji;
+
+$headline: EliceDigitalBaeum-Bd;
+$body: NanumSquareRound;
 
 $content-max-width: 720px;
 $content-horizontal-padding: 15px;
@@ -8,3 +11,17 @@ $content-image-max-height: 560px;
 $screen-sm-min: 576px;
 $screen-md-min: 768px;
 $screen-lg-min: 1080px;
+
+@font-face {
+  font-family: 'EliceDigitalBaeum-Bd';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_elice@1.0/EliceDigitalBaeum-Bd.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NanumSquareRound';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}

@@ -2,7 +2,7 @@
 emoji: 🔮
 title: React 블로그에 소셜기능 넣기 - 공유버튼 만들기(1)
 date: '2022-07-08 00:00:00'
-author: 주녘씨
+author: 주녁
 tags: 블로그 버튼 카카오톡 SNS React
 categories: 블로그-발전기
 ---
@@ -17,31 +17,25 @@ categories: 블로그-발전기
 
 넣어보고, 이를 응용해서 `후원버튼`을 만들어 볼 것이다.
 
-    P.S : React 블로그 이므로 
-          jekyll 블로그 이용자는 
+    P.S : React 블로그 이므로
+          jekyll 블로그 이용자는
           포스트 하단의 참고자료를 보도록 하자
-
-
 
 <br/><br/>
 
 ---
 
-
 ## **카카오 개발자센터**
 
-우리는 먼저 [카카오 개발자센터](https://developers.kakao.com/)에서 
+우리는 먼저 [카카오 개발자센터](https://developers.kakao.com/)에서
 
 `도메인을 등록`하고, `메시지빌더로 템플릿`을 만들 것이다.
 
-
 ![카카오](kakao1.png)
-
-
 
 ![카카오](kakao2.png)
 
-애플리케이션을 추가하려고 하면, 
+애플리케이션을 추가하려고 하면,
 
 앱이름과 사업자명을 적게 되어있는데 크게 신경쓰지않고 적어도 된다!
 
@@ -49,17 +43,15 @@ categories: 블로그-발전기
 
 <br/><br/>
 
-
 ![카카오](kakao3.png)
 
-애플리케이션을 생성하고 나면 
+애플리케이션을 생성하고 나면
 
 `플랫폼 메뉴`에서 자신의 블로그 주소를 적어주자.
 
 이 때, https://블로그주소.com/ 에서 마지막 `/`는 빼줘야한다.
 
 <br/><br/>
-
 
 ![카카오](kakao4.png)
 
@@ -68,8 +60,6 @@ categories: 블로그-발전기
 이제 `메시지 빌더`를 통해 `나만의 공유하기 버튼`을 만들어보자
 
 <br/><br/>
-
-
 
 ![카카오](kakao5.png)
 
@@ -81,24 +71,21 @@ categories: 블로그-발전기
 
 <br/><br/>
 
-
 ![카카오](kakao7.png)
 
-수 많은 탭과 기능이 보이지만 
+수 많은 탭과 기능이 보이지만
 
 우리가 알아야 할 것은 `4가지 뿐`이다.
 
-
 <br/><br/>
 
-*[다음 2편](https://www.junwork.net/blog-social-feature-button2/)에 계속..*
+_[다음 2편](https://www.junwork.net/blog-social-feature-button2/)에 계속.._
 
 ---
 
 참고자료 출처
 
 [Github Blog에 카카오톡 공유버튼 만들기](https://pozafly.github.io/blog/jekyll-kakao-share-button/)
-
 
 ```toc
 

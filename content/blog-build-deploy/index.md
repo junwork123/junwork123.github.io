@@ -2,7 +2,7 @@
 emoji: 🔮
 title: 블로그 빌드 및 배포 자동화 - 1
 date: '2022-06-20 00:00:00'
-author: 주녘씨
+author: 주녁
 tags: 블로그 React 빌드 배포 자동화 package.json
 categories: 블로그-발전기
 ---
@@ -20,11 +20,12 @@ npm install gh-pages --save-dev
 
 npm install copyfiles
 ```
+
 각각 설치하는 내용은 아래와 같다.
 
 P.S 이 스킨은 4.9.3버전까지만 동작하는듯 하다. (버전을 잘 확인하자)
 
-- gatsby : 리액트(React) 기반의 정적 사이트 생성 프레임워크 
+- gatsby : 리액트(React) 기반의 정적 사이트 생성 프레임워크
 
 - gh-pages : GitHub Repository를 이용해 웹 사이트를 무료로 호스팅해주는 서비스
 
@@ -38,11 +39,9 @@ P.S 이 스킨은 4.9.3버전까지만 동작하는듯 하다. (버전을 잘 �
 
 필자처럼 개인 도메인(ooo.com, xxx.net)을 구매한 사람은
 
-GitHub repository의 `pages`에서 
+GitHub repository의 `pages`에서
 
 접근 주소를 개인도메인으로 설정해줄 수 있다.
-
-
 
 ![이미지](capture.png)
 
@@ -54,11 +53,11 @@ Source항목은 호스팅될 브랜치를 설정하는 곳으로
 
 <br/><br/>
 
-하지만 `한가지 문제점`이 있는데, 
+하지만 `한가지 문제점`이 있는데,
 
 매번 배포할 때마다 Custom Domain 항목이 초기화된다는 점이다.
 
-이 문제는 도메인이 적힌 CNAME 파일이 
+이 문제는 도메인이 적힌 CNAME 파일이
 
 빌드 결과물에 포함되지 않아서 발생하는 문제이다.
 
@@ -97,14 +96,13 @@ SSH를 사용할 경우 암호키-공개키를 활용하여 Push해야한다.(�
 
 ![repo.png](repo.png)
 
-
 ## - scripts
 
 `npm run OOO`으로 동작하는 명령어들이다.
 
-`&&`로 명령어를 여러개 연결할 수 있으며 
+`&&`로 명령어를 여러개 연결할 수 있으며
 
-같은 명령어이기만 하면 `pre`를 붙여서 먼저 실행하도록 하게 할 수 있다. 
+같은 명령어이기만 하면 `pre`를 붙여서 먼저 실행하도록 하게 할 수 있다.
 
 <br/><br/>
 
@@ -121,6 +119,7 @@ SSH를 사용할 경우 암호키-공개키를 활용하여 Push해야한다.(�
 해석하자면 `public` 폴더안의 결과물을 `gh-pages` 브랜치에 배포하겠다는 뜻이다.
 
     gh-pages -d public -b gh-pages
+
 ```js
 // 아래는 키워드 부연설명
 -d, --dir : basePath(빌드 결과물, 배포될 파일들 위치)
@@ -129,13 +128,8 @@ SSH를 사용할 경우 암호키-공개키를 활용하여 Push해야한다.(�
 
 -s, --src : options.src(배포될 파일들의 매칭패턴, 기본은 `**/*`로 전체 파일이다.)
 ```
+
 > 더 자세한 설명은 [공식 메뉴얼](https://www.npmjs.com/package/gh-pages-cli)에서 확인할 수 있다.
-
-
-
-
-
-
 
 <br/><br/>
 
@@ -147,11 +141,10 @@ SSH를 사용할 경우 암호키-공개키를 활용하여 Push해야한다.(�
 
     "deploy": "npm run build && npm run copy && gh-pages -d public -b gh-pages",
 
-
-
 <br/><br/>
 
 ---
+
 ## 다음으로
 
 <br/>
@@ -160,12 +153,11 @@ SSH를 사용할 경우 암호키-공개키를 활용하여 Push해야한다.(�
 
 이마저도 귀찮다면?
 
-포스팅 작성 후 커밋만으로 
+포스팅 작성 후 커밋만으로
 
 배포까지 한번에 끝낼 수 있는 방법도 있다.
 
-*[다음 2편]()에 계속..*
-
+_[다음 2편]()에 계속.._
 
 ```toc
 

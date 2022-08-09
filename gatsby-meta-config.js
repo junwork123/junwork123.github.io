@@ -1,6 +1,6 @@
 module.exports = {
     title: `JUNWORK.NET`,
-    description: `주녘씨의 코드공방`,
+    description: `주녁, DevNote`,
     language: `ko`, // `ko`, `en` => currently support versions for Korean and English
     siteUrl: `https://www.junwork.net`,
     ogImage: `/og-image.png`, // Path to your in the 'static' folder
@@ -16,7 +16,7 @@ module.exports = {
         bio: {
             role: `개발자`,
             description: ['사람에 가치를 두는', '능동적으로 일하는', '이로운 것을 만드는'],
-            thumbnail: 'logo_nb.png', // Path to the image in the 'asset' folder
+            thumbnail: 'logo/logo_nb.png', // Path to the image in the 'asset' folder
         },
         social: {
             github: `https://github.com/junwork123`,
@@ -72,8 +72,8 @@ module.exports = {
             // ========================================================
             // ========================================================
             {
-                date: '2022.03 ~',
-                activity: 'OOO 통신사 E-Commerce 개발 및 운영',
+                date: '2022.03 ~ 2022.08',
+                activity: 'KT Shop E-Commerce 개발 및 유지보수',
             },
             {
                 date: '2018.03 ~ 2021.06',

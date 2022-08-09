@@ -14,9 +14,9 @@ function AboutPage({ data }) {
         <Layout>
             <Seo title="About" />
       <Bio author={author} language={language} />
-      <TimeStampSection timestamps={certificates} />
-      <TimeStampSection timestamps={experiences} />
-      <TimeStampSection timestamps={timestamps} />
+      <TimeStampSection timestamps={timestamps} title="경력 Career"/>
+      <TimeStampSection timestamps={experiences} title="경험 Experience"/>
+      <TimeStampSection timestamps={certificates} title="자격 Certificates"/>
       <ProjectSection projects={projects} />
     </Layout>
   );

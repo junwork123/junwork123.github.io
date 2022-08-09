@@ -2,12 +2,12 @@
 emoji: 🔮
 title: React 블로그에 소셜기능 넣기 - 공유버튼 만들기(3)
 date: '2022-06-20 00:00:00'
-author: 주녘씨
+author: 주녁
 tags: 블로그 버튼 카카오톡 SNS React
 categories: 블로그-발전기
 ---
 
-*[이전편 2편]()에서 계속..*
+_[이전편 2편]()에서 계속.._
 
 이번 편에서는 본격적으로 React 코드를 작성해보자
 
@@ -15,10 +15,9 @@ categories: 블로그-발전기
 
 ## **버튼을 만들어보자**
 
-[카카오 개발자센터의 문서](https://developers.kakao.com/docs/latest/ko/message/js-link#custom-template-msg)를 보면 
+[카카오 개발자센터의 문서](https://developers.kakao.com/docs/latest/ko/message/js-link#custom-template-msg)를 보면
 
 아래와 같은 JavaScript 샘플을 제공하고 있다.
-
 
 ```javascript
 // 1번코드 : 카카오에서 만든 공유하기 버튼 사용하기
@@ -87,22 +86,15 @@ Kakao.Share.sendCustom({
 
 ```
 
-
-
-
-
 <br/><br/>
 
 ---
 
-
-*다음 3편에 계속..*
-
+_다음 3편에 계속.._
 
 참고자료 출처
 
 [[Github Blog] 깃허브 블로그에 카카오페이,토스 Buy me a coffee 후원버튼 달기](https://devyuseon.github.io/github%20blog/add-kakaopay-donate/)
-
 
 ```toc
 

@@ -2,7 +2,7 @@
 emoji: 🔮
 title: 인텔리제이(intelliJ) 사용법 정리
 date: '2022-07-23 00:00:00'
-author: 주녘씨
+author: 주녁
 tags: 인텔리제이 intelliJ 사용법 단축키
 categories: how-to
 ---
@@ -13,14 +13,13 @@ categories: how-to
 
 `psvm` → public static void main 자동 생성
 
-`sout / soutv / soutm` →  System.*out*.println() 자동 생성
+`sout / soutv / soutm` → System._out_.println() 자동 생성
 
 `/** + enter` = 자동 주석 생성(javadoc 형식)
 
 `iter + enter` = foreach문 자동 생성
 
 <br/><br/>
-
 
 ## **단축키**
 
@@ -52,10 +51,9 @@ categories: how-to
 
 <br/><br/>
 
+_참고자료_
 
-*참고자료*
-
-*[jaimemi님 블로그](https://jaimemin.tistory.com/1549)*
+_[jaimemi님 블로그](https://jaimemin.tistory.com/1549)_
 
 ```toc
 

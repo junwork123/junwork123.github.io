@@ -2,7 +2,7 @@
 emoji: 🔮
 title: 스프링 의존성 주입(Dependency Injection)이란?
 date: '2022-07-31 00:00:00'
-author: 주녘씨
+author: 주녁
 tags: 스프링 Spring DI 의존성 주입 Dependency Injection
 categories: Spring
 ---
@@ -18,7 +18,6 @@ categories: Spring
 스프링에서 지원하는 핵심 프로그래밍 모델 중 하나로
 
 말 그대로 **의존관계를 외부에서 결정**해주는 디자인 패턴이다.
-
 
 <br/><br/>
 
@@ -82,7 +81,7 @@ VIP 할인 정책의 행동은 무엇일까? 역시 할인이다.
 
 각 할인 정책은 `같은 행동을 하기 때문에 interface로 묶을 수 있다.`
 
-```java 
+```java
     public interface discountPolicy{ // 할인 정책 인터페이스는
         public double discount(); // 할인을 한다.
     }
@@ -137,9 +136,9 @@ Customer가 생성될 때(로그인 시, 비로그인 주문 시 등등)
 
 ## 스프링과 DI
 
-실제로 스프링에서는 아래와 같이 
+실제로 스프링에서는 아래와 같이
 
-@Autowired 태그를 통해서 
+@Autowired 태그를 통해서
 
 DB 작업을 위한 repository 설정이나, Service 설정 등
 
@@ -157,37 +156,29 @@ public class UserService {
         this.userRepository = userRepository;
         this.memberService = memberService;
     }
-    
+
 }
 ```
+
 <br/>
 
 때문에 `변경이 필요한 부분은` 적절하게 의존성 주입이 가능하도록
 
 `interface를 활용하여 설계하여야 한다.`
 
+<br/>
 
+_출처_
 
+_[mangkyu님 블로그](https://mangkyu.tistory.com/125)_
 
+_[인프런 스프링 MVC 강의 1편](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-mvc-1#)_
 
-<br/> 
-
-
-
-
-
-*출처*
-
-*[mangkyu님 블로그](https://mangkyu.tistory.com/125)*
-
-*[인프런 스프링 MVC 강의 1편](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-mvc-1#)*
-
-*[인프런 스프링 핵심 원리 기본편](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%ED%95%B5%EC%8B%AC-%EC%9B%90%EB%A6%AC-%EA%B8%B0%EB%B3%B8%ED%8E%B8/)*
+_[인프런 스프링 핵심 원리 기본편](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%ED%95%B5%EC%8B%AC-%EC%9B%90%EB%A6%AC-%EA%B8%B0%EB%B3%B8%ED%8E%B8/)_
 
 <br/>
 
 ---
-
 
 ```toc
 

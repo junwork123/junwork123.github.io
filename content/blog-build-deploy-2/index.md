@@ -2,10 +2,11 @@
 emoji: 🔮
 title: 블로그 빌드 및 배포 자동화 - 2
 date: '2022-06-23 00:00:00'
-author: 주녘씨
+author: 주녁
 tags: 블로그 빌드 배포 자동화 github-acition ci/cd
 categories: 블로그-발전기
 ---
+
 ## **자동 배포 권한을 얻기 위한 토큰 생성**
 
 먼저 GitHub 계정의 [Developer settings](https://github.com/settings/apps) 메뉴에서 토큰(Personal access tokens)을 만들어야 한다.
@@ -50,8 +51,6 @@ categories: 블로그-발전기
 
 ![메뉴 진입 화면3](setting3.png)
 
-
-
 스크린샷 처럼 `set up a workflow yourself` 메뉴를 누르면
 
 드디어 최종장에 돌입하게 된다. ~~필자는 이 메뉴 찾는데 10분이나 걸렸다~~
@@ -69,133 +68,133 @@ yml 스크립트를 `.github/workflows/` 위치에 작성해야 한다.
 예시를 통해 각 키워드마다 의미를 빠르게 파악하고 응용하자.
 
 ```yml
-    name: Blog Deployment # 이 스크립트의 제목
+name: Blog Deployment # 이 스크립트의 제목
 
-    # 어떤 행동을 할때마다 실행할지
-    on: 
-        # master, release/v*라는 이름의 브랜치에 push가 발생할 때마다
-        # ex) release/v0.1, release/v2.1.5
-        push:
-            branches: 
-                - master
-                - release/v*
-        
-        # gh-pages 브랜치에 pull_request가 발생할 때마다
-        pull_request:
-            branches: 
-                - gh-pages
+# 어떤 행동을 할때마다 실행할지
+on:
+  # master, release/v*라는 이름의 브랜치에 push가 발생할 때마다
+  # ex) release/v0.1, release/v2.1.5
+  push:
+    branches:
+      - master
+      - release/v*
 
-        # cron 표현식으로 `UTC 기준 매일 월~금 오전2시에 실행`
-        schedule: 
-            - cron: "0 0 2 ? * MON-FRI *"
+  # gh-pages 브랜치에 pull_request가 발생할 때마다
+  pull_request:
+    branches:
+      - gh-pages
 
-        # 직접 "Run workflow"버튼을 누를때만 실행
-        workflow_dispatch: 
+  # cron 표현식으로 `UTC 기준 매일 월~금 오전2시에 실행`
+  schedule:
+    - cron: '0 0 2 ? * MON-FRI *'
 
-    # 실행할 작업을 정의
-    jobs:
-        # 'build'라는 이름의 job은 (job이름은 맘대로 적어도 됨)
-        # 'Checkout, Install, Build'라는 이름의 작업을
-        # 우분투 최신버전에서 동작시킨다.
-        # 동작내용은 
-        # [브랜치 체크아웃 
-        #   > 패키지 설치 
-        #   > 빌드 
-        #   > 메시지 출력
-        #   > 도메인 복사
-        #   > 배포] 순으로 진행된다.
+  # 직접 "Run workflow"버튼을 누를때만 실행
+  workflow_dispatch:
 
-        deploy: 
-            runs-on: ubuntu-latest
+# 실행할 작업을 정의
+jobs:
+  # 'build'라는 이름의 job은 (job이름은 맘대로 적어도 됨)
+  # 'Checkout, Install, Build'라는 이름의 작업을
+  # 우분투 최신버전에서 동작시킨다.
+  # 동작내용은
+  # [브랜치 체크아웃
+  #   > 패키지 설치
+  #   > 빌드
+  #   > 메시지 출력
+  #   > 도메인 복사
+  #   > 배포] 순으로 진행된다.
 
-            name: Checkout, Install, Build
+  deploy:
+    runs-on: ubuntu-latest
 
-            # 다음 동작을 순서대로 실행
-            steps:
-                # 'uses' == 누군가 미리 정의된 workflow@version 사용
-                # 'master' 브랜치를 체크아웃()
-                - name: Checkout branche
-                  uses: actions/checkout@master
-                
-                # 패키지 설치 동작 
-                # [node 설치 
-                #   > 의존성 캐시검사 
-                #   > (변화가 있다면) npm설치] 순으로 동작
-                - name: Use Node.js
-                  uses: actions/setup-node@master
-                  with:
-                      node-version: 16.x
+    name: Checkout, Install, Build
 
-                - name: Cache node modules
-                  uses: actions/cache@v2
-                  id: cache
-                  with:
-                      path: node_modules
-                      key: npm-packages-${{ hashFiles('**/package-lock.json') }}
+    # 다음 동작을 순서대로 실행
+    steps:
+      # 'uses' == 누군가 미리 정의된 workflow@version 사용
+      # 'master' 브랜치를 체크아웃()
+      - name: Checkout branche
+        uses: actions/checkout@master
 
-                - name: Install Dependencies
-                  if: steps.cache.outputs.cache-hit != 'true'
-                  run: npm install
+      # 패키지 설치 동작
+      # [node 설치
+      #   > 의존성 캐시검사
+      #   > (변화가 있다면) npm설치] 순으로 동작
+      - name: Use Node.js
+        uses: actions/setup-node@master
+        with:
+          node-version: 16.x
 
-                # 빌드 실행
-                - name: Build
-                  run: npm run build
-                    
-                # 도메인 설정파일을 빌드결과물에 복사
-                - name: copy Cname
-                  run: cp CNAME public/ 
+      - name: Cache node modules
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: node_modules
+          key: npm-packages-${{ hashFiles('**/package-lock.json') }}
 
-                # 특정 유저의 배포 액션을 이용하여
-                # 빌드 결과물을 배포 경로에 복사한다.
-                - name: Deploy changes
-                  uses: peaceiris/actions-gh-pages@v3 
-                  with:
-                      github_token: ${{ secrets.GITHUB_TOKEN }}
-                      publish_dir: ./public
-                      publish_branch: gh-pages # default: gh-pages
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm install
+
+      # 빌드 실행
+      - name: Build
+        run: npm run build
+
+      # 도메인 설정파일을 빌드결과물에 복사
+      - name: copy Cname
+        run: cp CNAME public/
+
+      # 특정 유저의 배포 액션을 이용하여
+      # 빌드 결과물을 배포 경로에 복사한다.
+      - name: Deploy changes
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages # default: gh-pages
 ```
 
 <br/>
 
-## 반영된 실제 YML 코드 <span id="code"></span> 
+## 반영된 실제 YML 코드 <span id="code"></span>
 
 <br/>
 
 ```yml
 name: Blog Deployment
-on: 
-    push:
-        branches: 
-            - master
+on:
+  push:
+    branches:
+      - master
 
 jobs:
-    deploy: 
-        runs-on: ubuntu-latest
-        name: Checkout, Install, Build
-        steps:
-            - name: Checkout branche
-              uses: actions/checkout@master
-            
-            - name: Use Node.js
-              uses: actions/setup-node@master
-              with:
-                  node-version: 16.x
+  deploy:
+    runs-on: ubuntu-latest
+    name: Checkout, Install, Build
+    steps:
+      - name: Checkout branche
+        uses: actions/checkout@master
 
-            - name: Install Dependencies
-              run: npm install --force
+      - name: Use Node.js
+        uses: actions/setup-node@master
+        with:
+          node-version: 16.x
 
-            - name: Build
-              run: npm run build
-                
-            - name: copy Cname
-              run: cp CNAME public/ 
+      - name: Install Dependencies
+        run: npm install --force
 
-            - name: Deploy changes
-              uses: peaceiris/actions-gh-pages@v3
-              with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
-                  publish_dir: ./public
-                  publish_branch: gh-pages
+      - name: Build
+        run: npm run build
+
+      - name: copy Cname
+        run: cp CNAME public/
+
+      - name: Deploy changes
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
 ```
 
 cache 옵션을 사용하지 않았을 때 빌드&배포 시간 : 5분
@@ -214,13 +213,10 @@ npm install `--force` 명령어로 강제 설치 옵션을 주면 문제없이 �
 Run npm install
   npm ERR! code ERESOLVE
   npm ERR! ERESOLVE could not resolve
-  npm ERR! 
+  npm ERR!
   npm ERR! While resolving: gatsby-plugin-advanced-sitemap@2.0.0
 ...
 ```
-
-
-
 
 <br/><br/>
 
@@ -235,7 +231,6 @@ Run npm install
 > [Actions의 이벤트](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows)
 
 > [cron 표현식](cron.png) // 이건 여러군데서 쓰이니 알아두면 좋을거야!
-
 
 ```toc
 

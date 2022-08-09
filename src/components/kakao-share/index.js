@@ -1,7 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
 import useScript from '../hooks/hooks';
-import kakaoBtnImg from '../../../assets/kakaotalk_sharing_btn_small.png' 
-import logo from '../../../assets/logo_low.png' 
 
 function KakaoShare({post}){ 
   // kakao SDK import하기
