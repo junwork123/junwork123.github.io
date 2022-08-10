@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { graphql } from 'gatsby';
 import Layout from '../layout';
 import Seo from '../components/seo';
 import Bio from '../components/bio';
 import Post from '../models/post';
+import kakaoInit from '../components/init';
 
 import { getUniqueCategories } from '../utils/helpers';
 import PostTabs from '../components/post-tabs';
@@ -27,6 +28,7 @@ function HomePage({ data }) {
         tabIndex={tabIndex}
         showMoreButton
       />
+      <kakaoInit/>
     </Layout>
   );
 }

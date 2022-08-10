@@ -26,7 +26,7 @@ function PostHeader({ post, viewCount }) {
         {post.date}
         {viewCount && ` · ${viewCount} views`}
       </div>
-      <KakaoShare post={post}/>
+      <KakaoShare post={post} key={process.env.REACT_APP_KAKAO_SHARE_KEY}/>
     </header>
   );
 }
