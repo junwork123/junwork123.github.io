@@ -1,6 +1,6 @@
 ---
 emoji: 🔮
-title: 파이썬 문법 정리
+title: 파이썬(Python) 문법 정리
 date: '2022-08-13 00:00:00'
 author: 주녁
 tags: 블로그 python 문법 usage algorithm

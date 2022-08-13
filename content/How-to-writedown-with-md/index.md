@@ -1,9 +1,9 @@
 ---
 emoji: 🔮
-title: 마크다운 작성법 정리
+title: 마크다운(Markdown) 작성법 정리
 date: '2022-06-20 00:00:00'
 author: 주녁
-tags: 블로그 markdown 마크다운
+tags: 블로그 markdown 마크다운 md
 categories: how-to
 ---
 
