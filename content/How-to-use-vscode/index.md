@@ -1,9 +1,9 @@
 ---
 emoji: 🔮
-title: 마크다운 작성법 정리
+title: Visual Studio Code(vscode) 사용법 정리
 date: '2022-08-13 00:00:00'
 author: 주녁
-tags: 블로그 markdown 마크다운
+tags: vscode usage 사용법 단축키 shortcut
 categories: how-to
 ---
 
