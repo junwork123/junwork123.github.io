@@ -28,9 +28,13 @@ categories: 블로그-발전기
 
 - 첫 index, about 페이지 설정 : /pages/\*.js
 
+<br/><br/>
+
 ## (중요) 포스팅 안에 `##`으로 제목이 없으면 아래 오류 발생
 
 `TypeError: Cannot read properties of null (reading 'children')`
+
+<br/><br/>
 
 ## (참고) 포스트 조회 Query
 

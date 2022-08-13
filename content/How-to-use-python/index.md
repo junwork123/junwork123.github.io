@@ -11,8 +11,6 @@ categories: how-to
 
 ## INDEX
 
-<br>
-
 [1. 문자열 관련 메소드](#string)
 
 [2. 리스트 관련 메소드](#list)
@@ -24,6 +22,8 @@ categories: how-to
 [5. 유용한 함수](#useful)
 
 <br/><br/>
+
+---
 
 ### 문자열 관련 메소드<span id="string"></span>
 
@@ -394,13 +394,24 @@ with open(os.path.join(BASE_DIR, 'result.json'), 'w+') as json_file:
     json.dump(data, json_file)
 ```
 
+<br/><br/>
+
 ---
 
-## 참고자료
+_참고자료_
 
-1. [파이썬 - 정규표현식 모듈](https://devanix.tistory.com/296)
-2. [파이썬 str 문자열 객체 메소드 함수 정리](https://withcoding.com/74)
-3. [파이썬 정규표현식(re) 사용법](<https://greeksharifa.github.io/정규표현식(re)/2018/07/20/regex-usage-01-basic/>)
-4. [정규식 단어 경계 메타 문자의 정확한 이해](https://ohgyun.com/392)
-5. [나만의 웹 크롤러 만들기 with Requests/BeautifulSoup](https://beomi.github.io/2017/01/20/HowToMakeWebCrawler/)
-6. [파이썬 list 리스트 사용법 정리 (삽입, 삭제, 정렬)](https://withcoding.com/75)
+_1. [파이썬 - 정규표현식 모듈](https://devanix.tistory.com/296)_
+
+_2. [파이썬 str 문자열 객체 메소드 함수 정리](https://withcoding.com/74)_
+
+_3. [파이썬 정규표현식(re) 사용법](<https://greeksharifa.github.io/정규표현식(re)/2018/07/20/regex-usage-01-basic/>)_
+
+_4. [정규식 단어 경계 메타 문자의 정확한 이해](https://ohgyun.com/392)_
+
+_5. [나만의 웹 크롤러 만들기 with Requests/BeautifulSoup](https://beomi.github.io/2017/01/20/HowToMakeWebCrawler/)_
+
+_6. [파이썬 list 리스트 사용법 정리 (삽입, 삭제, 정렬)](https://withcoding.com/75)_
+
+```toc
+
+```
