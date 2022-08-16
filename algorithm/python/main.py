@@ -3,5 +3,4 @@ def solution(n, edge):
     
     print("123")
     return answer
-
 solution(1, 2)
