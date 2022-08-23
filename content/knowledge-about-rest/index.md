@@ -185,7 +185,7 @@ API 중에서 <u>6가지를 모두 만족하면</u> `RESTful API`라고 할 수 
 
 ---
 
-## Uniform interface <span id="Uniform"></span>
+## 핵심 스타일 Uniform interface <span id="Uniform"></span>
 
 <br>
 
