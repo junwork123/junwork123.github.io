@@ -59,7 +59,7 @@ REST와 REST API, RESTful API에 대해 알아보도록 하자.
 
 `RESTful API` : REST 개념을 잘 지킨 API.
 
-`HTTP API` $\fallingdotseq$ `REST API` : REST 개념을 기반으로 한 API. (REST 개념을 일부만 따른다.)
+`HTTP API` ≒ `REST API` : REST 개념을 기반으로 한 API. (REST 개념을 일부만 따른다.)
     
     여기서 `REST API`의 정의에 대한 논쟁이 발생한다. (이후 서술)
 
@@ -161,15 +161,17 @@ HTTP 스펙을 따른다면
 
 `4. Uniform interface` 항목을 제외하고 대부분 지켜진다.
 
+이 때문에 HTTP API는 REST를 일부 준수하는 API라고 할 수 있고,
+
+일반적으로 사용하는 REST API의 뜻은 HTTP API를 의미한다.
+
+`논문의 저자는 REST API라고 사용하지 말 것을 주장하므로 유의가 필요하다.`
+
 <br/>
 
-이 스타일에 따라, 
+한편 제시된 6가지의 스타일에 따라, 
 
-API 중에서 <u>6가지를 모두 만족하면 RESTful API,</u>
-
-<u>일부만 만족하면 REST API</u>라고 이야기할 수 있다.
-
-`논문의 저자는 이마저도 REST API가 아니라고 주장하므로 유의가 필요하다.`
+API 중에서 <u>6가지를 모두 만족하면</u> `RESTful API`라고 할 수 있다.
 
 <br/>
 
