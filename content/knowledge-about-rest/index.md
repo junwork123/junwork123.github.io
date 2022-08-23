@@ -1,6 +1,6 @@
 ---
 emoji: 🔮
-title: REST와 REST API, RESTful API
+title: REST, REST API, RESTful API의 차이를 아시나요?
 date: '2022-08-23 00:00:00'
 author: 주녁
 tags: rest api restful crud

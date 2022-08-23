@@ -1,6 +1,6 @@
 ---
 emoji: 🔮
-title: 타임리프(thymeleaf) 사용법 정리
+title: 타임리프(thymeleaf) 문법 정리
 date: '2022-08-21 00:00:00'
 author: 주녁
 tags: 스프링 Spring thymeleaf 템플릿엔진 template
