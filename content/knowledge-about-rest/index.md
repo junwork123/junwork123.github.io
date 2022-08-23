@@ -1,6 +1,6 @@
 ---
 emoji: 🔮
-title: [자신있게 설명하기] REST와 REST API, RESTful API
+title: REST와 REST API, RESTful API
 date: '2022-08-23 00:00:00'
 author: 주녁
 tags: rest api restful crud
@@ -33,9 +33,17 @@ REST와 REST API, RESTful API에 대해 알아보도록 하자.
 
 위 그림을 기준으로 살펴보면 
 
-REST는 어떠한 개념이고, RESTful API는 완전히 REST에 속한 것으로 보인다.
+`REST`는 어떠한 개념이고, 
 
-반면, REST API는 REST, RESTful API와 일부 섞일수도 있어보인다.
+`RESTful API`는 완전히 REST에 속한 것으로 보인다.
+
+반면, `HTTP API`는 `REST API`랑 유사하다고 적혀있고
+
+`REST, RESTful API`와 일부 공통점이 있어보인다.
+
+<br/>
+
+그렇다면 각각 어떤 정의길래 위와 같은 그림이 나오는 것일까?
 
 <br/>
 
@@ -43,7 +51,7 @@ REST는 어떠한 개념이고, RESTful API는 완전히 REST에 속한 것으�
 
 ## 정의
 
-그렇다면 각각 어떤 정의길래 위와 같은 그림이 나오는 것일까?
+<br/>
 
 요약하면 다음과 같다.
 
@@ -51,12 +59,11 @@ REST는 어떠한 개념이고, RESTful API는 완전히 REST에 속한 것으�
 
 `RESTful API` : REST 개념을 잘 지킨 API.
 
-`HTTP API` ($\fallingdotseq$ REST API) : REST 개념을 기반으로 한 API. (REST 개념을 일부만 따른다.)
+`HTTP API` ($\fallingdotseq$ `REST API`) : REST 개념을 기반으로 한 API. (REST 개념을 일부만 따른다.)
     
+    여기서 `REST API`의 정의에 대한 논쟁이 발생한다. (이후 서술)
 
 <br/>
-
-여기서 `REST API`에 대한 논쟁이 발생하는데
 
 REST의 정의가 추상적이라서 잘 이해가 가지 않을 것이다.
 
@@ -68,7 +75,9 @@ REST의 정의가 추상적이라서 잘 이해가 가지 않을 것이다.
 
 ## REST(Representational State Transfer)
 
-REST 개념을 창시한 로이 필딩(Roy Fielding)은 
+<br/>
+
+REST 개념을 창시한 `로이 필딩(Roy Fielding)`은 
 
 REST를 다음과 같이 정의했다.
 
@@ -226,7 +235,7 @@ API 중에서 <u>6가지를 모두 만족하면 RESTful API,</u>
 
 <br>
 
-논문 저자 Roy Fielding은 
+논문 저자 `로이 필딩(Roy Fielding)`은 
 
 꾸준히 REST에 대한 논의를 펼치면서
 
