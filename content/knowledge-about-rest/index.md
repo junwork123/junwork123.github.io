@@ -59,7 +59,7 @@ REST와 REST API, RESTful API에 대해 알아보도록 하자.
 
 `RESTful API` : REST 개념을 잘 지킨 API.
 
-`HTTP API` ($\fallingdotseq$ `REST API`) : REST 개념을 기반으로 한 API. (REST 개념을 일부만 따른다.)
+`HTTP API` $\fallingdotseq$ `REST API` : REST 개념을 기반으로 한 API. (REST 개념을 일부만 따른다.)
     
     여기서 `REST API`의 정의에 대한 논쟁이 발생한다. (이후 서술)
 
@@ -182,11 +182,11 @@ API 중에서 <u>6가지를 모두 만족하면 RESTful API,</u>
 이 항목은 4개의 제약조건으로 구성되어 있다.
 
 
-1. Identification of resources
+1. `Identification of resources`
     
     = 리소스가 URI로 식별 가능해야 한다.
 
-2. Manipulation of resources through representations
+2. `Manipulation of resources through representations`
 
     = 리소스를 representation 전송으로 조작해야 한다.
 
