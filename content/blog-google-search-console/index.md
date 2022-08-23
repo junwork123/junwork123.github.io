@@ -4,7 +4,7 @@ title: 블로그에 검색 엔진 최적화(SEO) 적용으로 검색유입 늘�
 date: '2022-06-29 00:00:00'
 author: 주녁
 tags: 블로그 React SEO SearchConsole
-categories: 블로그-발전기
+categories: blog-dev
 ---
 
 ## 구글 서치콘솔(SearchConsole)

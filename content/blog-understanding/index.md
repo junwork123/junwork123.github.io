@@ -4,7 +4,7 @@ title: 이 블로그 스킨에 대한 이해 with React, GraphQL
 date: '2022-06-18 00:00:00'
 author: 주녁
 tags: 블로그 gatsby React GraphQL
-categories: 블로그-발전기
+categories: blog-dev
 ---
 
 ## 포스팅 기본 구조

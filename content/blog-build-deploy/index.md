@@ -4,7 +4,7 @@ title: 블로그 빌드 및 배포 자동화 - 1
 date: '2022-06-20 00:00:00'
 author: 주녁
 tags: 블로그 React 빌드 배포 자동화 package.json
-categories: 블로그-발전기
+categories: blog-dev
 ---
 
 ## **사전준비**

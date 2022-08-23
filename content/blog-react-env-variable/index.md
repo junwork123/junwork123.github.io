@@ -4,7 +4,7 @@ title: React 환경변수 세팅하기
 date: '2022-06-20 00:00:00'
 author: 주녁
 tags: 블로그 React env 환경변수
-categories: 블로그-발전기
+categories: blog-dev
 ---
 
 # React 환경변수 세팅하기
@@ -26,7 +26,7 @@ React 환경변수를 설정하는 방법을 찾아보았다.
 그리고 다음과 같이 `REACT_APP_~~~`으로 시작하는 변수를 선언한다.
 
 ```yml
-  REACT_APP_KAKAO_SHARE_KEY=키값
+REACT_APP_KAKAO_SHARE_KEY=키값
 ```
 
 ### <u>중요한 것!</u>
@@ -39,39 +39,39 @@ React 환경변수를 설정하는 방법을 찾아보았다.
 
 <br/><br/>
 
-
 ## `사용하기`
 
 <br/>
 
 그리고 사용할 스크립트로 이동해서 다음과 같이 사용하면 된다.
+
 ```javascript
   // 방법1
   function app() {
     const kakaoKey = process.env.REACT_APP_~~~~
   }
-  
+
   // 방법2
   return <p key={process.env.REACT_APP_~~~~}>
 ```
 
 <br/><br/>
 
-
 ## `+ 환경 분리하기`
 
 <br/>
 
-또한 `실행환경(로컬, 개발, 운영 등)`에 따라 
+또한 `실행환경(로컬, 개발, 운영 등)`에 따라
 
 `우선순위를 정하여 동작`할 수 있다.
 
 (물론 .env 하나만 있다면 그 파일이 사용된다.)
 
 ```yml
-    # 순서대로 로컬, 개발, 운영, 일반순으로 우선순위가 동작한다.
-    .env.local > .env.development > .env.production > .env
+# 순서대로 로컬, 개발, 운영, 일반순으로 우선순위가 동작한다.
+.env.local > .env.development > .env.production > .env
 ```
+
 <br/><br/>
 
 ---

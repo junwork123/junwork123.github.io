@@ -4,7 +4,7 @@ title: React 블로그에 소셜기능 넣기 - 공유버튼 만들기(1)
 date: '2022-07-08 00:00:00'
 author: 주녁
 tags: 블로그 버튼 카카오톡 SNS React
-categories: 블로그-발전기
+categories: blog-dev
 ---
 
 ## **소셜기능**

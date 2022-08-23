@@ -4,7 +4,7 @@ title: 블로그에 댓글 기능 추가하기 with utterances
 date: '2022-07-02 00:00:00'
 author: 주녁
 tags: 블로그 댓글기능
-categories: 블로그-발전기
+categories: blog-dev
 ---
 
 ## 블로그에 댓글 기능을 추가해보자

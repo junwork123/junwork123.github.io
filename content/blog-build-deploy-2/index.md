@@ -4,7 +4,7 @@ title: 블로그 빌드 및 배포 자동화 - 2
 date: '2022-06-23 00:00:00'
 author: 주녁
 tags: 블로그 빌드 배포 자동화 github-acition ci/cd
-categories: 블로그-발전기
+categories: blog-dev
 ---
 
 ## **자동 배포 권한을 얻기 위한 토큰 생성**
