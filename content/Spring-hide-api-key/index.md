@@ -53,7 +53,7 @@ spring.profiles.include=파일명
 
 파일을 생성했으면
 
-내용은 변수명=Key값 형태로 적으면 되는데,
+내용은 `변수명=Key값` 형태로 적으면 되는데,
 
 이 때, 따옴표 없이 작성하면 된다.
 
@@ -74,7 +74,7 @@ NAVER_API_KEY=값2
 
 <br/>
 
-이제 안전하게 보관한 Key 값을 꺼내서 써보도록 하자
+이제 안전하게 보관한 Key값을 꺼내서 써보도록 하자
 
 필자는 아래와 같은 형태로 Key값을 사용했었다.
 
@@ -90,7 +90,11 @@ public class ConstUtils {
 
 <br/>
 
-따라서, 아래와 같이 수정하였다.
+따라서, 아래와 같이 `어노테이션`으로 
+
+아까 설정파일에서 정의했던 `환경변수명을 호출`하는 방식으로 변경하였다.
+
+<br>
 
 ```java
 import org.springframework.beans.factory.annotation.Value;
@@ -101,9 +105,9 @@ public class DiscordChatBotFactory {
 ```
 <br/>
 
-이 때 사용하는 @Value 어노테이션은 
+이 때 사용하는 `@Value` 어노테이션은 
 
-<u>lombok이 아니라 스프링임에 주의하자.</u>
+<u>`lombok`이 아니라 `스프링`임에 주의하자.</u>
 
 
 <br/><br/>
