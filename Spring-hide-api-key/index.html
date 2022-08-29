@@ -130,10 +130,51 @@ resources/application<span class="token punctuation">-</span>API<span class="tok
 <br/>
 <p>또한 Git history에서 Key값이 노출된 내역이 있다면</p>
 <p><a href="https://www.gitguardian.com/">Git Guardian</a>을 통해 확인한 후 정리해주도록 하자.</p>
+<p>정리하는 방법은 3가지가 있다.</p>
+<p><code class="language-text">1. API Key 재발급</code></p>
+<p>Git Guardian 공식문서에서도</p>
+<p>히스토리 정리는 굉장히 조심할 것을 강조하고 있다.</p>
+<p><code class="language-text">API Key 재발급이 가장 안전하고 빠른 방법이다.</code></p>
+<p><br><br></p>
+<p><code class="language-text">2. git filter-branch</code></p>
+<p><a href="https://git-scm.com/docs/git-filter-branch">Git 자체에서 지원하는 기능</a>으로</p>
+<p><code class="language-text">히스토리를 전체 필터링하여 해당 파일을 제거한다.</code></p>
+<p>(로컬 저장소도 포함되므로 주의가 필요하다)</p>
+<br>
+<p>다만, 필자의 경우</p>
+<p>처음부터 Key가 포함되어 있거나,</p>
+<p>파일명이 변경된 경우였고</p>
+<p>잘 작동하지 않았다.</p>
+<p>(만약 아신다면 댓글에 첨부 부탁!)</p>
+<br>
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token function">git</span> filter-branch -f --index-filter <span class="token string">'git rm --cached --ignore-unmatch 파일명'</span> --prune-empty --all</code></pre></div>
+<ol start="3">
+<li>
+<p>BFG repo-cleaner</p>
+<p>2번 방법보다 속도가 더 빠른 방법이다.</p>
+<p>오픈소스로 제공된 프로젝트로</p>
+<p><code class="language-text">프로젝트를 clone한 뒤</code></p>
+<p>히스토리 상에서</p>
+<p>해당 파일, 문자열을 전부 삭제한 뒤</p>
+<p><code class="language-text">재커밋하는 방식을 취한다.</code></p>
+<p>사용법은 <a href="https://rtyley.github.io/bfg-repo-cleaner/">여기서</a> 참고하자</p>
+<p>(JAVA 8버전 이상의 JRE가 필요하다)</p>
+</li>
+</ol>
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment">#1. 프로젝트를 빈 폴더에 새로 clone한다.</span>
+<span class="token function">git</span> clone https:/저장소 주소.git
+
+<span class="token comment">#2. bfg 파일과 삭제할 문자열을 clone 위치에 넣고 </span>
+<span class="token comment">#   아래 명령어 실행</span>
+java -jar bfg.jar -rt delete.txt <span class="token builtin class-name">.</span>
+
+<span class="token comment">#3 처리가 끝났다면 아래 명령어 실행</span>
+<span class="token function">git</span> reflog expire --expire<span class="token operator">=</span>now --all <span class="token operator">&amp;&amp;</span> <span class="token function">git</span> gc --prune<span class="token operator">=</span>now --aggressive
+</code></pre></div>
 <p><br/><br/></p>
 <p><em>출처</em></p>
-<p><em><a href="https://nam-ki-bok.github.io/spring/HideAPI/">nam-ki-bok님 블로그</a></em></p>
-<p><em><a href="https://miinsun.tistory.com/148">miinsun님 블로그</a></em></p>
+<p><em><a href="https://velog.io/@sv002/git-filter-branch-%ED%9E%88%EC%8A%A4%ED%86%A0%EB%A6%AC-%ED%95%84%ED%84%B0%EB%A7%81">sv002님 블로그</a></em></p>
+<p><em><a href="https://nato-blog.tistory.com/127">nato님 블로그</a></em></p>
 <br/>
 <hr>
 <div class="table-of-contents">
