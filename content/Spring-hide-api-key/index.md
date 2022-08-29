@@ -137,15 +137,84 @@ resources/application-API-KEY.properties
 
 [Git Guardian](https://www.gitguardian.com/)을 통해 확인한 후 정리해주도록 하자.
 
+정리하는 방법은 3가지가 있다.
+
+`1. API Key 재발급`
+
+Git Guardian 공식문서에서도 
+
+히스토리 정리는 굉장히 조심할 것을 강조하고 있다.
+
+`API Key 재발급이 가장 안전하고 빠른 방법이다.`
+
+<br><br>
+
+`2. git filter-branch`
+
+[Git 자체에서 지원하는 기능](https://git-scm.com/docs/git-filter-branch)으로 
+
+`히스토리를 전체 필터링하여 해당 파일을 제거한다.`
+
+(로컬 저장소도 포함되므로 주의가 필요하다)
+
+<br>
+
+다만, 필자의 경우
+
+처음부터 Key가 포함되어 있거나,
+
+파일명이 변경된 경우였고
+
+잘 작동하지 않았다.
+
+(만약 아신다면 댓글에 첨부 부탁!)
+
+<br>
+
+```bash
+git filter-branch -f --index-filter 'git rm --cached --ignore-unmatch 파일명' --prune-empty --all
+```
+
+3. BFG repo-cleaner 
+
+    2번 방법보다 속도가 더 빠른 방법이다.
+
+    오픈소스로 제공된 프로젝트로
+
+    `프로젝트를 clone한 뒤` 
+    
+    히스토리 상에서 
+
+    해당 파일, 문자열을 전부 삭제한 뒤 
+    
+    `재커밋하는 방식을 취한다.`
+
+    사용법은 [여기서](https://rtyley.github.io/bfg-repo-cleaner/) 참고하자
+
+    (JAVA 8버전 이상의 JRE가 필요하다)
+
+
+
+```bash
+#1. 프로젝트를 빈 폴더에 새로 clone한다.
+git clone https:/저장소 주소.git
+
+#2. bfg 파일과 삭제할 문자열을 clone 위치에 넣고 
+#   아래 명령어 실행
+java -jar bfg.jar -rt delete.txt .
+
+#3 처리가 끝났다면 아래 명령어 실행
+git reflog expire --expire=now --all && git gc --prune=now --aggressive
+
+```
+
 <br/><br/>
 
 _출처_
 
-_[nam-ki-bok님 블로그](https://nam-ki-bok.github.io/spring/HideAPI/)_
+_[sv002님 블로그](https://velog.io/@sv002/git-filter-branch-%ED%9E%88%EC%8A%A4%ED%86%A0%EB%A6%AC-%ED%95%84%ED%84%B0%EB%A7%81)_
 
-
-_[miinsun님 블로그](https://miinsun.tistory.com/148)_
-
+_[nato님 블로그](https://nato-blog.tistory.com/127)_
 
 <br/>
 
