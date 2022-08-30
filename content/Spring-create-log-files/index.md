@@ -1,7 +1,7 @@
 ---
 emoji: 🔮
 title: 스프링 로그를 파일로 남겨보자(logback, Slf4j)
-date: '2022-07-23 00:00:00'
+date: '2022-08-30 00:00:00'
 author: 주녁
 tags: 스프링 Spring 로그 log logback Slf4j log4j logstash
 categories: Spring
