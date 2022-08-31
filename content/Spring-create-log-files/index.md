@@ -267,7 +267,7 @@ spring.output.ansi.enabled=always
         <file>${LOGS_ABSOLUTE_PATH}/logback.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>logback-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOGS_ABSOLUTE_PATH}/logback-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>30</maxHistory>
             <totalSizeCap>3GB</totalSizeCap>
             <timeBasedFileNamingAndTriggeringPolicy
