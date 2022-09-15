@@ -25,7 +25,7 @@ categories: how-to
 
 ---
 
-### 문자열 관련 메소드<span id="string"></span>
+## 문자열 관련 메소드<span id="string"></span>
 
 ```python
 # 문자열 뒤집기
@@ -80,7 +80,7 @@ len('hello')
 
 ---
 
-### 리스트 관련 함수<span id="list"></span>
+## 리스트 관련 함수<span id="list"></span>
 
 ```python
 # 알파벳 생성하기
@@ -155,7 +155,7 @@ for item in list(newDict):
 
 ---
 
-### 정규표현식(re모듈)<span id="re"></span>
+## 정규표현식(re모듈)<span id="re"></span>
 
 - 주요 메소드
 
@@ -297,7 +297,7 @@ sum(char in string2 for char in string)
 
 ---
 
-### 유용한 함수<span id="useful"></span>
+## 유용한 함수<span id="useful"></span>
 
 ```python
 # 프로그래머스 로그 찍기
@@ -360,7 +360,9 @@ newInfo2 = {**info, 'month' : 1, 'day' : 25}
 
 ---
 
-### 파싱 라이브러리 BeautifulSoup4(bs4)<span id="bs4"></span>
+## 파싱 라이브러리 BeautifulSoup4(bs4)<span id="bs4"></span>
+
+<br>
 
 아래 코드는 크롤링한 데이터를 Python파일와 같은 위치에 result.json을 만들어 저장하는 예제.(이준범님 코드)
 
