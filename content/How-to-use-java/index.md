@@ -1,6 +1,6 @@
 ---
 emoji: 🔮
-title: Java 문법 정리(알고리즘을 중점으로)
+title: Java 문법 정리
 date: '2022-09-16 00:00:00'
 author: 주녁
 tags: JAVA java algorithm 알고리즘 문법 syntax
