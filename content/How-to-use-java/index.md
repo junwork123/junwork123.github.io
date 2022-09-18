@@ -17,7 +17,9 @@ categories: how-to
 
 [3. 형 변환 관련](#cast)
 
-[4. 유용한 함수](#useful)
+[4. 정규식 관련](#regex)
+
+[5. 유용한 함수](#useful)
 
 <br/><br/>
 
@@ -112,6 +114,15 @@ import java.util.*; // 급할떄만 쓰자
     List<Integer> intList = Arrays.stream(arr)
                                 .boxed()                        
                                 .collect(Collectors.toList());
+```
+<br>
+
+<br>
+
+---
+## 정규식 괸련<span id="regex"></span>
+```java
+
 ```
 <br>
 
