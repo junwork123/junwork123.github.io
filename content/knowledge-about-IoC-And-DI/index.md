@@ -149,11 +149,41 @@ IoC는 <u>역할과 관심을 분리해 변경에 유연한 코드를 작성할 
 
 겉보기엔 어려워보이지만, 해석하면 당연한 이야기이다.
 
+위 원칙을 적용한 코드의 예시는 아래와 같다.
+
+(Java 문법을 기준으로 작성하였고, 엄격한 예시가 아닐 수 있다!)
+
 <br/>
 
 1. `고차원 모듈`(=피자 가게)는 `저차원 모듈`(=직원)에 의존하면 안된다.
 
-    직원이 A → C로 변경되어도, 수행하는 역할은 같아야 한다.
+    직원이 Senior `A` → Junior `C`로 변경되어도, 수행하는 역할은 같아야 한다.
+
+    ```java
+    public class PizzaStore {
+        KitchenStaff kitchenStaff;
+        public runStore(){
+            ...
+            kitchenStaff.makePizza(...);
+            ...
+        }
+    }
+    ```
+    ```java
+    public class SeniorKitchenStaff implements KitchenStaff {
+        @Override
+        public void move(Point from, Point to){...};
+        public Pizza makePizza(Bread bread, Topping topping){...fast making..};
+    }
+    ```
+
+    ```java
+    public class JuniorKitchenStaff implements KitchenStaff {
+        @Override
+        public void move(Point from, Point to){...};
+        public Pizza makePizza(Bread bread, Topping topping){...slow making...};
+    }
+    ```
 
     <br>
 
@@ -165,16 +195,50 @@ IoC는 <u>역할과 관심을 분리해 변경에 유연한 코드를 작성할 
     
     → 모든 개념을 점점 세세하게 분해해야 한다는 의미이다.
 
+    ```java
+    public interface Staff {
+        public void move(Point from, Point to);
+    }
+    ```
+
+    ```java
+    public class KitchenStaff extends Staff {
+        @Override
+        public void move(Point from, Point to){...walk...};
+        public Pizza makePizza(Bread bread, Topping topping){...};
+    }
+    ```
+
     <br>
 
 3. `추상화 된 것`(=피자)은 `구체적인 것`(=레시피)에 의존하면 안 된다. 
 
     페퍼로니 피자와 포테이토 피자는 레시피가 달라도 피자라는 개념은 동일하다. 
     
-    피자의 재료에 따라 피자의 역할을 벗어나는 경우가 없어야한다.
+    피자의 내용물에 따라 피자의 역할을 벗어나는 경우가 없어야한다.
 
     (못먹는 피자가 되거나, 피자가 직원 대신 일을 한다던가!)
 
+    
+    ```java
+    public abstract Class Pizza {
+        public Bread bread;
+        public Topping topping;
+        public int size;
+        abstract public Taste taste();
+    }
+    ```
+
+    ```java
+    public Class WeirdPizza extends Pizza{
+        public Staff staff; // 이 피자는 직원을 가지고 있다!
+        @Override
+        public Taste taste() {
+            return new Taste("Weird Taste");
+        }
+        public void work(){...this pizza can work!...};
+    }
+    ```
     <br>
 
 4. `구체적인 것`(=레시피)이 `추상화된 것`(=피자)에 의존해야 한다.
@@ -185,7 +249,28 @@ IoC는 <u>역할과 관심을 분리해 변경에 유연한 코드를 작성할 
     
     피자를 정의하는데 전혀 영향을 미치지 않는다.
 
-<br>
+    <br>
+
+    ```java
+    public Class PotatoPizza extends Pizza{
+        public PotatoPizza(Bread bread){
+            this.bread = bread;
+            this.topping = new Topping("Potato");
+            this.size = 15;
+        }
+        @Override
+        public Taste taste() {
+            return new Taste("Potato Taste");
+        }
+    }
+
+    // example
+    Pizza pizza = new PotatoPizza(bread);
+    pizza.taste(); // 어떤 피자던 먹으면 맛이 난다.
+    ```
+
+
+
 
 ---
 ## **마치며**
