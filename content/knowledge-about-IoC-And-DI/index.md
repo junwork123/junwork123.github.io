@@ -1,6 +1,6 @@
 ---
 emoji: 🔮
-title: IoC(Inverse Of Control)와 DIP(Dependency Inversion Principle)를 아시나요?
+title: IoC와 DIP를 아시나요?
 date: '2022-09-21 00:00:00'
 author: 주녁
 tags: IoC DIP Inverse Of Control Dependency Inversion Principle Factory 
