@@ -28,9 +28,9 @@ categories: knowledge
 
 프로그래밍의 많은 부분은 현실세계를 모방하여 만들어진다.
 
-<u>서비스를 제공하는 쪽이 사용하는 쪽에 의존</u>한다.
+<u>서비스를 제공하는 쪽이 사용하는 쪽에 의존한다.</u>
 
-이를 `제어의 역전(IoC, Inverse of Control)`라고 부른다.
+이를 `제어의 역전`(IoC, Inverse of Control)라고 부른다.
 
 IoC도 피자가게와 같은 맥락을 가진다.
 
