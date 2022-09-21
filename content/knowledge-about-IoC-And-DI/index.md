@@ -173,7 +173,7 @@ IoC는 <u>역할과 관심을 분리해 변경에 유연한 코드를 작성할 
     public class SeniorKitchenStaff implements KitchenStaff {
         @Override
         public void move(Point from, Point to){...};
-        public Pizza makePizza(Bread bread, Topping topping){...fast making..};
+        public Pizza makePizza(Bread bread, Topping topping){...빨리 만든다..};
     }
     ```
 
@@ -181,7 +181,7 @@ IoC는 <u>역할과 관심을 분리해 변경에 유연한 코드를 작성할 
     public class JuniorKitchenStaff implements KitchenStaff {
         @Override
         public void move(Point from, Point to){...};
-        public Pizza makePizza(Bread bread, Topping topping){...slow making...};
+        public Pizza makePizza(Bread bread, Topping topping){...느리게 만든다...};
     }
     ```
 
@@ -197,15 +197,17 @@ IoC는 <u>역할과 관심을 분리해 변경에 유연한 코드를 작성할 
 
     ```java
     public interface Staff {
+        // 직원은 움직일 수 있어야 한다.
         public void move(Point from, Point to);
     }
     ```
 
     ```java
     public class KitchenStaff extends Staff {
+        // 움직일 수 있고, 피자를 만들 수 있는 직원!
         @Override
         public void move(Point from, Point to){...walk...};
-        public Pizza makePizza(Bread bread, Topping topping){...};
+        public Pizza makePizza(Bread bread, Topping topping){...피자를 만든다...};
     }
     ```
 
@@ -225,18 +227,19 @@ IoC는 <u>역할과 관심을 분리해 변경에 유연한 코드를 작성할 
         public Bread bread;
         public Topping topping;
         public int size;
-        abstract public Taste taste();
+        abstract public Taste taste(); // 피자는 맛을 낸다!
     }
     ```
 
     ```java
     public Class WeirdPizza extends Pizza{
-        public Staff staff; // 이 피자는 직원을 가지고 있다!
+        // 이 이상한 피자는 직원을 가지고 있다!
+        public Staff staff; 
         @Override
         public Taste taste() {
             return new Taste("Weird Taste");
         }
-        public void work(){...this pizza can work!...};
+        public void work(){...이 이상한 피자는 일도 할 수 있다!...};
     }
     ```
     <br>
@@ -268,16 +271,14 @@ IoC는 <u>역할과 관심을 분리해 변경에 유연한 코드를 작성할 
     Pizza pizza = new PotatoPizza(bread);
     pizza.taste(); // 어떤 피자던 먹으면 맛이 난다.
     ```
-
-
-
+<br>
 
 ---
 ## **마치며**
 
 <br>
 
-이제 IoC와 DIP를 설명할 수 있는가?
+자, 이제 IoC와 DIP를 설명할 수 있는가?
 
 <br>
 
