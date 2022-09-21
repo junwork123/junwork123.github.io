@@ -171,8 +171,11 @@
 <p>피자가게는 가게라고 뭉뚱그려 말할 수 있고(추상화),</p>
 <p>직원 또한 일할 수 있는 무언가(인간, 로봇, 똑똑한 강아지..)라고 뭉뚱그려 말할 수 있다.</p>
 <p>→ 모든 개념을 점점 세세하게 분해해야 한다는 의미이다.</p>
-<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Staff</span> <span class="token punctuation">{</span>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Staff</span> <span class="token keyword">implements</span> <span class="token class-name">Movable</span><span class="token punctuation">{</span>
     <span class="token comment">// 직원은 움직일 수 있어야 한다.</span>
+<span class="token punctuation">}</span></code></pre></div>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Movable</span><span class="token punctuation">{</span>
+    <span class="token comment">// 움직이는 행동이 가능한 인터페이스</span>
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">move</span><span class="token punctuation">(</span><span class="token class-name">Point</span> from<span class="token punctuation">,</span> <span class="token class-name">Point</span> <span class="token keyword">to</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre></div>
 <div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">KitchenStaff</span> <span class="token keyword">extends</span> <span class="token class-name">Staff</span> <span class="token punctuation">{</span>
