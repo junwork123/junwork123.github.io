@@ -196,8 +196,14 @@ IoC는 <u>역할과 관심을 분리해 변경에 유연한 코드를 작성할 
     → 모든 개념을 점점 세세하게 분해해야 한다는 의미이다.
 
     ```java
-    public interface Staff {
+    public abstract class Staff implements Movable{
         // 직원은 움직일 수 있어야 한다.
+    }
+    ```
+    
+    ```java
+    public interface Movable{
+        // 움직이는 행동이 가능한 인터페이스
         public void move(Point from, Point to);
     }
     ```
