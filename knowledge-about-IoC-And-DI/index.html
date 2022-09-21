@@ -139,11 +139,31 @@
 <br>
 <p>이러한 원칙을 <code class="language-text">DIP</code>(Dependency Inversion Principle)이라고 한다.</p>
 <p>겉보기엔 어려워보이지만, 해석하면 당연한 이야기이다.</p>
+<p>위 원칙을 적용한 코드의 예시는 아래와 같다.</p>
+<p>(Java 문법을 기준으로 작성하였고, 엄격한 예시가 아닐 수 있다!)</p>
 <br/>
 <ol>
 <li>
 <p><code class="language-text">고차원 모듈</code>(=피자 가게)는 <code class="language-text">저차원 모듈</code>(=직원)에 의존하면 안된다.</p>
-<p>직원이 A → C로 변경되어도, 수행하는 역할은 같아야 한다.</p>
+<p>직원이 Senior <code class="language-text">A</code> → Junior <code class="language-text">C</code>로 변경되어도, 수행하는 역할은 같아야 한다.</p>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PizzaStore</span> <span class="token punctuation">{</span>
+    <span class="token class-name">KitchenStaff</span> kitchenStaff<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token function">runStore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+        kitchenStaff<span class="token punctuation">.</span><span class="token function">makePizza</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></div>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SeniorKitchenStaff</span> <span class="token keyword">implements</span> <span class="token class-name">KitchenStaff</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">move</span><span class="token punctuation">(</span><span class="token class-name">Point</span> from<span class="token punctuation">,</span> <span class="token class-name">Point</span> <span class="token keyword">to</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token class-name">Pizza</span> <span class="token function">makePizza</span><span class="token punctuation">(</span><span class="token class-name">Bread</span> bread<span class="token punctuation">,</span> <span class="token class-name">Topping</span> topping<span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>fast making<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></div>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JuniorKitchenStaff</span> <span class="token keyword">implements</span> <span class="token class-name">KitchenStaff</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">move</span><span class="token punctuation">(</span><span class="token class-name">Point</span> from<span class="token punctuation">,</span> <span class="token class-name">Point</span> <span class="token keyword">to</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token class-name">Pizza</span> <span class="token function">makePizza</span><span class="token punctuation">(</span><span class="token class-name">Bread</span> bread<span class="token punctuation">,</span> <span class="token class-name">Topping</span> topping<span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>slow making<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></div>
  <br>
 </li>
 <li>
@@ -151,13 +171,35 @@
 <p>피자가게는 가게라고 뭉뚱그려 말할 수 있고(추상화),</p>
 <p>직원 또한 일할 수 있는 무언가(인간, 로봇, 똑똑한 강아지..)라고 뭉뚱그려 말할 수 있다.</p>
 <p>→ 모든 개념을 점점 세세하게 분해해야 한다는 의미이다.</p>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Staff</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">move</span><span class="token punctuation">(</span><span class="token class-name">Point</span> from<span class="token punctuation">,</span> <span class="token class-name">Point</span> <span class="token keyword">to</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></div>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">KitchenStaff</span> <span class="token keyword">extends</span> <span class="token class-name">Staff</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">move</span><span class="token punctuation">(</span><span class="token class-name">Point</span> from<span class="token punctuation">,</span> <span class="token class-name">Point</span> <span class="token keyword">to</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>walk<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token class-name">Pizza</span> <span class="token function">makePizza</span><span class="token punctuation">(</span><span class="token class-name">Bread</span> bread<span class="token punctuation">,</span> <span class="token class-name">Topping</span> topping<span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></div>
  <br>
 </li>
 <li>
 <p><code class="language-text">추상화 된 것</code>(=피자)은 <code class="language-text">구체적인 것</code>(=레시피)에 의존하면 안 된다.</p>
 <p>페퍼로니 피자와 포테이토 피자는 레시피가 달라도 피자라는 개념은 동일하다.</p>
-<p>피자의 재료에 따라 피자의 역할을 벗어나는 경우가 없어야한다.</p>
+<p>피자의 내용물에 따라 피자의 역할을 벗어나는 경우가 없어야한다.</p>
 <p>(못먹는 피자가 되거나, 피자가 직원 대신 일을 한다던가!)</p>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token class-name">Class</span> <span class="token class-name">Pizza</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token class-name">Bread</span> bread<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token class-name">Topping</span> topping<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> size<span class="token punctuation">;</span>
+    <span class="token keyword">abstract</span> <span class="token keyword">public</span> <span class="token class-name">Taste</span> <span class="token function">taste</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></div>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">Class</span> <span class="token class-name">WeirdPizza</span> <span class="token keyword">extends</span> <span class="token class-name">Pizza</span><span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token class-name">Staff</span> staff<span class="token punctuation">;</span> <span class="token comment">// 이 피자는 직원을 가지고 있다!</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">Taste</span> <span class="token function">taste</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Taste</span><span class="token punctuation">(</span><span class="token string">"Weird Taste"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">work</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token keyword">this</span> pizza can work<span class="token operator">!</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></div>
  <br>
 </li>
 <li>
@@ -165,9 +207,24 @@
 <p>모든 피자는 도우 위에 토핑이 들어가고, 오븐에 굽는다.</p>
 <p>피자의 도우 크기, 토핑 종류, 얼마나 굽는지 구체적인 요소는</p>
 <p>피자를 정의하는데 전혀 영향을 미치지 않는다.</p>
+ <br>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">Class</span> <span class="token class-name">PotatoPizza</span> <span class="token keyword">extends</span> <span class="token class-name">Pizza</span><span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token class-name">PotatoPizza</span><span class="token punctuation">(</span><span class="token class-name">Bread</span> bread<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>bread <span class="token operator">=</span> bread<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>topping <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Topping</span><span class="token punctuation">(</span><span class="token string">"Potato"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>size <span class="token operator">=</span> <span class="token number">15</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">Taste</span> <span class="token function">taste</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Taste</span><span class="token punctuation">(</span><span class="token string">"Potato Taste"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// example</span>
+<span class="token class-name">Pizza</span> pizza <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PotatoPizza</span><span class="token punctuation">(</span>bread<span class="token punctuation">)</span><span class="token punctuation">;</span>
+pizza<span class="token punctuation">.</span><span class="token function">taste</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 어떤 피자던 먹으면 맛이 난다.</span></code></pre></div>
 </li>
 </ol>
-<br>
 <hr>
 <h2 id="마치며" style="position:relative;"><a href="#%EB%A7%88%EC%B9%98%EB%A9%B0" aria-label="마치며 permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>마치며</strong></h2>
 <br>
