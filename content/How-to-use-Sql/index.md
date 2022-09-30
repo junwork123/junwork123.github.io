@@ -21,12 +21,14 @@ categories: how-to
 
 [5. 중복제거(DISTINCT) 관련](#DISTINCT)
 
-[6. 빈 값 처리](#IFNULL)
+[6. 빈 값(NULL) 처리](#IFNULL)
 
 <br/><br/>
 
 ---
+
 ## GROUP 관련<span id="GROUP"></span>
+
 ```sql
 -- 두 번 이상 쓰인 이름, 해당 이름이 쓰인 횟수
 SELECT
@@ -42,7 +44,8 @@ HAVING
     COUNT(NAME) > 1
 ORDER BY
     NAME
-``` 
+```
+
 <br>
 
 ```sql
@@ -50,7 +53,7 @@ ORDER BY
 SELECT
     HOUR(DATETIME) AS HOUR
     , COUNT(HOUR(DATETIME))
-FROM 
+FROM
     ANIMAL_OUTS
 GROUP BY
     HOUR
@@ -65,40 +68,41 @@ ORDER BY
 ```sql
 -- 각 시간대별 건수(빈 값 포함) ★★★
 SET @HOUR = -1;
-SELECT 
+SELECT
     (@HOUR := @HOUR +1) AS HOUR
     , (
-        SELECT COUNT(HOUR(DATETIME)) 
-        FROM 
-            ANIMAL_OUTS 
-        WHERE 
+        SELECT COUNT(HOUR(DATETIME))
+        FROM
+            ANIMAL_OUTS
+        WHERE
             HOUR(DATETIME)=@HOUR
-      ) AS COUNT 
-FROM 
+      ) AS COUNT
+FROM
     ANIMAL_OUTS
-WHERE 
+WHERE
     @HOUR < 23;
 ```
 
 <br>
 
-
 ---
+
 ## JOIN 관련<span id="JOIN"></span>
+
 ```sql
 -- 한쪽 테이블에만 값이 있는 경우(OUTER JOIN)
-SELECT 
+SELECT
     OUTS.ANIMAL_ID
     , OUTS.NAME
-FROM 
+FROM
     ANIMAL_OUTS OUTS
-    LEFT OUTER JOIN 
+    LEFT OUTER JOIN
         ANIMAL_INS INS
-    ON 
+    ON
         OUTS.ANIMAL_ID = INS.ANIMAL_ID
-WHERE 
+WHERE
     INS.ANIMAL_ID IS NULL
-ORDER BY 
+ORDER BY
     OUTS.ANIMAL_ID
 ```
 
@@ -125,7 +129,9 @@ ORDER BY
 <br>
 
 ---
+
 ## String 관련 <span id="STRING"><span>
+
 ```sql
 -- 특정 문자열 조건 검색
 SELECT
@@ -134,9 +140,9 @@ SELECT
 FROM
     ANIMAL_INS
 WHERE
-    ANIMAL_TYPE = "Dog" 
-    AND NAME LIKE "%EL%" 
-ORDER BY 
+    ANIMAL_TYPE = "Dog"
+    AND NAME LIKE "%EL%"
+ORDER BY
     NAME
 ```
 
@@ -148,20 +154,22 @@ SELECT
     ANIMAL_ID
     , NAME
     , CASE
-        WHEN 
+        WHEN
             SEX_UPON_INTAKE LIKE '%Neutered%'
             OR SEX_UPON_INTAKE LIKE '%Spayed%'
         THEN 'O'
-        ELSE 'X' 
+        ELSE 'X'
     END as '중성화'
 FROM
     ANIMAL_INS
 ORDER BY
     ANIMAL_ID
 ```
+
 <br>
 
 ---
+
 ## Date 관련 <span id="Date"><span>
 
 ```sql
@@ -198,7 +206,9 @@ ORDER BY
 ```
 
 ---
+
 ## 중복제거(DISTINCT) 관련 <span id="DISTINCT"><span>
+
 ```sql
 -- 중복을 제거한 카운트
 SELECT
@@ -210,7 +220,9 @@ FROM
 <br>
 
 ---
+
 ## GROUP 관련<span id="GROUP"></span>
+
 ```sql
 -- 이름이 NULL 값일 때 처리
 SELECT
@@ -222,7 +234,6 @@ FROM
 ORDER BY
     ANIMAL_ID
 ```
-
 
 <br/>
 
