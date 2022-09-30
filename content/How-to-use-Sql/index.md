@@ -1,9 +1,9 @@
 ---
 emoji: 🔮
 title: SQL 문법 정리(사례 위주)
-date: '2022-09-16 00:00:00'
+date: '2022-10-01 00:00:00'
 author: 주녁
-tags: sql SQL mysql postgreSql 알고리즘 문법 syntax
+tags: sql SQL mysql oracle mssql postgreSql 알고리즘 문법 syntax
 categories: how-to
 ---
 
