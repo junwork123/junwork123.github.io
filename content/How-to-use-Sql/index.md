@@ -1,6 +1,6 @@
 ---
 emoji: 🔮
-title: SQL 문법 정리(사례 위주)
+title: 알고리즘에서 써먹는 SQL 문법 정리
 date: '2022-10-01 00:00:00'
 author: 주녁
 tags: sql SQL mysql oracle mssql postgreSql 알고리즘 문법 syntax

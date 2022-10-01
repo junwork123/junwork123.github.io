@@ -1,6 +1,6 @@
 ---
 emoji: 🔮
-title: Java 문법 정리(알고리즘을 중점으로)
+title: 알고리즘에서 써먹는 자바(Java) 문법 정리
 date: '2022-09-16 00:00:00'
 author: 주녁
 tags: JAVA java algorithm 알고리즘 문법 syntax
@@ -87,24 +87,22 @@ import java.util.*; // 급할떄만 쓰자
 ## 형 변환 관련<span id="cast"></span>
 ```java
 /* 기본형 변환 */
-    Integer.parseInt("10"); // 숫자 → 문자
-    Character.getNumericValue('10'); // 문자 → 숫자
-    "hello".toCharArray(); // 문자열 → 배열
+    int i = Integer.parseInt("10"); // String → int
+    int i = Character.getNumericValue('10'); // char → int
+    char[] chars = "hello".toCharArray(); // String → char[]
 
-/* 리스트 → 배열 */
+/* List<String> → String[] */
     String arr[] = list.toArray(new String[list.size()]); 
         // new String[0] : 같은 크기, 
         // new String[list.size()+1] : null로 채워서 append
 
-/* String 배열 → 리스트 */
+/* String [] → List<String> */
     List<String> list = new ArrayList<>(Arrays.asList(arr)); // 새로운 객체를 생성
     List<String> list2 = Stream.of(arr).collect(Collectors.toList()); // 스트림 사용
         // Arrays.asList(arr) : 원본 배열을 참조하는 리스트 반환(같이 변경됨)
 
-/* int 배열 → 리스트 ★★★ */
+/* int[] → List<Integer> */
     int[] arr = { 1, 2, 3 };
-
-    // 반복문 사용
     List<Integer> intList = new ArrayList<>();        
     for (int item : arr) {
         intList.add(item);        

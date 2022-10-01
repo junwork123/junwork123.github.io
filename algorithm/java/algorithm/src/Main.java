@@ -14,5 +14,8 @@ public class Main {
         };
         int[] result = solution.solution(5,4, paths);
         System.out.printf("return : %d %d", result[0], result[1]);
+        int i = Integer.parseInt();
+        int numericValue = Character.getNumericValue('10');// 문자 → 숫자
+        char[] chars = "hello".toCharArray();// 문자열 → 배열
     }
 }
