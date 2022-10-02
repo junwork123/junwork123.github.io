@@ -241,7 +241,7 @@ ORDER BY
 
 ---
 
-## GROUP 관련<span id="GROUP"></span>
+## 7. 복잡한 쿼리(PL/SQL)<span id="PLSQL"></span>
 
 ```sql
 -- 동적 쿼리를 이용한 평균나이 구하기
