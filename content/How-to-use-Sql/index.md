@@ -23,6 +23,8 @@ categories: how-to
 
 [6. 빈 값(NULL) 처리](#IFNULL)
 
+[7. 복잡한 쿼리(PL/SQL)](#PLSQL)
+
 <br/><br/>
 
 ---
@@ -238,6 +240,42 @@ ORDER BY
 <br/>
 
 ---
+
+## GROUP 관련<span id="GROUP"></span>
+
+```sql
+-- 동적 쿼리를 이용한 평균나이 구하기
+CREATE OR REPLACE FUNCTION avg_ages(n INTEGER)
+RETURNS NUMERIC AS $$
+DECLARE
+    r RECORD;
+    total NUMERIC := 0;
+    query TEXT;
+BEGIN
+    query := 'SELECT age FROM person LIMIT $1';
+    FOR r IN EXECUTE query USING n
+    LOOP
+        total := total + r.age;
+    END LOOP;
+    RETURN total / n;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+---
+<br>
+
+_참고자료_
+
+_[PostgreSQL의 PL/pgSQL 튜토리얼 – 3 : 변수와 상수](http://www.gisdeveloper.co.kr/?p=4573)_
+
+_[PostgreSQL의 PL/pgSQL 튜토리얼 – 4 : IF 조건문](http://www.gisdeveloper.co.kr/?p=4582)_
+
+_[PostgreSQL의 PL/pgSQL 튜토리얼 – 5 : CASE 조건문](http://www.gisdeveloper.co.kr/?p=4601)_
+
+_[PostgreSQL의 PL/pgSQL 튜토리얼 – 6 : 반복문](http://www.gisdeveloper.co.kr/?p=4621)_
+
+_[PostgreSQL의 PL/pgSQL 튜토리얼 – 7 : 질의 결과를 반환하는 함수](http://www.gisdeveloper.co.kr/?p=4642)_
 
 ```toc
 
