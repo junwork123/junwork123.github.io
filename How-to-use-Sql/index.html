@@ -270,7 +270,7 @@ $$ <span class="token keyword">LANGUAGE</span> plpgsql<span class="token punctua
     <span class="token punctuation">)</span> RR
     <span class="token keyword">ON</span> RI<span class="token punctuation">.</span>REST_ID <span class="token operator">=</span> RR<span class="token punctuation">.</span>REST_ID
 <span class="token keyword">WHERE</span>
-    RI<span class="token punctuation">.</span>ADDRESS <span class="token operator">LIKE</span> <span class="token string">'%서울%'</span>
+    RI<span class="token punctuation">.</span>ADDRESS <span class="token operator">LIKE</span> <span class="token string">'서울%'</span>
 <span class="token keyword">ORDER</span> <span class="token keyword">BY</span> 
     RR<span class="token punctuation">.</span>SCORE <span class="token keyword">DESC</span><span class="token punctuation">,</span>
     RI<span class="token punctuation">.</span>FAVORITES <span class="token keyword">DESC</span>
