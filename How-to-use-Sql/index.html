@@ -153,6 +153,32 @@
 <span class="token keyword">ORDER</span> <span class="token keyword">BY</span>
     INS<span class="token punctuation">.</span><span class="token keyword">DATETIME</span></code></pre></div>
 <br>
+<div class="gatsby-highlight" data-language="sql"><pre class="language-sql"><code class="language-sql"><span class="token comment">-- INNER JOIN 후 평균 구하기</span>
+<span class="token keyword">SELECT</span>
+    RI<span class="token punctuation">.</span>REST_ID<span class="token punctuation">,</span>
+    RI<span class="token punctuation">.</span>REST_NAME<span class="token punctuation">,</span>
+    RI<span class="token punctuation">.</span>FOOD_TYPE<span class="token punctuation">,</span>
+    RI<span class="token punctuation">.</span>FAVORITES<span class="token punctuation">,</span>
+    RI<span class="token punctuation">.</span>ADDRESS<span class="token punctuation">,</span>
+    RR<span class="token punctuation">.</span>SCORE
+<span class="token keyword">FROM</span>
+    REST_INFO RI
+    <span class="token keyword">INNER</span> <span class="token keyword">JOIN</span> <span class="token punctuation">(</span>
+        <span class="token keyword">SELECT</span> 
+            REST_ID<span class="token punctuation">,</span> 
+            <span class="token function">ROUND</span><span class="token punctuation">(</span><span class="token function">AVG</span><span class="token punctuation">(</span>REVIEW_SCORE<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> SCORE
+        <span class="token keyword">FROM</span> 
+            REST_REVIEW
+        <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> REST_ID
+    <span class="token punctuation">)</span> RR
+    <span class="token keyword">ON</span> RI<span class="token punctuation">.</span>REST_ID <span class="token operator">=</span> RR<span class="token punctuation">.</span>REST_ID
+<span class="token keyword">WHERE</span>
+    RI<span class="token punctuation">.</span>ADDRESS <span class="token operator">LIKE</span> <span class="token string">'서울%'</span>
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> 
+    RR<span class="token punctuation">.</span>SCORE <span class="token keyword">DESC</span><span class="token punctuation">,</span>
+    RI<span class="token punctuation">.</span>FAVORITES <span class="token keyword">DESC</span>
+</code></pre></div>
+<br>
 <hr>
 <h2 id="string-관련-span-idstringspan" style="position:relative;"><a href="#string-%EA%B4%80%EB%A0%A8-span-idstringspan" aria-label="string 관련 span idstringspan permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>String 관련 <span id="STRING"><span></h2>
 <div class="gatsby-highlight" data-language="sql"><pre class="language-sql"><code class="language-sql"><span class="token comment">-- 특정 문자열 조건 검색</span>
@@ -249,32 +275,6 @@
     <span class="token keyword">RETURN</span> total <span class="token operator">/</span> n<span class="token punctuation">;</span>
 <span class="token keyword">END</span><span class="token punctuation">;</span>
 $$ <span class="token keyword">LANGUAGE</span> plpgsql<span class="token punctuation">;</span></code></pre></div>
-<div class="gatsby-highlight" data-language="sql"><pre class="language-sql"><code class="language-sql"><span class="token comment">-- 재구매가 일어난 상품과 회원 리스트</span>
-<span class="token comment">-- 코드를 입력하세요</span>
-<span class="token keyword">SELECT</span>
-    RI<span class="token punctuation">.</span>REST_ID<span class="token punctuation">,</span>
-    RI<span class="token punctuation">.</span>REST_NAME<span class="token punctuation">,</span>
-    RI<span class="token punctuation">.</span>FOOD_TYPE<span class="token punctuation">,</span>
-    RI<span class="token punctuation">.</span>FAVORITES<span class="token punctuation">,</span>
-    RI<span class="token punctuation">.</span>ADDRESS<span class="token punctuation">,</span>
-    RR<span class="token punctuation">.</span>SCORE
-<span class="token keyword">FROM</span>
-    REST_INFO RI
-    <span class="token keyword">INNER</span> <span class="token keyword">JOIN</span> <span class="token punctuation">(</span>
-        <span class="token keyword">SELECT</span> 
-            REST_ID<span class="token punctuation">,</span> 
-            <span class="token function">ROUND</span><span class="token punctuation">(</span><span class="token function">AVG</span><span class="token punctuation">(</span>REVIEW_SCORE<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> SCORE
-        <span class="token keyword">FROM</span> 
-            REST_REVIEW
-        <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> REST_ID
-    <span class="token punctuation">)</span> RR
-    <span class="token keyword">ON</span> RI<span class="token punctuation">.</span>REST_ID <span class="token operator">=</span> RR<span class="token punctuation">.</span>REST_ID
-<span class="token keyword">WHERE</span>
-    RI<span class="token punctuation">.</span>ADDRESS <span class="token operator">LIKE</span> <span class="token string">'서울%'</span>
-<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> 
-    RR<span class="token punctuation">.</span>SCORE <span class="token keyword">DESC</span><span class="token punctuation">,</span>
-    RI<span class="token punctuation">.</span>FAVORITES <span class="token keyword">DESC</span>
-</code></pre></div>
 <div class="gatsby-highlight" data-language="sql"><pre class="language-sql"><code class="language-sql"><span class="token comment">--- 재구매가 일어난 상품과 회원 리스트</span>
 </code></pre></div>
 <div class="gatsby-highlight" data-language="sql"><pre class="language-sql"><code class="language-sql"><span class="token comment">-- 정렬 기준 세분화</span></code></pre></div>
