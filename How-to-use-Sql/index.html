@@ -334,13 +334,19 @@ $$ <span class="token keyword">LANGUAGE</span> plpgsql<span class="token punctua
 <span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> USER_INFO
 <span class="token keyword">DROP</span> <span class="token keyword">CONSTRAINT</span> 연락처_PK <span class="token comment">-- 제약조건도 삭제 가능</span></code></pre></div>
 <br>
-<div class="gatsby-highlight" data-language="sql"><pre class="language-sql"><code class="language-sql"><span class="token comment">-- 테이블 삭제(구조, 데이터 모두 삭제)</span>
+<div class="gatsby-highlight" data-language="sql"><pre class="language-sql"><code class="language-sql"><span class="token comment">-- 테이블 삭제</span>
+<span class="token comment">-- 데이블 전체를 삭제, 공간, 객체를 삭제한다. 삭제 후 절대 되돌릴 수 없다.</span>
+<span class="token keyword">DROP</span> 명령어는 데이블 전체를 삭제<span class="token punctuation">,</span> 공간<span class="token punctuation">,</span> 객체를 삭제한다<span class="token punctuation">.</span> 삭제 후 절대 되돌릴 수 없다<span class="token punctuation">.</span>
 <span class="token keyword">DROP</span> <span class="token keyword">TABLE</span> USER_INFO
 
 <span class="token comment">-- 테이블 초기화(구조는 남기고, 데이터만 초기화)</span>
+<span class="token comment">-- 테이블 용량이 줄어 들고, 인덱스 등도 모두 삭제 된다. </span>
+<span class="token comment">-- 삭제 후 절대 되돌릴 수 없다.</span>
 <span class="token keyword">TRUNCATE</span> <span class="token keyword">TABLE</span> USER_INFO
 
 <span class="token comment">-- 데이터 삭제(DML이지만 맥락상 추가함)</span>
+<span class="token comment">-- 테이블 용량이 줄어 들지 않고, 원하는 데이터만 지울 수 있다.</span>
+<span class="token comment">-- 삭제 후 잘못 삭제한 것을 되돌릴 수 있다.</span>
 <span class="token keyword">DELETE</span> <span class="token keyword">FROM</span> USER_INFO
 <span class="token keyword">DELETE</span> USER_INFO <span class="token comment">-- FROM 생략가능</span>
 <span class="token keyword">DELETE</span> <span class="token keyword">FROM</span> USER_INFO
