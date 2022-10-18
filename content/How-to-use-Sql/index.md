@@ -9,7 +9,13 @@ categories: how-to
 
 지적과 댓글은 언제나 환영합니다!
 
-문법은 Oracle과 PostgreSQL 위주로 작성했습니다.
+<br>
+
+SQL 코딩테스트와 SQLD 문제 풀이를 중점으로 작성했습니다.
+
+(문법은 Oracle과 PostgreSQL 기준입니다.)
+
+<br>
 
 사용법을 익히는 참고용 정도로 봐주시면 감사하겠습니다.
 
@@ -32,6 +38,8 @@ categories: how-to
 [8. DCL(Data Control Language) 관련](#DCL)
 
 [9. DDL(Data Definition Language) 관련](#DDL)
+
+[10. 기타 CASE 모음](#ETC)
 
 <br/><br/>
 
@@ -380,7 +388,29 @@ DROP TABLE USER_INFO
 -- 테이블 초기화(구조는 남기고, 데이터만 초기화)
 TRUNCATE TABLE USER_INFO
 
+-- 데이터 삭제(DML이지만 맥락상 추가함)
+DELETE FROM USER_INFO
+DELETE USER_INFO -- FROM 생략가능
+DELETE FROM USER_INFO
+    WHERE 이름 = 'Jane';
+
 ```
+
+## 기타 CASE 모음 <span id="ETC"><span>
+
+<br>
+
+```sql
+-- 오류 CASE 모음
+
+-- NOT NULL인 컬럼을 채우지 않으면 오류
+INSERT INTO USER_INFO (이름, 방문일) VALUES ('Jane', 2020-09-05)
+
+-- 컬럼명 지정이 이뤄지지 않으면 전체값이 들어가야함
+INSERT INTO USER_INFO VALUES ('Jane', '010-0000-0000' , 2020-09-05)
+
+```
+
 ---
 
 
@@ -398,6 +428,8 @@ _[PostgreSQL의 PL/pgSQL 튜토리얼 – 5 : CASE 조건문](http://www.gisdeve
 _[PostgreSQL의 PL/pgSQL 튜토리얼 – 6 : 반복문](http://www.gisdeveloper.co.kr/?p=4621)_
 
 _[PostgreSQL의 PL/pgSQL 튜토리얼 – 7 : 질의 결과를 반환하는 함수](http://www.gisdeveloper.co.kr/?p=4642)_
+
+_[SQLD 자격증 문제 풀이](https://www.youtube.com/watch?v=8uP_E6SyiuM&list=PLLyuWzYmiwulMJrt5B-atyAFjEGDRYDDd&index=7)_
 
 ```toc
 
