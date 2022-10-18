@@ -417,6 +417,24 @@ INSERT INTO USER_INFO VALUES ('Jane', '010-0000-0000' , 2020-09-05)
 
 ```
 
+<br>
+
+```sql
+-- 특수한 CASE
+
+INSERT INTO USER_INFO (...)
+SAVEPOINT S1
+UPDATE USER_INFO SET ... WHERE ...
+SAVEPOINT S2
+--COMMIT << 커밋을 했다면 S2상태로 복원된다.
+ROLLBACK S1;
+COMMIT;
+-- ROLLBACK 시, SAVEPOINT가 있을때 => COMMIT이 없는 경우, 해당 SAVEPOINT 이후는 무효가 된다. 
+-- ROLLBACK 시, SAVEPOINT가 없을때 => 가장 최신의 COMMIT 상태로 복원된다.
+```
+
+```
+
 ---
 
 
