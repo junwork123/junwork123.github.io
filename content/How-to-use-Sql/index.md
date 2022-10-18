@@ -9,6 +9,10 @@ categories: how-to
 
 지적과 댓글은 언제나 환영합니다!
 
+문법은 Oracle과 PostgreSQL 위주로 작성했습니다.
+
+사용법을 익히는 참고용 정도로 봐주시면 감사하겠습니다.
+
 ## INDEX
 
 [1. GROUP 관련](#GROUP)
@@ -24,6 +28,10 @@ categories: how-to
 [6. 빈 값(NULL) 처리](#IFNULL)
 
 [7. 복잡한 쿼리(PL/SQL)](#PLSQL)
+
+[8. DCL(Data Control Language) 관련](#DCL)
+
+[9. DDL(Data Definition Language) 관련](#DDL)
 
 <br/><br/>
 
@@ -302,7 +310,77 @@ $$ LANGUAGE plpgsql;
 ```sql
 -- 정렬 기준 세분화
 ```
+## DCL(Data Control Language) 관련 <span id="DCL"><span>
 
+<br>
+
+```sql
+-- WHERE, UPDATE를 쓸 수 있도록 권한 부여
+GRANT
+    SELECT,
+    UPDATE
+ON
+    USERS.list
+TO
+    managerA
+
+```
+
+## DDL(Data Definition Language) 관련 <span id="DDL"><span>
+
+<br>
+
+```sql
+-- 테이블 정의
+CREATE TABLE USER_INFO(
+    이름    varchar2(10),
+    연락처  number not null,
+    방문일  date,
+    고객번호    varchar2(10) primary key -- PK = Not Null & Unique
+);
+```
+
+<br>
+
+```sql
+-- 테이블 수정
+ALTER TABLE USER_INFO 
+RENAME TO USERS
+
+-- 컬럼 수정
+ALTER TABLE USER_INFO
+RENAME COLUMN 연락처
+    TO 전화번호
+
+-- 컬럼 속성 변경
+ALTER TABLE USER_INFO
+MODIFY (이름 varchar(20) NOT NULL);
+
+-- 컬럼 추가
+ALTER TABLE USER_INFO
+ADD (주소 varchar(10) NOT NULL);
+
+ALTER TABLE USER_INFO
+ADD CONSTRAINT 연락처_PK FOREIGN KEY(연락처); -- <제약조건 명>으로 제약조건을 추가 가능
+
+-- 컬럼 삭제
+ALTER TABLE USER_INFO
+DROP COLUMN 주소;
+
+ALTER TABLE USER_INFO
+DROP CONSTRAINT 연락처_PK -- 제약조건도 삭제 가능
+```
+
+<br>
+
+```sql
+-- 테이블 삭제(구조, 데이터 모두 삭제)
+DROP TABLE USER_INFO
+
+-- 테이블 초기화(구조는 남기고, 데이터만 초기화)
+TRUNCATE TABLE USER_INFO
+
+```
 ---
 
 
