@@ -432,7 +432,7 @@ COMMIT;
 -- ROLLBACK 시, SAVEPOINT가 없을때 => 가장 최신의 COMMIT 상태로 복원된다.
 ```
 
-````
+```
 
 ---
 
