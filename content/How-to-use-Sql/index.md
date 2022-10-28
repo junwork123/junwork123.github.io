@@ -158,17 +158,17 @@ SELECT
 FROM
     REST_INFO RI
     INNER JOIN (
-        SELECT 
-            REST_ID, 
+        SELECT
+            REST_ID,
             ROUND(AVG(REVIEW_SCORE), 2) SCORE
-        FROM 
+        FROM
             REST_REVIEW
         GROUP BY REST_ID
     ) RR
     ON RI.REST_ID = RR.REST_ID
 WHERE
     RI.ADDRESS LIKE '서울%'
-ORDER BY 
+ORDER BY
     RR.SCORE DESC,
     RI.FAVORITES DESC
 
@@ -269,7 +269,7 @@ FROM
 
 ---
 
-## GROUP 관련<span id="GROUP"></span>
+## 빈 값(NULL) 처리<span id="IFNULL"></span>
 
 ```sql
 -- 이름이 NULL 값일 때 처리
@@ -287,7 +287,7 @@ ORDER BY
 
 ---
 
-## 7. 복잡한 쿼리(PL/SQL)<span id="PLSQL"></span>
+## 복잡한 쿼리(PL/SQL)<span id="PLSQL"></span>
 
 ```sql
 -- 동적 쿼리를 이용한 평균나이 구하기
@@ -308,8 +308,6 @@ END;
 $$ LANGUAGE plpgsql;
 ```
 
-
-
 ```sql
 --- 재구매가 일어난 상품과 회원 리스트
 
@@ -318,6 +316,7 @@ $$ LANGUAGE plpgsql;
 ```sql
 -- 정렬 기준 세분화
 ```
+
 ## DCL(Data Control Language) 관련 <span id="DCL"><span>
 
 <br>
@@ -352,7 +351,7 @@ CREATE TABLE USER_INFO(
 
 ```sql
 -- 테이블 수정
-ALTER TABLE USER_INFO 
+ALTER TABLE USER_INFO
 RENAME TO USERS
 
 -- 컬럼 수정
@@ -388,7 +387,7 @@ DROP 명령어는 데이블 전체를 삭제, 공간, 객체를 삭제한다. �
 DROP TABLE USER_INFO
 
 -- 테이블 초기화(구조는 남기고, 데이터만 초기화)
--- 테이블 용량이 줄어 들고, 인덱스 등도 모두 삭제 된다. 
+-- 테이블 용량이 줄어 들고, 인덱스 등도 모두 삭제 된다.
 -- 삭제 후 절대 되돌릴 수 없다.
 TRUNCATE TABLE USER_INFO
 
@@ -429,11 +428,11 @@ SAVEPOINT S2
 --COMMIT << 커밋을 했다면 S2상태로 복원된다.
 ROLLBACK S1;
 COMMIT;
--- ROLLBACK 시, SAVEPOINT가 있을때 => COMMIT이 없는 경우, 해당 SAVEPOINT 이후는 무효가 된다. 
+-- ROLLBACK 시, SAVEPOINT가 있을때 => COMMIT이 없는 경우, 해당 SAVEPOINT 이후는 무효가 된다.
 -- ROLLBACK 시, SAVEPOINT가 없을때 => 가장 최신의 COMMIT 상태로 복원된다.
 ```
 
-```
+````
 
 ---
 
@@ -457,4 +456,4 @@ _[SQLD 자격증 문제 풀이](https://www.youtube.com/watch?v=8uP_E6SyiuM&list
 
 ```toc
 
-```
+````
