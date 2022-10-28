@@ -1,23 +1,29 @@
 ---
 emoji: 🔮
-title: IntelliJ, SpringBoot, Docker Let’s GO (개념편)
+title: Let’s GO Docker(개념편)
 date: '2022-10-24 00:00:00'
 author: 주녁
-tags: 도커 Docker IntelliJ SpringBoot Docker VM Container 도커
+tags: 도커 Docker VM Container 도커
 categories: infra
 ---
 
 지적과 댓글은 언제나 환영합니다!
 
-<br/><br/>
+<br>
 
-![예.. 그 드립 맞습니다!](0.png)
+이 글은 3편의 시리즈물로 제작하였다.
 
-_예.. 그 드립 맞습니다..!_
+- `개념편` : Docker의 개념
 
-인텔리제이에서 Spring Boot 프로젝트를 Docker로 이미지화 하기
+- `실습편` : Spring Boot 앱을 Docker로 배포하기
+
+- `심화편` : Docker 공식문서 같이읽기
 
 <br>
+
+![Let's go](0.png)
+
+<u>**시작해보자!**</u>
 
 ---
 
