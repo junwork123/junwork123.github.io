@@ -1,10 +1,10 @@
 ---
 emoji: 🔮
 title: Jar 파일 빌드하는 법 N가지 정리
-date: '2022-07-23 00:00:00'
+date: '2022-11-04 00:00:00'
 author: 주녁
-tags: 스프링 Spring AOP, Aspect Oriented Programming Interceptor 인터셉터 관점지향
-categories: Spring
+tags: IntelliJ Java Achive Jar 
+categories: how-to
 ---
 
 지적과 댓글은 언제나 환영합니다!
@@ -15,7 +15,7 @@ categories: Spring
 
 이 글은 jar 파일을 빌드하는 N가지 방법에 대해 다루고 있습니다.
 
-IntelliJ 환경을 권장하며, Terminal로 빌드하는 방법도 추가했습니다.
+IntelliJ 환경을 권장하며, 터미널과 콘솔 빌드하는 방법도 추가했습니다.
 
 (만약, 빠진 부분이나 추가로 알고 계시는 방법이 있다면 댓글로 부탁드립니다!)
 
@@ -49,10 +49,6 @@ IntelliJ에서 아래 화면과 같이
 
 빌드 결과물이 \build\libs 경로 jar파일로 생성된다.
 
-끝이다.
-
-간단하지 않은가?
-
 <br>
 
 ---
@@ -67,28 +63,31 @@ IntelliJ에서 아래 화면과 같이
 
 빌드 결과물이 \build\libs 경로 jar파일로 생성된다.
 
-끝이다.
-
-간단하지 않은가?
-
 <br>
 
 ---
 
 ### **3. 나는 통일된 방법을 사용하고 싶어요!(Artifacts 사용)**
 
-좌측 상단 메뉴에서
-
-`File` > `Project Structure` > `Artifacts` > `+` > `JAR` > `From modules with dependencies`를 선택한다.
-
-![아티팩트 빌드 화면](artifacts.png)
-
 <br>
+
+상단 메뉴에서
+
+`File` → `Project Structure` → `Artifacts` → `+` → `JAR` → `From modules with dependencies`를 선택한다.
 
 실행할 메인 클래스를 지정해주고
 
 `extract to the target JAR` 버튼을 선택하고 OK를 눌러 적용하자.
 
+![아티팩트 빌드 화면](artifacts.png)
+
+<br>
+
+상단 메뉴에서
+
+`Build` → `Build Artifacts` → `자신의 Artifacts 설정`
+
+→ `Build`를 누르면 된다.
 
 <br>
 
@@ -102,9 +101,60 @@ IntelliJ에서 아래 화면과 같이
 
 <br>
 
-이 명령어를 실행하면 \_\_위치에 jar파일이 생성된다.
+단순 Java 어플리케이션인 경우
 
-이 파일을 Docker에서 이미지로 만들면 끝이다.
+```bash
+# 프로젝트 경로로 이동
+cd ${프로젝트 경로}
+
+# 빌드 결과물 폴더 생성
+mkdir out/
+
+# 클래스파일 생성
+javac -d ${결과물 위치} ${메인클래스 경로+파일명}.java
+javac -d ./out Main.java
+
+# jar 파일 생성하기
+jar cvf ${생성할 jar 이름}.jar ${메인클래스 파일명}.class
+jar cvf ./out/Main.jar ./out/Main.class
+
+```
+
+<br>
+
+라이브러리 의존성이 필요한 경우(Spring)
+
+```bash
+# Gradle
+./gradlew build
+./gradlew demo-0.0.1-SNAPSHOT.jar
+java -jar demo-0.0.1-SNAPSHOT.jar
+
+# Maven
+./mvnw compile
+./mvnw package
+java -jar demo-0.0.1-SNAPSHOT.jar
+```
+
+<br>
+
+추가로 알면 좋은 명령어
+
+```bash
+# 클래스파일 실행하기 
+# -cp : 클래스 파일 경로(위와 똑같은 경로)
+java -cp ./out ${메인클래스 경로+파일명}.java
+
+# jar 파일 실행하기
+java -jar ${생성한 jar 이름}.jar
+
+# jar 파일 실행 종료하기
+ps -ef | grep jar
+> (jar 프로세스 id 출력됨)
+
+kill ${프로세스 id}
+
+```
 
 
 _출처_
