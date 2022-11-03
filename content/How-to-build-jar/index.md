@@ -1,6 +1,6 @@
 ---
 emoji: 🔮
-title: Jar 파일 빌드하는 법 N가지 정리
+title: Jar 파일 빌드하는 법 정리
 date: '2022-11-04 00:00:00'
 author: 주녁
 tags: IntelliJ Java Achive Jar 
