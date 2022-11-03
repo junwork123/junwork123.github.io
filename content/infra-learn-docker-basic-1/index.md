@@ -201,6 +201,78 @@ curl -fsSL https://get.docker.com/ | sudo sh
 
 <br>
 
+## 설치 확인하기
+
+설치가 완료되었다면, 아래 명령어로 한번 확인해보자!
+
+<br>
+
+```bash
+docker version
+```
+
+<br>
+
+      Client:
+      Version:      1.12.6
+      API version:  1.24
+      Go version:   go1.6.4
+      Git commit:   78d1802
+      Built:        Wed Jan 11 00:23:16 2017
+      OS/Arch:      darwin/amd64
+
+      Server:
+      Version:      1.12.6
+      API version:  1.24
+      Go version:   go1.6.4
+      Git commit:   78d1802
+      Built:        Wed Jan 11 00:23:16 2017
+      OS/Arch:      linux/amd64
+
+`Client`와 `Server` 정보가 출력되었다면, 정상이다!.
+
+<details>
+    <summary>혹시 에러가 발생한 경우</summary>
+
+   
+   > Error response from daemon: Bad response from Docker engine
+
+   Server 정보가 안나오고 위 메시지가 나왔다면
+
+   docker daemon이 정상적으로 실행되지 않았거나 
+   
+   sudo를 입력하지 않은 경우 발생할 수 있다.
+
+</details>
+
+<br><br>
+
+왜 버전 정보에 클라이언트와 서버로 나뉘어 등장할까?
+
+<br>
+
+![Docker 내부 구조](5.png)
+
+<br>
+
+도커는 특이하게도 하나의 실행파일이지만 
+
+위와 같은 구조로 클라이언트와 서버로 나뉘어서 동작한다.
+
+<br>
+
+우리가 입력하는 명령어는 
+
+클라이언트에서 입력받지만 서버로 전송된다.
+
+<br>
+
+다시 이 정보가 서버에서 클라이언트로 보내지기 때문에
+
+마치 하나처럼 느껴지는 것이다.
+
+<br>
+
 다음편에서는 IntelliJ에서 SpringBoot를 Docker 이미지로 배포해보도록 하자.
 
 <br>
