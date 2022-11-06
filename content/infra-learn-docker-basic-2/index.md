@@ -88,7 +88,7 @@ docker images
 
 <br>
 
-자, 드디어 Docker 이미지를 실행해보자.
+드디어 Docker 이미지를 실행하는 순간이다.
 
 ```bash
  docker run docker-example:0.0.1
@@ -96,13 +96,19 @@ docker images
 
 <br>
 
+Dokcer가 잘 동작하는지 확인했다면,
+
 어플리케이션이 잘 동작하는지 확인도 해보자.
 
-(아래 방법은 예시일 뿐이다!)
+(아래 방법은 예시일 뿐이니 각자 방법으로 자신의 앱에 테스트해보자!)
 
 ```bash
 $ curl localhost:8080/
 ```
+
+<br>
+
+---
 
 <br>
 
