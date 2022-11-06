@@ -1,6 +1,6 @@
 ---
 emoji: 🔮
-title: Let’s GO Docker(실습편)
+title: Let’s Go Docker(실습편) - 어플리케이션을 Docker로 배포하기
 date: '2022-11-06 00:00:00'
 author: 주녁
 tags: 도커 Docker IntelliJ SpringBoot Docker VM Container 도커
@@ -11,23 +11,18 @@ categories: infra
 
 <br/>
 
-인텔리제이에서 Spring Boot 프로젝트를 Docker로 이미지화 하기
+# 어플리케이션을 Docker로 배포하기
 
-<br>
-
----
-
-## 시작에 앞서
-
-<br>
 
 이번 실습편에서는
 
-아래 2가지 단계를 통해 도커를 찍먹해볼 것이다.
+아래 3가지 단계를 통해 도커를 찍먹해볼 것이다.
 
 - Docker 이미지 만들기
 
 - 만든 이미지를 실행해보기
+
+- 변경사항을 자동으로 배포하기(심화편)
 
 <br>
 
@@ -111,9 +106,17 @@ $ curl localhost:8080/
 
 <br>
 
-지금까지 어플리케이션을 Dockerfile을 통해 Docker 이미지로 생성해보았다.
+지금까지 어플리케이션을 Dockerfile을 통해 
 
----
+Docker 이미지로 생성해보았다.
+
+<br>
+
+하지만, 소스코드의 내용이 변경되면, 다시 위 과정을 거쳐야한다.
+
+변경사항을 자동으로 배포할 수는 없을까?
+
+다음 실습편을 통해 배워보도록 하자
 
 <br>
 
