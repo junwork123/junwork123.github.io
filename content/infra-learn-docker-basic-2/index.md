@@ -1,7 +1,7 @@
 ---
 emoji: 🔮
 title: Let’s GO Docker(실습편)
-date: '2022-10-24 00:00:00'
+date: '2022-11-06 00:00:00'
 author: 주녁
 tags: 도커 Docker IntelliJ SpringBoot Docker VM Container 도커
 categories: infra
@@ -21,15 +21,13 @@ categories: infra
 
 <br>
 
-이번 실습편에서는 
+이번 실습편에서는
 
-아래 3가지 단계를 통해 도커를 찍먹해볼 것이다.
+아래 2가지 단계를 통해 도커를 찍먹해볼 것이다.
 
 - Docker 이미지 만들기
 
 - 만든 이미지를 실행해보기
-
-- 변경사항을 자동으로 배포하기
 
 <br>
 
@@ -53,7 +51,7 @@ Docker 컨테이너는 Docker 이미지를 기반으로 실행된다.
 
 <br>
 
-(만약, 다른 언어나 플랫폼이라면 
+(만약, 다른 언어나 플랫폼이라면
 
 자신의 프로젝트에 맞게 빌드 결과물을 얻고 다음 단계를 진행하자.)
 
@@ -61,7 +59,7 @@ Docker 컨테이너는 Docker 이미지를 기반으로 실행된다.
 
 ## 2. 만든 이미지를 실행해보기
 
-프로젝트 최상위 디렉토리에 
+프로젝트 최상위 디렉토리에
 
 `dockerfile`을 아래와 같은 내용으로생성하자.
 
@@ -85,15 +83,15 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 docker build -t docker-example:0.0.1 .
 ```
 
-<br> 
+<br>
 
 images 명령어로 docker이미지가 제대로 만들어 졌는지 확인한다.
 
 ```bash
-docker images 
+docker images
 ```
 
-<br> 
+<br>
 
 자, 드디어 Docker 이미지를 실행해보자.
 
@@ -108,26 +106,12 @@ docker images
 (아래 방법은 예시일 뿐이다!)
 
 ```bash
-$ curl localhost:8080/ 
+$ curl localhost:8080/
 ```
 
 <br>
 
 지금까지 어플리케이션을 Dockerfile을 통해 Docker 이미지로 생성해보았다.
-
-하지만, 소스코드의 내용이 변경되면, 다시 위 과정을 거쳐야한다.
-
-자동으로 배포할 수는 없을까?
-
-<br>
-
----
-
-## 변경사항을 자동으로 배포하기
-
-<br>
-
-
 
 ---
 
@@ -146,7 +130,6 @@ _[Spring Boot, Dockerfile로 이미지 생성, 배포하기 | 개발 저장소 (
 _[Topical Guide | Spring Boot Docker](https://spring.io/guides/topicals/spring-boot-docker)_
 
 _[Dockerfile reference | Docker Documentation](https://docs.docker.com/engine/reference/builder/)_
-
 
 <br/>
 
