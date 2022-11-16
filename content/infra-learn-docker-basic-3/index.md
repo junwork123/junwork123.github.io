@@ -49,6 +49,12 @@ Github는 사용자가 CI/CD 도구를 직접 통합해야 한다.
 
 자세한 설명은 주석을 참고하자.
 
+<br>
+
+    # 알아두기
+    중간중간 보이는 secret들은 저장소 내 환경변수로,
+    Repository 상단 Settings > Secrets에서 설정할 수 있다.
+
 ```yaml
 name: App Deployment # 이 스크립트의 제목
 
