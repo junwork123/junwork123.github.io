@@ -1,9 +1,9 @@
 ---
 emoji: 🔮
 title: Let’s Go Docker(번외편) - Docker 공식문서 같이읽기
-date: '2022-10-24 00:00:00'
+date: '2022-11-17 00:00:00'
 author: 주녁
-tags: 도커 Docker IntelliJ SpringBoot Docker VM Container 도커
+tags: 도커 Docker IntelliJ SpringBoot Docker VM Container 도커 Docs Documentation
 categories: infra
 ---
 
@@ -345,6 +345,8 @@ P.S
   ```
 
 <br>
+
+(작성중입니다 ㅠㅠ)
 
 ---
 
