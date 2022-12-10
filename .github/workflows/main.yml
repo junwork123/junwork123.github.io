@@ -33,6 +33,9 @@ jobs:
                 
             - name: copy Cname
               run: cp CNAME public/ 
+              
+            - name: copy ads
+              run: cp ads.txt public/ 
 
             - name: Deploy changes
               uses: peaceiris/actions-gh-pages@v3
