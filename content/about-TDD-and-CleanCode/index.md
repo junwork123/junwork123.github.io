@@ -103,6 +103,13 @@ categories: how-to
 
 - 메소드가 접근자가 private인 경우, protected로 변경하면 테스트 가능 구조로 변경할 수 있다.
 
+        기존 레거시 코드가 있을 때, 
+        메소드 시그니처(이름, 매개변수 등)을 변경하지 않고
+        테스트 가능하도록 만드는 과도기적인 단계에서 사용하는 방법이다.
+
+        결과적으로는 public으로 테스트 가능하도록
+        메소드, 클래스의 역할을 적절하게 분리하는 것이 필요하다.
+
 ```java
 // CarTest.java
 @Test
@@ -121,18 +128,17 @@ public void MoveTest(){
 
 ```
 
-        기존 레거시 코드가 있을 때, 
-        메소드 시그니처(이름, 매개변수 등)을 변경하지 않고
-        테스트 가능하도록 만드는 과도기적인 단계에서 사용하는 방법이다.
 
-        결과적으로는 public으로 테스트 가능하도록
-        메소드, 클래스의 역할을 적절하게 분리하는 것이 필요하다.
 
 ---
 
 <br>
 
 - 인터페이스를 활용하여 분리하라
+
+        Spring이 아니여도 DI를 사용할 수 있다.
+        Interface를 통해 동작을 분리하고 
+        외부에서 주입받도록 하라.
 
 ```java
 @FunctionalInterface
@@ -155,9 +161,53 @@ void move() {
 }
 ```
 
-        Spring이 아니여도 DI를 사용할 수 있다.
-        Interface를 통해 동작을 분리하고 
-        외부에서 주입받도록 하라.
+
+
+<br>
+
+- 인스턴스에 의존하는 메서드의 경우, 
+  
+  인스턴스를 인자로 넘겨주는 방식으로 변경하여 의존성을 제거한다.
+
+```java
+public class Cars {
+    private final List<Car> cars;
+
+    public Cars(List<Car> cars) {
+        this.cars = cars;
+    }
+
+    public List<Car> findWinners() {
+        // 이 경우 테스트할 때, static findWinners()만 테스트를 하면 되고,
+        // 실제 사용은 Cars.findWinners()를 사용하면 된다.
+        // 테스트하기 쉬운 구조로 변경된다.
+        return findWinners(this.cars, getMaxPosition());
+    }
+
+    public static List<Car> findWinners(List<Car> cars, Position maxPosition) {
+        return cars.stream()
+                .filter(car -> car.getPosition().equals(maxPosition))
+                .collect(Collectors.toList());
+    }
+
+    public Position getMaxPosition() {
+        return cars.stream()
+                .map(Car::getPosition)
+                .max(Position::compareTo)
+                .orElseThrow(() -> new IllegalArgumentException("우승한 자동차가 없습니다."));
+    }
+    
+    /* 
+    public List<Car> findWinners(Position maxPosition) {
+        이 메소드는 테스트할 때, 
+        Position 생성자와 같이 테스트해야 하므로 단일 테스트가 어렵다.
+        return cars.stream()
+                .filter(car -> car.getPosition().equals(maxPosition))
+                .collect(Collectors.toList());
+    }
+    */
+}
+```
 
 <br>
 
@@ -241,13 +291,6 @@ void move() {
 
 - 모든 원시값과 문자열을 포장한다.
 
-        primitive값을 직접 조작하는 대신 Class로 포장하자.
-        이 때도 역시, Setter/Getter를 피해야 한다.
-
-        final 키워드로 멤버변수를 불변(immutable) 상태를 만드는 것은 좋은 전략이다.
-        다만, 값의 증감 등 연산할 때 인스턴스가 만들어질 수 있기 때문에
-        적절한 타협이 필요하다.
-
 ```java
 public Position move(int toMove){
         // 조작할 일이 많이 없거나, 안정성(불변 상태) 우선인 경우
@@ -258,6 +301,16 @@ public Position move(int toMove){
         return this;
 }
 ```
+
+        primitive값을 직접 조작하는 대신 Class로 포장하자.
+        이 때도 역시, Setter/Getter를 피해야 한다.
+
+        final 키워드로 멤버변수를 불변(immutable) 상태를 만드는 것은 좋은 전략이다.
+        다만, 값의 증감 등 연산할 때 인스턴스가 만들어질 수 있기 때문에
+        적절한 타협이 필요하다.
+
+
+
         
 - 역할 분리를 위해 클래스를 분리하는 것은 긍정적이다.
 
@@ -281,6 +334,8 @@ public Position(int position) {
 ```
 
 <br/>
+
+
 
 ---
 
