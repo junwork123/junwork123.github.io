@@ -1,6 +1,6 @@
 ---
 emoji: 🔮
-title: MSA 도커라이징 삽질기
+title: MSA 도커라이징(Dockerizing) 삽질기
 date: '2022-12-15 00:00:00'
 author: 주녁
 tags: docker dockerize dockerizing 도커 도커라이징 도커라이즈 MSA
@@ -254,7 +254,7 @@ API 요청으로 통신하고 있긴 하지만,
 
 다음 편에는 `dockerfile`과 `docker-compose`를 활용해
 
-이러한 과정을 간소화해보도록 하겠습니다.
+이러한 과정을 간소화해보도록 하겠다.
 
 <br>
 
