@@ -4,11 +4,18 @@ title: MSA 도커라이징(Dockerizing) 삽질기
 date: '2022-12-15 00:00:00'
 author: 주녁
 tags: docker dockerize dockerizing 도커 도커라이징 도커라이즈 MSA
-categories: knowledge
+categories: infra
 ---
 
+지적과 댓글은 언제나 환영합니다!
+
+<br>
+
+---
 
 ## 들어가기에 앞서..
+
+<br>
 
     본 게시글은 MSA 형태로 구성된 서비스를 
     하나씩 도커라이징(dockerizing)하는 게시물입니다.
