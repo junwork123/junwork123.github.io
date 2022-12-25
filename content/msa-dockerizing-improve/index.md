@@ -14,6 +14,7 @@ categories: knowledge
 
 ---
 
+<br>
 
 # 도커 삽질 개선하기
 
@@ -64,28 +65,28 @@ categories: knowledge
     TZ=Asia/Seoul
     DB_HOST=0.0.0.0 # 외부 DB와 연결하고 싶을 때 DB IP 입력
     DB_KIND=postgresql # oracle, tibero
-    DB_NAME=sf1_db
-    DB_SCHEMA_NAME=sf1_schema
+    DB_NAME=db
+    DB_SCHEMA_NAME=schema
     DB_USER=postgres
     DB_PASSWORD=0000
     DB_PORT_IN=5432
     DB_PORT_OUT=5432
     
-    # Manager Configuration
-    MANAGER_IP=0.0.0.0 # 관리도구를 실행할 호스트의 IP로 변경
-    MANAGER_NAME=manager1
-    MANAGER_PORT_IN=8080
-    MANAGER_PORT_OUT=8080
+    # SERVICE_B Configuration
+    SERVICE_B_IP=0.0.0.0 # 관리도구를 실행할 호스트의 IP로 변경
+    SERVICE_B_NAME=SERVICE_B
+    SERVICE_B_PORT_IN=8080
+    SERVICE_B_PORT_OUT=8080
     
-    # ServiceKit Configuration
-    SERVICEKIT_NAME=kit1
-    SERVICEKIT_PORT_IN=8888
-    SERVICEKIT_PORT_OUT=8888
-    SERVICEKIT_CACHE_PORT_IN=8900
-    SERVICEKIT_CACHE_PORT_OUT=8900
+    # SERVICE_D Configuration
+    SERVICE_D_NAME=kit1
+    SERVICE_D_PORT_IN=8888
+    SERVICE_D_PORT_OUT=8888
+    SERVICE_D_CACHE_PORT_IN=8900
+    SERVICE_D_CACHE_PORT_OUT=8900
     ```
     
-2. Manager에 대한 dockerfile 작성
+2. SERVICE_B에 대한 dockerfile 작성
     
     ```yaml
     # database.properties 설정파일 예시
@@ -104,31 +105,31 @@ categories: knowledge
     # APPLICATION
     FROM openjdk:8-jdk-alpine
     
-    ENV APPNAME sf-1-v7-manager
+    ENV APPNAME SERVICE_B
     ENV WORKDIR /home/$APPNAME
     WORKDIR $WORKDIR
     COPY ./target/lib $WORKDIR/lib
     COPY ./conf $WORKDIR/conf
-    COPY  ./target/sf-1-manager-7.1.0.jar $WORKDIR/lib/sf-1-manager-7.1.0.jar
+    COPY  ./target/SERVICE_B-7.1.0.jar $WORKDIR/lib/SERVICE_B-7.1.0.jar
     
-    ENTRYPOINT [ "java",  "-Dlogging.level.kr.co.wisenut=info", "-Dfile.encoding=UTF-8", "-Xms1G", "-Xmx4G", "-XX:+UseG1GC","-cp", "/home/sf-1-v7-manager/lib/*", "-Dsf1.manager.path=./",  "-DLOG_PATH=./log",  "-Dspring.config.location=./conf/application.properties" , "kr.co.wisenut.manager.sf1.SearchManagerApplication", "$NODENAME", "start" ]
+    ENTRYPOINT [ "java", ... ]
     ```
     
-3. ServiceKit에 대한 dockerfile 작성
+3. SERVICE_D에 대한 dockerfile 작성
     
     ```docker
-    # ServiceKit
+    # SERVICE_D
     FROM openjdk:8-jdk-alpine
     
-    ENV APPNAME sf-1-v7-servicekit
+    ENV APPNAME SERVICE_D
     ENV WORKDIR /home/$APPNAME
     WORKDIR $WORKDIR
     
     COPY ark  $WORKDIR/ark
     COPY conf $WORKDIR/conf
-    COPY ./target/servicekit-7.1.0.jar $WORKDIR/app.jar
+    COPY ./target/SERVICE_D-7.1.0.jar $WORKDIR/app.jar
     
-    ENTRYPOINT ["java", "-Dsf1.servicekit.path=./", "-Dlogging.path=./log", "-cp", "'ark/classes/*;ark/classes/lib/*'", "-jar", "app.jar","$NODENAME", "start" ]
+    ENTRYPOINT ["java", "-jar", "app.jar","$NODENAME", "start" ]
     ```
     
 4. DB에 대한 dockerfile 작성 및 이미지 빌드
@@ -153,7 +154,7 @@ categories: knowledge
         
         RUN chmod 777 $WORKDIR/conf/init.sh $WORKDIR/conf/postgresql_table.sql
         
-        # sed -i "s/{SF1_MANAGER_SCHEMA_NAME}/$DB_SCHEMA_NAME/g" "$WORKDIR"/conf/postgresql_table.sql
+        # sed -i "s/{SERVICE_B_SCHEMA_NAME}/$DB_SCHEMA_NAME/g" "$WORKDIR"/conf/postgresql_table.sql
          #ENTRYPOINT su postgres $WORKDIR/conf/init.sh
         ```
         
@@ -170,7 +171,7 @@ categories: knowledge
         ```
         
         ```yaml
-        docker build -f Dockerfile_db -t sf1_pg14:7.1.0 .
+        docker build -f Dockerfile_db -t pg14:7.1.0 .
         ```
         
     - 외부 DB를 연결하는 경우
@@ -191,7 +192,7 @@ categories: knowledge
                 ports:
                   - ${DB_PORT_IN}:${DB_PORT_OUT}
                 volumes:
-                  - sf1_db_storage:/var/lib/postgresql/data
+                  - db_storage:/var/lib/postgresql/data
                 environment:
                   DB_KIND: ${DB_KIND}
                   DB_NAME: ${DB_NAME}
@@ -205,20 +206,20 @@ categories: knowledge
                   timeout: 3s
                   retries: 3
         
-            manager:
+            SERVICE_B:
                 build:
                   context: .
                   dockerfile: Dockerfile
-                image: sf1_manager:7.1.0
-                container_name: manager
+                image: SERVICE_B:7.1.0
+                container_name: SERVICE_B
                 restart: always
                 depends_on:
                   database:
                     condition: service_healthy
                 ports:
-                  - ${MANAGER_PORT_IN}:${MANAGER_PORT_OUT}
+                  - ${SERVICE_B_PORT_IN}:${SERVICE_B_PORT_OUT}
                 environment:
-                  NODENAME: ${MANAGER_NAME}
+                  NODENAME: ${SERVICE_B_NAME}
                   DB_HOST: db_instance
                   DB_KIND: ${DB_KIND}
                   DB_NAME: ${DB_NAME}
@@ -227,18 +228,18 @@ categories: knowledge
                   DB_PASSWORD: ${DB_PASSWORD}
                   DB_PORT: ${DB_PORT_OUT}
         
-            servicekit:
-                image: sf1_servicekit:7.1.0
-                container_name: servicekit
+            SERVICE_D:
+                image: SERVICE_D:7.1.0
+                container_name: SERVICE_D
                 restart: always
                 depends_on:
                   database:
                       condition: service_healthy
                 ports:
-                  - ${SERVICEKIT_PORT_IN}:${SERVICEKIT_PORT_OUT}
-                  - ${SERVICEKIT_CACHE_PORT_IN}:${SERVICEKIT_CACHE_PORT_OUT}
+                  - ${SERVICE_D_PORT_IN}:${SERVICE_D_PORT_OUT}
+                  - ${SERVICE_D_CACHE_PORT_IN}:${SERVICE_D_CACHE_PORT_OUT}
                 environment:
-                  NODENAME: ${SERVICEKIT_NAME}
+                  NODENAME: ${SERVICE_D_NAME}
                   DB_HOST: db_instance
                   DB_KIND: ${DB_KIND}
                   DB_NAME: ${DB_NAME}
@@ -246,9 +247,9 @@ categories: knowledge
                   DB_USER: ${DB_USER}
                   DB_PASSWORD: ${DB_PASSWORD}
                   DB_PORT: ${DB_PORT_OUT}
-                  MANAGER_IP: ${MANAGER_IP}
+                  SERVICE_B_IP: ${SERVICE_B_IP}
         volumes:
-          sf1_db_storage:
+          db_storage:
             driver: local
         ```
         
@@ -262,7 +263,7 @@ categories: knowledge
         
         # DB 컨테이너에서 스크립트 실행
         docker exec -it db_instance /bin/bash
-        sed -i "s/{SF1_MANAGER_SCHEMA_NAME}/$DB_SCHEMA_NAME/g" "$WORKDIR"/conf/postgresql_table.sql
+        sed -i "s/{SERVICE_B_SCHEMA_NAME}/$DB_SCHEMA_NAME/g" "$WORKDIR"/conf/postgresql_table.sql
         su postgres $WORKDIR/conf/init.sh
         
         # 종료
@@ -273,17 +274,17 @@ categories: knowledge
         
         ```docker
         services:
-          manager:
+          SERVICE_B:
             build:
               context: .
               dockerfile: Dockerfile
-            image: sf1_manager:7.1.0
-            container_name: manager
+            image: SERVICE_B:7.1.0
+            container_name: SERVICE_B
             restart: always
             ports:
-              - ${MANAGER_PORT_IN}:${MANAGER_PORT_OUT}
+              - ${SERVICE_B_PORT_IN}:${SERVICE_B_PORT_OUT}
             environment:
-              NODENAME: ${MANAGER_NAME}
+              NODENAME: ${SERVICE_B_NAME}
               DB_HOST: ${DB_HOST}
               DB_KIND: ${DB_KIND}
               DB_NAME: ${DB_NAME}
@@ -292,15 +293,15 @@ categories: knowledge
               DB_PASSWORD: ${DB_PASSWORD}
               DB_PORT: ${DB_PORT_OUT}
         
-          servicekit:
-            image: sf1_servicekit:7.1.0
-            container_name: servicekit
+          SERVICE_D:
+            image: SERVICE_D:7.1.0
+            container_name: SERVICE_D
             restart: always
             ports:
-              - ${SERVICEKIT_PORT_IN}:${SERVICEKIT_PORT_OUT}
-              - ${SERVICEKIT_CACHE_PORT_IN}:${SERVICEKIT_CACHE_PORT_OUT}
+              - ${SERVICE_D_PORT_IN}:${SERVICE_D_PORT_OUT}
+              - ${SERVICE_D_CACHE_PORT_IN}:${SERVICE_D_CACHE_PORT_OUT}
             environment:
-              NODENAME: ${SERVICEKIT_NAME}
+              NODENAME: ${SERVICE_D_NAME}
               DB_HOST: ${DB_HOST}
               DB_KIND: ${DB_KIND}
               DB_NAME: ${DB_NAME}
@@ -308,7 +309,7 @@ categories: knowledge
               DB_USER: ${DB_USER}
               DB_PASSWORD: ${DB_PASSWORD}
               DB_PORT: ${DB_PORT_OUT}
-              MANAGER_IP: ${MANAGER_IP}
+              SERVICE_B_IP: ${SERVICE_B_IP}
         ```
         
         ```docker
