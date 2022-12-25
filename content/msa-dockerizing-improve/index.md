@@ -1,6 +1,6 @@
 ---
 emoji: 🔮
-title: MSA 도커라이징(Dockerizing) 삽질 개선하기
+title: MSA 도커라이징(Dockerizing) 삽질기를 개선하기
 date: '2022-12-25 00:00:00'
 author: 주녁
 tags: docker dockerize dockerizing 도커 도커라이징 도커라이즈 MSA
@@ -22,7 +22,7 @@ categories: knowledge
 
 ## 이전편 요약
 
-이전 편 `도커 삽질하기` 에서는 단순 리눅스 컨테이너를 생성해서
+이전 편 `[도커 삽질하기](https://www.junwork.net/dockerize-msa-basic/)` 에서는 단순 리눅스 컨테이너를 생성해서
 
 직접 명령어를 타이핑하면서, 컨테이너의 상태를 변경하였다.
 
