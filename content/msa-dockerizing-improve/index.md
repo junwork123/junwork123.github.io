@@ -22,7 +22,7 @@ categories: knowledge
 
 ## 이전편 요약
 
-이전 편 `[도커 삽질하기](https://www.junwork.net/dockerize-msa-basic/)` 에서는 단순 리눅스 컨테이너를 생성해서
+이전 편 [도커 삽질하기](https://www.junwork.net/dockerize-msa-basic/) 에서는 단순 리눅스 컨테이너를 생성해서
 
 직접 명령어를 타이핑하면서, 컨테이너의 상태를 변경하였다.
 
@@ -138,36 +138,32 @@ categories: knowledge
         ```docker
         # Database
         FROM postgres:14
-        
-        ENV APPNAME DBInstaller
+
+        ENV APPNAME DBinstaller
         ENV WORKDIR /home/$APPNAME
         WORKDIR $WORKDIR
         COPY conf $WORKDIR/conf
-        
+
         # 타임존 설정
         RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
             && echo $TZ > /etc/timezone
-        
-        # update 및 패키지 설치
+
+        # update 및 패키지 설치, init 명령어 등록
         RUN apt update \
-            && apt install -y sudo procps # openjdk-11-jdk vim git tar gzip build-essential curl alien
-        
-        RUN chmod 777 $WORKDIR/conf/init.sh $WORKDIR/conf/postgresql_table.sql
-        
-        # sed -i "s/{SERVICE_B_SCHEMA_NAME}/$DB_SCHEMA_NAME/g" "$WORKDIR"/conf/postgresql_table.sql
-         #ENTRYPOINT su postgres $WORKDIR/conf/init.sh
+            && apt install -y sudo sed \
+            && cat $WORKDIR/conf/init.sh >> /bin/init \
+            && chmod u+x /bin/init
         ```
         
         ```bash
         #!/bin/bash
-        
-        # Create a user and a database
-        psql -U "$DB_USER" -c "CREATE DATABASE $DB_NAME;"
-        
-        psql -U "$DB_USER" -d "$DB_NAME" -c "CREATE SCHEMA $DB_SCHEMA_NAME;"
-        
-        # Run the SQL script to initialize the database
-        psql -U "$DB_USER" -d "$DB_NAME" -a -f "$WORKDIR"/conf/postgresql_table.sql
+
+        # Create a database and initialize it
+        SQL_FILE_PATH="$WORKDIR"/conf/postgresql_table.sql
+        sudo sed -i "s/{SERVICE_B_SCHEMA_NAME}/$DB_SCHEMA_NAME/g" SQL_FILE_PATH
+        su postgres -c 'psql -U "$DB_USER" -c "CREATE DATABASE $DB_NAME"'
+        su postgres -c 'psql -U "$DB_USER" -d "$DB_NAME" -c "CREATE SCHEMA $DB_SCHEMA_NAME"'
+        su postgres -c 'psql -U "$DB_USER" -d "$DB_NAME" -a -f $SQL_FILE_PATH'
         ```
         
         ```yaml
@@ -262,9 +258,7 @@ categories: knowledge
         docker-compose --env-file .\.env.local up -d
         
         # DB 컨테이너에서 스크립트 실행
-        docker exec -it db_instance /bin/bash
-        sed -i "s/{SERVICE_B_SCHEMA_NAME}/$DB_SCHEMA_NAME/g" "$WORKDIR"/conf/postgresql_table.sql
-        su postgres $WORKDIR/conf/init.sh
+        docker exec -it db_instance init
         
         # 종료
         docker compose down -v
@@ -422,14 +416,14 @@ categories: knowledge
     <summary>특정 파일의 텍스트를 찾아 바꾸기 하고 싶어요</summary>
 
     # file.txt 파일에서 "찾을내용"을 "바꿀내용"으로 찾아바꾸기
-    
-    $ sed -i 's/찾을내용/바꿀내용/g' file.txt
-    
-    자세한 명령어의 설명은 아래와 같다.
-    
-    -i : 파일의 내용을 바꿈
-    's' : 찾아바꾸기
-    'g' : 모든 문자열 바꾸기
+    # 방법1
+    tr '찾을내용' '바꿀내용' < 바꿀파일
+
+    # 방법2
+    # -i : 파일의 내용을 바꿈
+    # 's' : 찾아바꾸기
+    # 'g' : 모든 문자열 바꾸기
+    sed -i 's/찾을내용/바꿀내용/g' file.txt
 
 </details>
 
