@@ -7,6 +7,7 @@ function PostHeader({ post, viewCount }) {
 
   return (
     <header className="post-header">
+      <meta http-equiv="Cache-Control" content="max-age=1440" />
       {post.emoji && <div className="emoji">{post.emoji}</div>}
       <div className="info">
         <div className="categories">
