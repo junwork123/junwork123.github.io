@@ -1,10 +1,10 @@
 ---
 emoji: 🔮
-title: MSA 도커라이징(Dockerizing) 삽질기를 개선하기
+title: MSA 도커라이징(Dockerizing) 2편, 개선하기
 date: '2022-12-25 00:00:00'
 author: 주녁
 tags: docker dockerize dockerizing 도커 도커라이징 도커라이즈 MSA
-categories: knowledge
+categories: infra
 ---
 
 
