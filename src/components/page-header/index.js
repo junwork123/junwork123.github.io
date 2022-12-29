@@ -27,7 +27,6 @@ function PageHeader({ siteTitle }) {
       `}
       render={(data) => (
         <header className="page-header-wrapper">
-        	<meta http-equiv="Cache-Control" content="max-age=1440" />
           <div className="page-header">
             <div className="front-section">
               <Link className="link" to="/">

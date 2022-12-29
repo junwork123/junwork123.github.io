@@ -57,7 +57,9 @@ function Seo({ description, title }) {
           content: `website`,
         },
       ]}
-    />
+    >
+    <meta http-equiv="Cache-Control" content="max-age=1440" />
+    </Helmet>
   );
 }
 
