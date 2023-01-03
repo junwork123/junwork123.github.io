@@ -147,10 +147,10 @@
 
 <span class="token comment"># Create a database and initialize it</span>
 <span class="token builtin class-name">export</span> <span class="token assign-left variable">SQL_FILE_PATH</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$WORKDIR</span>"</span>/conf/<span class="token string">"<span class="token variable">$DB_TYPE</span>"</span>.sql
-<span class="token function">sudo</span> <span class="token function">sed</span> -i <span class="token string">"s/{SERVICE_B_SCHEMA_NAME}/<span class="token variable">$DB_SCHEMA_NAME</span>/g"</span> <span class="token string">"<span class="token variable">$SQL_FILE_PATH</span>"</span>
-<span class="token function">su</span> postgres -c <span class="token string">'psql -U "$DB_USER" -c "CREATE DATABASE $DB_NAME"'</span>
-<span class="token function">su</span> postgres -c <span class="token string">'psql -U "$DB_USER" -d "$DB_NAME" -c "CREATE SCHEMA $DB_SCHEMA_NAME"'</span>
-<span class="token function">su</span> postgres -c <span class="token string">'psql -U "$DB_USER" -d "$DB_NAME" -a -f "$SQL_FILE_PATH"'</span></code></pre></div>
+<span class="token function">sudo</span> <span class="token function">sed</span> -i <span class="token string">"s/{SF1_MANAGER_SCHEMA_NAME}/<span class="token variable">$DB_SCHEMA_NAME</span>/g"</span> <span class="token string">"<span class="token variable">$SQL_FILE_PATH</span>"</span>
+<span class="token function">su</span> - postgres -c <span class="token string">"psql -U <span class="token variable">$DB_USER</span> -c <span class="token entity" title="\&quot;">\"</span>CREATE DATABASE <span class="token variable">$DB_NAME</span><span class="token entity" title="\&quot;">\"</span>"</span>
+<span class="token function">su</span> - postgres -c <span class="token string">"psql -U <span class="token variable">$DB_USER</span> -d <span class="token variable">$DB_NAME</span> -c <span class="token entity" title="\&quot;">\"</span>CREATE SCHEMA <span class="token variable">$DB_SCHEMA_NAME</span><span class="token entity" title="\&quot;">\"</span>"</span>
+<span class="token function">su</span> - postgres -c <span class="token string">"psql -U <span class="token variable">$DB_USER</span> -d <span class="token variable">$DB_NAME</span> -a -f <span class="token variable">$SQL_FILE_PATH</span>"</span></code></pre></div>
 </li>
 <li>
 <p>Oracle</p>
@@ -197,7 +197,7 @@ RUN <span class="token function">apt-get</span> <span class="token function">ins
 
 <span class="token comment"># DB Configuration</span>
 <span class="token assign-left variable">DB_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
-<span class="token assign-left variable">DB_VERSION</span><span class="token operator">=</span>latest
+<span class="token assign-left variable">DB_IMAGE_VERSION</span><span class="token operator">=</span>postgres-7.1.0
 <span class="token assign-left variable">DB_PORT_IN</span><span class="token operator">=</span><span class="token number">5432</span>
 <span class="token assign-left variable">DB_PORT_OUT</span><span class="token operator">=</span><span class="token number">5432</span>
 <span class="token assign-left variable">DB_ENV_FILE</span><span class="token operator">=</span>.env.db
@@ -206,13 +206,13 @@ RUN <span class="token function">apt-get</span> <span class="token function">ins
 
 <span class="token comment"># SERVICE_B Configuration</span>
 <span class="token assign-left variable">SERVICE_B_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
-<span class="token assign-left variable">SERVICE_B_VERSION</span><span class="token operator">=</span>latest
+<span class="token assign-left variable">SERVICE_B_IMAGE_VERSION</span><span class="token operator">=</span>latest
 <span class="token assign-left variable">SERVICE_B_NAME</span><span class="token operator">=</span>SERVICE_B1
-<span class="token assign-left variable">SERVICE_B_IP</span><span class="token operator">=</span><span class="token number">61.82</span>.137.58 <span class="token comment"># 관리도구를 실행할 호스트의 IP로 변경</span>
+<span class="token assign-left variable">SERVICE_B_IP</span><span class="token operator">=</span><span class="token number">0.0</span>.0.0 <span class="token comment"># 실행할 호스트의 IP로 변경</span>
 
 <span class="token comment"># SERVICE_D Configuration</span>
 <span class="token assign-left variable">SERVICE_D_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
-<span class="token assign-left variable">SERVICE_D_VERSION</span><span class="token operator">=</span>latest
+<span class="token assign-left variable">SERVICE_D_IMAGE_VERSION</span><span class="token operator">=</span>latest
 <span class="token assign-left variable">SERVICE_D_NAME</span><span class="token operator">=</span>kit1
 
 <span class="token comment"># Ports</span>
@@ -250,7 +250,7 @@ RUN <span class="token function">apt-get</span> <span class="token function">ins
 
 <span class="token comment"># DB Configuration</span>
 <span class="token assign-left variable">DB_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
-<span class="token assign-left variable">DB_VERSION</span><span class="token operator">=</span>latest
+<span class="token assign-left variable">DB_IMAGE_VERSION</span><span class="token operator">=</span>oracle-7.1.0
 <span class="token assign-left variable">DB_PORT_IN</span><span class="token operator">=</span><span class="token number">1521</span>
 <span class="token assign-left variable">DB_PORT_OUT</span><span class="token operator">=</span><span class="token number">1521</span>
 <span class="token assign-left variable">DB_ENV_FILE</span><span class="token operator">=</span>.env.db
@@ -259,13 +259,13 @@ RUN <span class="token function">apt-get</span> <span class="token function">ins
 
 <span class="token comment"># SERVICE_B Configuration</span>
 <span class="token assign-left variable">SERVICE_B_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
-<span class="token assign-left variable">SERVICE_B_VERSION</span><span class="token operator">=</span>latest
+<span class="token assign-left variable">SERVICE_B_IMAGE_VERSION</span><span class="token operator">=</span>latest
 <span class="token assign-left variable">SERVICE_B_NAME</span><span class="token operator">=</span>SERVICE_B1
-<span class="token assign-left variable">SERVICE_B_IP</span><span class="token operator">=</span><span class="token number">61.82</span>.137.58 <span class="token comment"># 관리도구를 실행할 호스트의 IP로 변경</span>
+<span class="token assign-left variable">SERVICE_B_IP</span><span class="token operator">=</span><span class="token number">0.0</span>.0.0 <span class="token comment"># 호스트의 IP로 변경</span>
 
 <span class="token comment"># SERVICE_D Configuration</span>
 <span class="token assign-left variable">SERVICE_D_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
-<span class="token assign-left variable">SERVICE_D_VERSION</span><span class="token operator">=</span>latest
+<span class="token assign-left variable">SERVICE_D_IMAGE_VERSION</span><span class="token operator">=</span>latest
 <span class="token assign-left variable">SERVICE_D_NAME</span><span class="token operator">=</span>kit1
 
 <span class="token comment"># Ports</span>
@@ -305,7 +305,7 @@ RUN <span class="token function">apt-get</span> <span class="token function">ins
 services:
     database:
         env_file: <span class="token variable">${DB_ENV_FILE}</span>
-        image: <span class="token variable">${DB_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${DB_VERSION}</span>
+        image: <span class="token variable">${DB_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${DB_IMAGE_VERSION}</span>
         container_name: db_instance
         restart: unless-stopped
         ports:
@@ -320,7 +320,7 @@ services:
 
     SERVICE_B:
         env_file: <span class="token variable">${DB_ENV_FILE}</span>
-        image: <span class="token variable">${SERVICE_B_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_VERSION}</span>
+        image: <span class="token variable">${SERVICE_B_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_IMAGE_VERSION}</span>
         container_name: SERVICE_B
         restart: always
         depends_on:
@@ -335,7 +335,7 @@ services:
 
     SERVICE_D:
         env_file: <span class="token variable">${DB_ENV_FILE}</span>
-        image: <span class="token variable">${SERVICE_D_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_VERSION}</span>
+        image: <span class="token variable">${SERVICE_D_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_IMAGE_VERSION}</span>
         container_name: SERVICE_D
         restart: always
         depends_on:
@@ -359,7 +359,7 @@ volumes:
 services:
     database:
         env_file: <span class="token variable">${DB_ENV_FILE}</span>
-        image: <span class="token variable">${DB_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${DB_VERSION}</span>
+        image: <span class="token variable">${DB_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${DB_IMAGE_VERSION}</span>
         container_name: db_instance
         restart: unless-stopped
         ports:
@@ -375,7 +375,7 @@ services:
 
     SERVICE_B:
         env_file: <span class="token variable">${DB_ENV_FILE}</span>
-        image: <span class="token variable">${SERVICE_B_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_VERSION}</span>
+        image: <span class="token variable">${SERVICE_B_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_IMAGE_VERSION}</span>
         container_name: SERVICE_B
         restart: always
         depends_on:
@@ -390,7 +390,7 @@ services:
 
     SERVICE_D:
         env_file: <span class="token variable">${DB_ENV_FILE}</span>
-        image: <span class="token variable">${SERVICE_D_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_VERSION}</span>
+        image: <span class="token variable">${SERVICE_D_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_IMAGE_VERSION}</span>
         container_name: SERVICE_D
         restart: always
         depends_on:
@@ -414,7 +414,7 @@ volumes:
 services:
   SERVICE_B:
     env_file: <span class="token variable">${DB_ENV_FILE}</span>
-    image: <span class="token variable">${SERVICE_B_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_VERSION}</span>
+    image: <span class="token variable">${SERVICE_B_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_IMAGE_VERSION}</span>
     container_name: SERVICE_B
     restart: always
     ports:
@@ -426,7 +426,7 @@ services:
 
   SERVICE_D:
     env_file: <span class="token variable">${DB_ENV_FILE}</span>
-    image: <span class="token variable">${SERVICE_D_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_VERSION}</span>
+    image: <span class="token variable">${SERVICE_D_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_IMAGE_VERSION}</span>
     container_name: SERVICE_D
     restart: always
     ports:
