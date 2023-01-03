@@ -16,7 +16,7 @@ categories: infra
 
 ## 목표
 
-도커 개선하기에서 작성한 내용을 발전시켜보자.
+[도커 개선하기](https://www.junwork.net/dockerize-msa-improve/)에서 작성한 내용을 발전시켜보자.
 
 <br>
 
