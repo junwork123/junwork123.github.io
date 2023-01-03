@@ -127,11 +127,49 @@
 </li>
 <li>
 <p>다음과 같은 구조를 가지게 됨</p>
+<blockquote>
+<p>Postgres, Oracle 버전을 각각 작성했습니다.</p>
+<p>필요한 부분만 골라서 사용하시면 됩니다.</p>
+</blockquote>
+<ul>
+<li>DB 설정파일
 <ul>
 <li>
-<p>DB Dockerfile</p>
+<p>/conf/DB설정할 SQL파일(*.sql) → 각자 필요에 맞게 작성</p>
+</li>
+<li>
+<p>/conf/initdb.sh</p>
+<ul>
+<li>
+<p>Postgres</p>
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token comment"># initdb.sh for PostgreSql</span>
+
+<span class="token comment"># Create a database and initialize it</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">SQL_FILE_PATH</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$WORKDIR</span>"</span>/conf/<span class="token string">"<span class="token variable">$DB_TYPE</span>"</span>.sql
+<span class="token function">sudo</span> <span class="token function">sed</span> -i <span class="token string">"s/{SERVICE_B_SCHEMA_NAME}/<span class="token variable">$DB_SCHEMA_NAME</span>/g"</span> <span class="token string">"<span class="token variable">$SQL_FILE_PATH</span>"</span>
+<span class="token function">su</span> postgres -c <span class="token string">'psql -U "$DB_USER" -c "CREATE DATABASE $DB_NAME"'</span>
+<span class="token function">su</span> postgres -c <span class="token string">'psql -U "$DB_USER" -d "$DB_NAME" -c "CREATE SCHEMA $DB_SCHEMA_NAME"'</span>
+<span class="token function">su</span> postgres -c <span class="token string">'psql -U "$DB_USER" -d "$DB_NAME" -a -f "$SQL_FILE_PATH"'</span></code></pre></div>
+</li>
+<li>
+<p>Oracle</p>
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token comment"># initdb.sh for Oracle</span>
+
+<span class="token comment"># Create a database and initialize it</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">SQL_FILE_PATH</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$WORKDIR</span>"</span>/conf/<span class="token string">"<span class="token variable">$DB_TYPE</span>"</span>.sql
+<span class="token function">su</span> - oracle -c <span class="token string">"echo <span class="token entity" title="\&quot;">\"</span>create user <span class="token variable">$DB_USER</span> identified by <span class="token variable">$DB_PASSWORD</span>;<span class="token entity" title="\&quot;">\"</span> | sqlplus / as sysdba"</span>
+<span class="token function">su</span> - oracle -c <span class="token string">"echo <span class="token entity" title="\&quot;">\"</span>grant dba to <span class="token variable">$DB_USER</span>;<span class="token entity" title="\&quot;">\"</span> | sqlplus / as sysdba"</span>
+<span class="token function">su</span> - oracle -c <span class="token string">"sqlplus <span class="token entity" title="\&quot;">\"</span><span class="token variable">$DB_USER</span>/<span class="token variable">$DB_PASSWORD</span>@<span class="token variable">$DB_NAME</span><span class="token entity" title="\&quot;">\"</span> &lt; <span class="token entity" title="\&quot;">\"</span><span class="token variable">$SQL_FILE_PATH</span><span class="token entity" title="\&quot;">\"</span>"</span></code></pre></div>
+</li>
+</ul>
+</li>
+<li>
+<p>./DB Dockerfile</p>
+<p>다른 DB를 사용하려면 <code class="language-text">FROM</code> 부분만 수정하면 된다.</p>
 <div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># Database</span>
-FROM postgres:14
+FROM postgres:14 
 
 ENV APPNAME DBinstaller
 ENV WORKDIR /home/<span class="token variable">$APPNAME</span>
@@ -143,40 +181,41 @@ RUN <span class="token function">ln</span> -snf /usr/share/zoneinfo/<span class=
     <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">echo</span> <span class="token variable">$TZ</span> <span class="token operator">></span> /etc/timezone
 
 <span class="token comment"># update 및 패키지 설치, init 명령어 등록</span>
-RUN <span class="token function">apt</span> update <span class="token punctuation">\</span>
-    <span class="token operator">&amp;&amp;</span> <span class="token function">apt</span> <span class="token function">install</span> -y <span class="token function">sudo</span> <span class="token function">sed</span> <span class="token punctuation">\</span>
-    <span class="token operator">&amp;&amp;</span> <span class="token function">cat</span> <span class="token variable">$WORKDIR</span>/conf/init.sh <span class="token operator">>></span> /bin/init <span class="token punctuation">\</span>
-    <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> u+x /bin/init</code></pre></div>
+RUN <span class="token function">apt-get</span> <span class="token function">install</span> -y <span class="token function">sudo</span> <span class="token function">sed</span> <span class="token punctuation">\</span>
+    <span class="token operator">&amp;&amp;</span> <span class="token function">cat</span> <span class="token variable">$WORKDIR</span>/conf/initdb.sh <span class="token operator">>></span> /bin/initdb <span class="token punctuation">\</span>
+    <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> u+x /bin/initdb</code></pre></div>
 </li>
-<li>
-<p>환경변수 설정파일(Compose / DB)</p>
+</ul>
+</li>
+<li>환경변수 설정파일(.env)
+<ul>
+<li>Postgres
 <ul>
 <li>
 <p>.env 파일(Docker Compose용)</p>
-<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># .env</span>
-<span class="token comment"># IMAGE=&lt;registry URL>/&lt;namespace>/&lt;project>/&lt;image></span>
-<span class="token comment"># VERSION=&lt;tag></span>
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># .env for PostgreSql</span>
 
 <span class="token comment"># DB Configuration</span>
 <span class="token assign-left variable">DB_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
 <span class="token assign-left variable">DB_VERSION</span><span class="token operator">=</span>latest
-<span class="token assign-left variable">DB_HOST</span><span class="token operator">=</span><span class="token number">0.0</span>.0.0 <span class="token comment"># 외부 DB와 연결하고 싶을 때 DB IP 입력</span>
-<span class="token assign-left variable">DB_ENV_FILE</span><span class="token operator">=</span>.env.db.postgres
+<span class="token assign-left variable">DB_PORT_IN</span><span class="token operator">=</span><span class="token number">5432</span>
+<span class="token assign-left variable">DB_PORT_OUT</span><span class="token operator">=</span><span class="token number">5432</span>
+<span class="token assign-left variable">DB_ENV_FILE</span><span class="token operator">=</span>.env.db
+<span class="token assign-left variable">DB_DEFAULT_PATH</span><span class="token operator">=</span>/var/lib/postgresql/data
+<span class="token comment"># DB_HOST=0.0.0.0 # 외부 DB와 연결하고 싶을 때 DB IP 입력</span>
 
 <span class="token comment"># SERVICE_B Configuration</span>
-<span class="token assign-left variable">SERVICE_B_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>SERVICE_B<span class="token punctuation">..</span>
+<span class="token assign-left variable">SERVICE_B_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
 <span class="token assign-left variable">SERVICE_B_VERSION</span><span class="token operator">=</span>latest
-<span class="token assign-left variable">SERVICE_B_IP</span><span class="token operator">=</span><span class="token number">0.0</span>.0.0 <span class="token comment"># 관리도구를 실행할 호스트의 IP로 변경</span>
 <span class="token assign-left variable">SERVICE_B_NAME</span><span class="token operator">=</span>SERVICE_B1
+<span class="token assign-left variable">SERVICE_B_IP</span><span class="token operator">=</span><span class="token number">61.82</span>.137.58 <span class="token comment"># 관리도구를 실행할 호스트의 IP로 변경</span>
 
 <span class="token comment"># SERVICE_D Configuration</span>
-<span class="token assign-left variable">SERVICE_D_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>SERVICE_D<span class="token punctuation">..</span>
+<span class="token assign-left variable">SERVICE_D_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
 <span class="token assign-left variable">SERVICE_D_VERSION</span><span class="token operator">=</span>latest
 <span class="token assign-left variable">SERVICE_D_NAME</span><span class="token operator">=</span>kit1
 
 <span class="token comment"># Ports</span>
-<span class="token assign-left variable">DB_PORT_IN</span><span class="token operator">=</span><span class="token number">5432</span>
-<span class="token assign-left variable">DB_PORT_OUT</span><span class="token operator">=</span><span class="token number">5432</span>
 <span class="token assign-left variable">SERVICE_B_PORT_IN</span><span class="token operator">=</span><span class="token number">8080</span>
 <span class="token assign-left variable">SERVICE_B_PORT_OUT</span><span class="token operator">=</span><span class="token number">8080</span>
 <span class="token assign-left variable">SERVICE_D_PORT_IN</span><span class="token operator">=</span><span class="token number">8888</span>
@@ -187,26 +226,81 @@ RUN <span class="token function">apt</span> update <span class="token punctuatio
 <li>
 <p>.env.db 파일(DB용)</p>
 <div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># DB Configuration</span>
-<span class="token assign-left variable">DB_NAME</span><span class="token operator">=</span><span class="token string">"sf1_db"</span>
-<span class="token assign-left variable">DB_SCHEMA_NAME</span><span class="token operator">=</span><span class="token string">"sf1_schema"</span>
 <span class="token assign-left variable">DB_USER</span><span class="token operator">=</span>postgres
 <span class="token assign-left variable">DB_PASSWORD</span><span class="token operator">=</span>0000
-<span class="token assign-left variable">TZ</span><span class="token operator">=</span>Asia/Seoul
 
 <span class="token comment"># Postgresql</span>
 <span class="token assign-left variable">POSTGRES_PASSWORD</span><span class="token operator">=</span><span class="token variable">${DB_PASSWORD}</span>
-<span class="token assign-left variable">DB_KIND</span><span class="token operator">=</span>postgresql <span class="token comment"># oracle, tibero</span>
+<span class="token assign-left variable">DB_NAME</span><span class="token operator">=</span><span class="token string">"db"</span>
+<span class="token assign-left variable">DB_SCHEMA_NAME</span><span class="token operator">=</span><span class="token string">"schema"</span>
+<span class="token assign-left variable">DB_KIND</span><span class="token operator">=</span><span class="token string">"postgresql"</span>
+<span class="token assign-left variable">DB_DELIMITER</span><span class="token operator">=</span><span class="token string">"//"</span>
 <span class="token assign-left variable">DB_DIALECT</span><span class="token operator">=</span><span class="token string">"org.hibernate.dialect.PostgreSQL10Dialect"</span>
 <span class="token assign-left variable">DB_DRIVER_CLASS_NAME</span><span class="token operator">=</span><span class="token string">"org.postgresql.Driver"</span>
-<span class="token assign-left variable">DB_TYPE</span><span class="token operator">=</span><span class="token string">"postgresql_table"</span></code></pre></div>
+<span class="token assign-left variable">DB_TYPE</span><span class="token operator">=</span><span class="token string">"postgresql_table"</span>
+<span class="token assign-left variable">TZ</span><span class="token operator">=</span><span class="token string">"Asia/Seoul"</span></code></pre></div>
 </li>
 </ul>
 </li>
-<li>
-<p>Docker Compose</p>
+<li>Oracle
 <ul>
 <li>
-<p>Docker-compose.yml</p>
+<p>.env 파일(Docker Compose용)</p>
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># .env for Oracle</span>
+
+<span class="token comment"># DB Configuration</span>
+<span class="token assign-left variable">DB_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
+<span class="token assign-left variable">DB_VERSION</span><span class="token operator">=</span>latest
+<span class="token assign-left variable">DB_PORT_IN</span><span class="token operator">=</span><span class="token number">1521</span>
+<span class="token assign-left variable">DB_PORT_OUT</span><span class="token operator">=</span><span class="token number">1521</span>
+<span class="token assign-left variable">DB_ENV_FILE</span><span class="token operator">=</span>.env.db
+<span class="token assign-left variable">DB_DEFAULT_PATH</span><span class="token operator">=</span>/opt/oracle/oradata
+<span class="token comment"># DB_HOST=0.0.0.0 # 외부 DB와 연결하고 싶을 때 DB IP 입력</span>
+
+<span class="token comment"># SERVICE_B Configuration</span>
+<span class="token assign-left variable">SERVICE_B_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
+<span class="token assign-left variable">SERVICE_B_VERSION</span><span class="token operator">=</span>latest
+<span class="token assign-left variable">SERVICE_B_NAME</span><span class="token operator">=</span>SERVICE_B1
+<span class="token assign-left variable">SERVICE_B_IP</span><span class="token operator">=</span><span class="token number">61.82</span>.137.58 <span class="token comment"># 관리도구를 실행할 호스트의 IP로 변경</span>
+
+<span class="token comment"># SERVICE_D Configuration</span>
+<span class="token assign-left variable">SERVICE_D_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
+<span class="token assign-left variable">SERVICE_D_VERSION</span><span class="token operator">=</span>latest
+<span class="token assign-left variable">SERVICE_D_NAME</span><span class="token operator">=</span>kit1
+
+<span class="token comment"># Ports</span>
+<span class="token assign-left variable">SERVICE_B_PORT_IN</span><span class="token operator">=</span><span class="token number">8080</span>
+<span class="token assign-left variable">SERVICE_B_PORT_OUT</span><span class="token operator">=</span><span class="token number">8080</span>
+<span class="token assign-left variable">SERVICE_D_PORT_IN</span><span class="token operator">=</span><span class="token number">8888</span>
+<span class="token assign-left variable">SERVICE_D_PORT_OUT</span><span class="token operator">=</span><span class="token number">8888</span>
+<span class="token assign-left variable">SERVICE_D_CACHE_PORT_IN</span><span class="token operator">=</span><span class="token number">8900</span>
+<span class="token assign-left variable">SERVICE_D_CACHE_PORT_OUT</span><span class="token operator">=</span><span class="token number">8900</span></code></pre></div>
+</li>
+<li>
+<p>.env.db 파일(DB용)</p>
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># DB Configuration</span>
+<span class="token assign-left variable">DB_USER</span><span class="token operator">=</span>admin
+<span class="token assign-left variable">DB_PASSWORD</span><span class="token operator">=</span>0000
+
+<span class="token comment"># Oracle</span>
+<span class="token assign-left variable">ORACLE_PASSWORD</span><span class="token operator">=</span><span class="token variable">${DB_PASSWORD}</span>
+<span class="token assign-left variable">DB_NAME</span><span class="token operator">=</span><span class="token string">"xe"</span>
+<span class="token assign-left variable">DB_SCHEMA_NAME</span><span class="token operator">=</span><span class="token string">"schema"</span>
+<span class="token assign-left variable">DB_KIND</span><span class="token operator">=</span><span class="token string">"oracle:thin"</span>
+<span class="token assign-left variable">DB_DELIMITER</span><span class="token operator">=</span><span class="token string">"@"</span>
+<span class="token assign-left variable">DB_DIALECT</span><span class="token operator">=</span><span class="token string">"org.hibernate.dialect.Oracle10gDialect"</span>
+<span class="token assign-left variable">DB_DRIVER_CLASS_NAME</span><span class="token operator">=</span><span class="token string">"oracle.jdbc.driver.OracleDriver"</span>
+<span class="token assign-left variable">DB_TYPE</span><span class="token operator">=</span><span class="token string">"oracle_table"</span>
+<span class="token assign-left variable">TZ</span><span class="token operator">=</span><span class="token string">"Asia/Seoul"</span></code></pre></div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Docker-Compose.yml
+<ul>
+<li>
+<p>Postgres</p>
 <div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># Docker compose</span>
 services:
     database:
@@ -217,7 +311,7 @@ services:
         ports:
           - <span class="token variable">${DB_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${DB_PORT_OUT}</span>
         volumes:
-          - sf1_db_storage:/var/lib/postgresql/data
+          - db_storage:<span class="token variable">${DB_DEFAULT_PATH}</span>
         healthcheck:
           test: <span class="token punctuation">[</span><span class="token string">"CMD"</span>, <span class="token string">"pg_isready"</span>, <span class="token string">"-U"</span>, <span class="token string">"postgres"</span><span class="token punctuation">]</span>
           interval: 10s
@@ -256,11 +350,66 @@ services:
           DB_HOST: db_instance
           SERVICE_B_IP: <span class="token variable">${SERVICE_B_IP}</span>
 volumes:
-  sf1_db_storage:
+  db_storage:
     driver: <span class="token builtin class-name">local</span></code></pre></div>
 </li>
 <li>
-<p>Docker-compose.external-db.yml</p>
+<p>Oracle</p>
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># Docker compose</span>
+services:
+    database:
+        env_file: <span class="token variable">${DB_ENV_FILE}</span>
+        image: <span class="token variable">${DB_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${DB_VERSION}</span>
+        container_name: db_instance
+        restart: unless-stopped
+        ports:
+          - <span class="token variable">${DB_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${DB_PORT_OUT}</span>
+        volumes:
+          - db_storage:<span class="token variable">${DB_DEFAULT_PATH}</span>
+        healthcheck:
+          <span class="token comment"># test: ps -ef | grep ora_</span>
+          test: <span class="token function">su</span> - oracle -c <span class="token string">"sqlplus SELECT INSTANCE_NAME, STATUS FROM V$<span class="token environment constant">$INSTANCE</span>;"</span>
+          interval: 10s
+          timeout: 3s
+          retries: <span class="token number">3</span>
+
+    SERVICE_B:
+        env_file: <span class="token variable">${DB_ENV_FILE}</span>
+        image: <span class="token variable">${SERVICE_B_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_VERSION}</span>
+        container_name: SERVICE_B
+        restart: always
+        depends_on:
+          database:
+            condition: service_healthy
+        ports:
+          - <span class="token variable">${SERVICE_B_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_PORT_OUT}</span>
+        environment:
+          NODENAME: <span class="token variable">${SERVICE_B_NAME}</span>
+          DB_PORT: <span class="token variable">${DB_PORT_OUT}</span>
+          DB_HOST: db_instance
+
+    SERVICE_D:
+        env_file: <span class="token variable">${DB_ENV_FILE}</span>
+        image: <span class="token variable">${SERVICE_D_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_VERSION}</span>
+        container_name: SERVICE_D
+        restart: always
+        depends_on:
+          database:
+              condition: service_healthy
+        ports:
+          - <span class="token variable">${SERVICE_D_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_PORT_OUT}</span>
+          - <span class="token variable">${SERVICE_D_CACHE_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_CACHE_PORT_OUT}</span>
+        environment:
+          NODENAME: <span class="token variable">${SERVICE_D_NAME}</span>
+          DB_PORT: <span class="token variable">${DB_PORT_OUT}</span>
+          DB_HOST: db_instance
+          SERVICE_B_IP: <span class="token variable">${SERVICE_B_IP}</span>
+volumes:
+  db_storage:
+    driver: <span class="token builtin class-name">local</span></code></pre></div>
+</li>
+<li>
+<p>컨테이너 외부 DB와 연결할 때</p>
 <div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># Docker compose</span>
 services:
   SERVICE_B:
@@ -298,60 +447,19 @@ services:
 <div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># 기존과 똑같이 실행</span>
 <span class="token function">docker-compose</span> up -d
 
-<span class="token comment"># 외부 DB 실행</span>
-<span class="token comment"># docker compose -f .\docker-compose-external-db.yml up -d</span>
-
-<span class="token comment"># DB 컨테이너에서 스크립트 실행</span>
-<span class="token function">docker</span> <span class="token builtin class-name">exec</span> -it db_instance init
-
-<span class="token comment"># 종료</span>
-<span class="token function">docker</span> compose down -v</code></pre></div>
+<span class="token comment"># DB 컨테이너에서 초기화 스크립트 실행</span>
+<span class="token function">docker</span> <span class="token builtin class-name">exec</span> -it db_instance initdb</code></pre></div>
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># 외부 DB 연결시 실행</span>
+<span class="token function">docker</span> compose -f .<span class="token punctuation">\</span>docker-compose-external-db.yml up -d</code></pre></div>
+<div class="gatsby-highlight" data-language="sql"><pre class="language-sql"><code class="language-sql"><span class="token comment"># 종료</span>
+docker compose down <span class="token operator">-</span>v</code></pre></div>
 </li>
 </ul>
 </li>
 </ol>
-<br>
 <hr>
 <h2 id="q--a" style="position:relative;"><a href="#q--a" aria-label="q  a permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Q &#x26; A</h2>
 <ul>
-<li>
-<p>DinD vs DooD의 차이가 뭔가요?</p>
-<p><span
-      class="gatsby-resp-image-wrapper"
-      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 700px; "
-    >
-      <span
-    class="gatsby-resp-image-background-image"
-    style="padding-bottom: 50.55555555555556%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAYAAAC0VX7mAAAACXBIWXMAAAsTAAALEwEAmpwYAAACBUlEQVQoz3WR32/ScBTF+bv36h/ggxp9UBOdvihuOPeLzWXMRHFsskEY40dLS0u/pbRQCv1B+dGPWXVmWeZJTu7Dvefk3HszUTynqQt6XogI5jjRAseb0Oj2aGoG+jigHy4w/Rjhx5jBnEkUIxl9GkMffRqztnfGUdvgBhknnHPcNihIgkJnwDdtREm1yNU0Dtsmm7Uun6oq2y2LQ8Uh17IoWz75msJBNktOtnn6s8Gu4gIJmeFsybnpcaFZVHo2ZTGmqA7I1gX7LZOc5PCx7bBxpbMpD8nKLmemR6GucPH2BTtNwUlLpWiFkKzI2NGCoj7ktCP4pTuUxJiycKnrfYoXl1RVwabiIStd5O0P1FSDqjtjq1jny9oj1q96PJENjo3pH8PxbMGpOaEkPErmhMuBT2MUogwnvN7J871aZ0f3EarCfOM5tu1wOZhSlE0KRz8oaC4HPY/KwIckIcMDkMYR7cGIV1t7XPcG5M0ZfcvBOz6iJnVpOv5DMpKbpyRJwi1XSZI22m6E7His73+lohoc2ksszaD37DFSp4vkxal8tVz+093UNOFdw+SvoTyeodguLz9v09BFmnDXCDmZwK4R0RoF6dzqnja5v/Jtwvow4Lw/Ya/aoqjZbOgR79SQ9x2fN50gvfHd+bt4cGXLn1G2ply7MVU7SFlzwpQVO8AO4v8m/A0m1OIA9PMOqQAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
-  ></span>
-  <img
-        class="gatsby-resp-image-image"
-        alt="Untitled"
-        title="Untitled"
-        src="/static/c8231c053eb45162ab16d245df3c67ef/8c557/dind.png"
-        srcset="/static/c8231c053eb45162ab16d245df3c67ef/e9ff0/dind.png 180w,
-/static/c8231c053eb45162ab16d245df3c67ef/f21e7/dind.png 360w,
-/static/c8231c053eb45162ab16d245df3c67ef/8c557/dind.png 700w"
-        sizes="(max-width: 700px) 100vw, 700px"
-        style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
-        loading="lazy"
-        decoding="async"
-      />
-    </span></p>
-<blockquote>
-<p>Docker는 위와 같이 3가지 유닛(Client, Host(Daemon), Registry) 으로 분리된다.</p>
-</blockquote>
-<ul>
-<li>
-<p>DinD(Docker in Docker)</p>
-<p>도커 컨테이너 내부에 호스트 도커 데몬과는 별개의 새로운 도커 데몬을 실행시키는 것이다. DinD를 이용하기 위해서는 새로운 도커 데몬 컨테이너를 실행시킬 때, —privileged 옵션을 사용하게 된다. 이 옵션은 컨테이너가 호스트 머신의 대부분의 권한을 얻을 수 있게 해준다. 이는 보안상 대부분의 권한을 획득하기 때문에 DinD는 권장하지 않는 방법이 되었다.</p>
-</li>
-<li>
-<p>DooD (Docker Out Of Docker)</p>
-<p>호스트 도커 데몬이 사용하는 소켓을 공유하여 도커 클라이언트 컨테이너에서 컨테이너를 실행시키는 것이다. 이 방법은 도커 클라이언트 컨테이너에 —privileged 옵션을 주지 않았기 때문에 DinD보다는 안전하다. 하지만 컨테이너 이름 충돌, 포트 충돌 가능성이 있고, 소켓 마운트 경로가 호스트에 의존하게 된다는 단점이 있다.</p>
-</li>
-</ul>
-</li>
 <li>
 <p>Compose CLI 커맨드 —env-file 옵션 vs Compose파일의 env_file 옵션의 차이가 뭔가요?</p>
 <ul>
@@ -365,24 +473,49 @@ services:
 </li>
 </ul>
 </li>
+<li>
+<p>오라클 DB에러가 발생했어요, ORA-01031 : insufficient privileges</p>
+<p>DBA 권한이 없는 유저로 접속시도한 경우에 발생합니다.</p>
+<p><code class="language-text">sqlplus / as sysdba</code> 와 같이 관리자 모드로 실행하면 됩니다.</p>
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token function">su</span> - oracle -c <span class="token string">"echo <span class="token entity" title="\&quot;">\"</span>create user <span class="token variable">$DB_USER</span> identified by <span class="token variable">$DB_PASSWORD</span>;<span class="token entity" title="\&quot;">\"</span> | sqlplus / as sysdba"</span></code></pre></div>
+</li>
+<li>
+<p>오라클 DB에러가 발생했어요, ORA-01109: database not open</p>
+<p>데이터베이스 읽기, 쓰기 권한이 열려있지 않은 경우에 발생하는 에러입니다</p>
+<p>아래 명령어를 통해 Open 상태로 변경할 수 있습니다.</p>
+<div class="gatsby-highlight" data-language="sql"><pre class="language-sql"><code class="language-sql">sqlplus <span class="token operator">/</span> <span class="token keyword">as</span> sysdba
+<span class="token keyword">ALTER</span> <span class="token keyword">DATABASE</span> <span class="token keyword">OPEN</span><span class="token punctuation">;</span></code></pre></div>
+<p>하지만, 제 경우에는 Oracle DB가 완전히 기동되기 전에 실행하려해서 발생했습니다.</p>
+<p>아래와 같은 명령어로 기동 상태를 확인할 수 있습니다.</p>
+<div class="gatsby-highlight" data-language="sql"><pre class="language-sql"><code class="language-sql">sqlplus <span class="token keyword">SELECT</span> INSTANCE_NAME<span class="token punctuation">,</span> <span class="token keyword">STATUS</span> <span class="token keyword">FROM</span> V$$INSTANCE<span class="token punctuation">;</span></code></pre></div>
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token function">su</span> - oracle -c <span class="token string">"echo <span class="token entity" title="\&quot;">\"</span>create user <span class="token variable">$DB_USER</span> identified by <span class="token variable">$DB_PASSWORD</span>;<span class="token entity" title="\&quot;">\"</span> | sqlplus / as sysdba"</span></code></pre></div>
+</li>
 </ul>
-<br>
 <hr>
-<h2 id="마치며" style="position:relative;"><a href="#%EB%A7%88%EC%B9%98%EB%A9%B0" aria-label="마치며 permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>마치며</h2>
-<p>다음편은 대망의 마지막편으로</p>
-<p>CI/CD를 통해 지금까지 했던 작업을 자동화해볼 것이다.</p>
-<p>release 브랜치에 push가 발생하면 docker 이미지로 배포함으로써</p>
-<p>Micro Service 갯수만큼 Docker Build - Push하는 반복작업을 최소화해보자.</p>
-<br>
+<h2 id="개선할-점" style="position:relative;"><a href="#%EA%B0%9C%EC%84%A0%ED%95%A0-%EC%A0%90" aria-label="개선할 점 permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>개선할 점</h2>
+<ul>
+<li>
+<p>health check 스크립트 통일</p>
+<div class="gatsby-highlight" data-language="sql"><pre class="language-sql"><code class="language-sql"><span class="token comment">#! /bin/sh</span>
+
+<span class="token comment"># Wait for PostgreSQL</span>
+until nc <span class="token operator">-</span>z <span class="token operator">-</span>v <span class="token operator">-</span>w30 <span class="token string">"$DB_HOST"</span> <span class="token number">5432</span>
+<span class="token keyword">do</span>
+  echo <span class="token string">'Waiting for PostgreSQL...'</span>
+  sleep <span class="token number">1</span>
+done
+echo <span class="token string">"PostgreSQL is up and running"</span></code></pre></div>
+</li>
+</ul>
 <hr>
-<p><em>참고자료</em></p>
-<p><em><a href="https://aidanbae.github.io/code/docker/dinddood/">DinD(docker in docker)와 DooD(docker out of docker) | 아이단은 어디갔을까 (aidanbae.github.io)</a></em></p>
-<p><em><a href="https://workshop.infograb.io/gitlab-ci/33_add_docker_build_stage/2_add_build_stage/"><code class="language-text">.gitlab-ci.yml</code> 파일에 Docker 이미지 빌드 단계 추가 - GitLab CI Workshop (infograb.io)</a></em></p>
-<p><em><a href="https://medium.com/monday-9-pm/ci-cd-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EA%B5%AC%EC%B6%95%EA%B8%B0-2-f96b1217279e">CI/CD 프로세스 구축기 2. 파이프라인 구성 | by kyeong su kim | 월요일 오후 9시 | Medium</a></em></p>
-<p><em><a href="https://hihellloitland.tistory.com/65">GitLab Runner 를 사용하여 GitLab CI 구성하기 (tistory.com)</a></em></p>
-<p><em><a href="https://otrodevym.tistory.com/entry/CICD-window%EC%97%90%EC%84%9C-Gitlab-CICD%EB%A5%BC-docker%EB%A1%9C-%EB%B0%B0%ED%8F%AC%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95">[Gitlab-CI/CD] window에서 Gitlab CI/CD를 docker로 배포하는 방법 (tistory.com)</a></em></p>
-<p><em><a href="https://yoonsu.tistory.com/25">[GitLab] docker-compose를 이용하여 GitLab Runner추가하기 (tistory.com)</a></em></p>
-<p><em><a href="https://ekwkqk12.tistory.com/32">[Gitlab] CI/GitLab Container Registry (tistory.com)</a></em></p>
+<p>참고자료</p>
+<p><a href="https://aidanbae.github.io/code/docker/dinddood/">DinD(docker in docker)와 DooD(docker out of docker) | 아이단은 어디갔을까 (aidanbae.github.io)</a></p>
+<p><a href="https://workshop.infograb.io/gitlab-ci/33_add_docker_build_stage/2_add_build_stage/"><code class="language-text">.gitlab-ci.yml</code> 파일에 Docker 이미지 빌드 단계 추가 - GitLab CI Workshop (infograb.io)</a></p>
+<p><a href="https://medium.com/monday-9-pm/ci-cd-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EA%B5%AC%EC%B6%95%EA%B8%B0-2-f96b1217279e">CI/CD 프로세스 구축기 2. 파이프라인 구성 | by kyeong su kim | 월요일 오후 9시 | Medium</a></p>
+<p><a href="https://hihellloitland.tistory.com/65">GitLab Runner 를 사용하여 GitLab CI 구성하기 (tistory.com)</a></p>
+<p><a href="https://otrodevym.tistory.com/entry/CICD-window%EC%97%90%EC%84%9C-Gitlab-CICD%EB%A5%BC-docker%EB%A1%9C-%EB%B0%B0%ED%8F%AC%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95">[Gitlab-CI/CD] window에서 Gitlab CI/CD를 docker로 배포하는 방법 (tistory.com)</a></p>
+<p><a href="https://yoonsu.tistory.com/25">[GitLab] docker-compose를 이용하여 GitLab Runner추가하기 (tistory.com)</a></p>
+<p><a href="https://ekwkqk12.tistory.com/32">[Gitlab] CI/GitLab Container Registry (tistory.com)</a></p>
 <hr>
 <div class="table-of-contents">
 <ul>
@@ -399,7 +532,7 @@ services:
 <p><a href="#q--a">Q &#x26; A</a></p>
 </li>
 <li>
-<p><a href="#%EB%A7%88%EC%B9%98%EB%A9%B0">마치며</a></p>
+<p><a href="#%EA%B0%9C%EC%84%A0%ED%95%A0-%EC%A0%90">개선할 점</a></p>
 </li>
 </ul>
-</div></div></div><div class="post-navigator"><div class="post-navigator-card-wrapper"><a class="post-card prev" href="/dockerize-msa-improve/"><div class="direction">이전 글</div><div class="title">MSA 도커라이징(Dockerizing) 2편, 개선하기</div></a></div><div class="post-navigator-card-wrapper"></div></div><div class="utterances"></div></main><footer class="page-footer-wrapper"><p class="page-footer">© <!-- -->2022<!-- --> powered by<a href="https://github.com/zoomKoding/zoomkoding-gatsby-blog"> zoomkoding-gatsby-blog</a></p><script src="https://utteranc.es/client.js" repo="junwork123/blog-comments" issue-term="pathname" label="reply" theme="github-dark" crossorigin="anonymous" async=""></script><script src="https://developers.kakao.com/sdk/js/kakao.js"></script></footer><div class="dark-mode-button-wrapper"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium dark-mode-button css-1yxmbwk" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge dark-mode-icon css-6flbmm" focusable="false" viewBox="0 0 24 24" aria-hidden="true" data-testid="DarkModeIcon"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"></path></svg></button></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/dockerize-msa-develop/";window.___webpackCompilationHash="bf8f171f8593390ec215";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-1749daff08ffd891c374.js"],"app":["/app-bba69f4c07e61f0aaf73.js"],"component---cache-caches-gatsby-plugin-offline-app-shell-js":["/component---cache-caches-gatsby-plugin-offline-app-shell-js-8560ac4a3c41ca7a3ebf.js"],"component---src-pages-404-js":["/component---src-pages-404-js-589c3500cd9e3bb66885.js"],"component---src-pages-about-js":["/component---src-pages-about-js-c2caf8f005d16c648911.js"],"component---src-pages-index-js":["/component---src-pages-index-js-b7a9ca1d80024c8d7e38.js"],"component---src-templates-blog-template-js":["/component---src-templates-blog-template-js-1fe156764a003d485f0c.js"],"component---src-templates-category-template-js":["/component---src-templates-category-template-js-668a6553c9e5ed7c5d6d.js"]};/*]]>*/</script><script src="/polyfill-1749daff08ffd891c374.js" nomodule=""></script><script src="/component---src-templates-blog-template-js-1fe156764a003d485f0c.js" async=""></script><script src="/f9d3028dbef90a6e9b8db85387d63dd9f4edf538-ecd5b538d15d72756d67.js" async=""></script><script src="/app-bba69f4c07e61f0aaf73.js" async=""></script><script src="/framework-08b0f563220b1fc07ab1.js" async=""></script><script src="/webpack-runtime-aba44cb19274288e4cfc.js" async=""></script></body></html>
+</div></div></div><div class="post-navigator"><div class="post-navigator-card-wrapper"><a class="post-card prev" href="/dockerize-msa-improve/"><div class="direction">이전 글</div><div class="title">MSA 도커라이징(Dockerizing) 2편, 개선하기</div></a></div><div class="post-navigator-card-wrapper"></div></div><div class="utterances"></div></main><footer class="page-footer-wrapper"><p class="page-footer">© <!-- -->2023<!-- --> powered by<a href="https://github.com/zoomKoding/zoomkoding-gatsby-blog"> zoomkoding-gatsby-blog</a></p><script src="https://utteranc.es/client.js" repo="junwork123/blog-comments" issue-term="pathname" label="reply" theme="github-dark" crossorigin="anonymous" async=""></script><script src="https://developers.kakao.com/sdk/js/kakao.js"></script></footer><div class="dark-mode-button-wrapper"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium dark-mode-button css-1yxmbwk" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge dark-mode-icon css-6flbmm" focusable="false" viewBox="0 0 24 24" aria-hidden="true" data-testid="DarkModeIcon"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"></path></svg></button></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/dockerize-msa-develop/";window.___webpackCompilationHash="bf8f171f8593390ec215";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-1749daff08ffd891c374.js"],"app":["/app-bba69f4c07e61f0aaf73.js"],"component---cache-caches-gatsby-plugin-offline-app-shell-js":["/component---cache-caches-gatsby-plugin-offline-app-shell-js-8560ac4a3c41ca7a3ebf.js"],"component---src-pages-404-js":["/component---src-pages-404-js-589c3500cd9e3bb66885.js"],"component---src-pages-about-js":["/component---src-pages-about-js-c2caf8f005d16c648911.js"],"component---src-pages-index-js":["/component---src-pages-index-js-b7a9ca1d80024c8d7e38.js"],"component---src-templates-blog-template-js":["/component---src-templates-blog-template-js-1fe156764a003d485f0c.js"],"component---src-templates-category-template-js":["/component---src-templates-category-template-js-668a6553c9e5ed7c5d6d.js"]};/*]]>*/</script><script src="/polyfill-1749daff08ffd891c374.js" nomodule=""></script><script src="/component---src-templates-blog-template-js-1fe156764a003d485f0c.js" async=""></script><script src="/f9d3028dbef90a6e9b8db85387d63dd9f4edf538-ecd5b538d15d72756d67.js" async=""></script><script src="/app-bba69f4c07e61f0aaf73.js" async=""></script><script src="/framework-08b0f563220b1fc07ab1.js" async=""></script><script src="/webpack-runtime-aba44cb19274288e4cfc.js" async=""></script></body></html>
