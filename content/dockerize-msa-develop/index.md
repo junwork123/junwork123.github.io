@@ -468,7 +468,22 @@ categories: infra
     done
     echo "PostgreSQL is up and running"
     ```
-    
+
+<br>
+
+---
+
+## 마치며
+
+다음편은 대망의 마지막편으로
+
+CI/CD를 통해 지금까지 했던 작업을 자동화해볼 것이다.
+
+release 브랜치에 push가 발생하면 docker 이미지로 배포함으로써
+
+Micro Service 갯수만큼 Docker Build - Push하는 반복작업을 최소화해보자.
+
+<br>
 
 ---
 
