@@ -83,13 +83,13 @@ categories: infra
                     ```bash
                     #!/bin/bash
                     # initdb.sh for PostgreSql
-                    
+
                     # Create a database and initialize it
                     export SQL_FILE_PATH="$WORKDIR"/conf/"$DB_TYPE".sql
-                    sudo sed -i "s/{SERVICE_B_SCHEMA_NAME}/$DB_SCHEMA_NAME/g" "$SQL_FILE_PATH"
-                    su postgres -c 'psql -U "$DB_USER" -c "CREATE DATABASE $DB_NAME"'
-                    su postgres -c 'psql -U "$DB_USER" -d "$DB_NAME" -c "CREATE SCHEMA $DB_SCHEMA_NAME"'
-                    su postgres -c 'psql -U "$DB_USER" -d "$DB_NAME" -a -f "$SQL_FILE_PATH"'
+                    sudo sed -i "s/{SF1_MANAGER_SCHEMA_NAME}/$DB_SCHEMA_NAME/g" "$SQL_FILE_PATH"
+                    su - postgres -c "psql -U $DB_USER -c \"CREATE DATABASE $DB_NAME\""
+                    su - postgres -c "psql -U $DB_USER -d $DB_NAME -c \"CREATE SCHEMA $DB_SCHEMA_NAME\""
+                    su - postgres -c "psql -U $DB_USER -d $DB_NAME -a -f $SQL_FILE_PATH"
                     ```
                     
                 - Oracle
@@ -97,7 +97,7 @@ categories: infra
                     ```bash
                     #!/bin/bash
                     # initdb.sh for Oracle
-                    
+
                     # Create a database and initialize it
                     export SQL_FILE_PATH="$WORKDIR"/conf/"$DB_TYPE".sql
                     su - oracle -c "echo \"create user $DB_USER identified by $DB_PASSWORD;\" | sqlplus / as sysdba"
@@ -137,7 +137,7 @@ categories: infra
                     
                     # DB Configuration
                     DB_IMAGE=registry.gitlab.com/...
-                    DB_VERSION=latest
+                    DB_IMAGE_VERSION=postgres-7.1.0
                     DB_PORT_IN=5432
                     DB_PORT_OUT=5432
                     DB_ENV_FILE=.env.db
@@ -146,13 +146,13 @@ categories: infra
                     
                     # SERVICE_B Configuration
                     SERVICE_B_IMAGE=registry.gitlab.com/...
-                    SERVICE_B_VERSION=latest
+                    SERVICE_B_IMAGE_VERSION=latest
                     SERVICE_B_NAME=SERVICE_B1
-                    SERVICE_B_IP=61.82.137.58 # 관리도구를 실행할 호스트의 IP로 변경
+                    SERVICE_B_IP=0.0.0.0 # 실행할 호스트의 IP로 변경
                     
                     # SERVICE_D Configuration
                     SERVICE_D_IMAGE=registry.gitlab.com/...
-                    SERVICE_D_VERSION=latest
+                    SERVICE_D_IMAGE_VERSION=latest
                     SERVICE_D_NAME=kit1
                     
                     # Ports
@@ -191,7 +191,7 @@ categories: infra
                     
                     # DB Configuration
                     DB_IMAGE=registry.gitlab.com/...
-                    DB_VERSION=latest
+                    DB_IMAGE_VERSION=oracle-7.1.0
                     DB_PORT_IN=1521
                     DB_PORT_OUT=1521
                     DB_ENV_FILE=.env.db
@@ -200,13 +200,13 @@ categories: infra
                     
                     # SERVICE_B Configuration
                     SERVICE_B_IMAGE=registry.gitlab.com/...
-                    SERVICE_B_VERSION=latest
+                    SERVICE_B_IMAGE_VERSION=latest
                     SERVICE_B_NAME=SERVICE_B1
-                    SERVICE_B_IP=61.82.137.58 # 관리도구를 실행할 호스트의 IP로 변경
+                    SERVICE_B_IP=0.0.0.0 # 호스트의 IP로 변경
                     
                     # SERVICE_D Configuration
                     SERVICE_D_IMAGE=registry.gitlab.com/...
-                    SERVICE_D_VERSION=latest
+                    SERVICE_D_IMAGE_VERSION=latest
                     SERVICE_D_NAME=kit1
                     
                     # Ports
@@ -245,7 +245,7 @@ categories: infra
                 services:
                     database:
                         env_file: ${DB_ENV_FILE}
-                        image: ${DB_IMAGE}:${DB_VERSION}
+                        image: ${DB_IMAGE}:${DB_IMAGE_VERSION}
                         container_name: db_instance
                         restart: unless-stopped
                         ports:
@@ -260,7 +260,7 @@ categories: infra
                 
                     SERVICE_B:
                         env_file: ${DB_ENV_FILE}
-                        image: ${SERVICE_B_IMAGE}:${SERVICE_B_VERSION}
+                        image: ${SERVICE_B_IMAGE}:${SERVICE_B_IMAGE_VERSION}
                         container_name: SERVICE_B
                         restart: always
                         depends_on:
@@ -275,7 +275,7 @@ categories: infra
                 
                     SERVICE_D:
                         env_file: ${DB_ENV_FILE}
-                        image: ${SERVICE_D_IMAGE}:${SERVICE_D_VERSION}
+                        image: ${SERVICE_D_IMAGE}:${SERVICE_D_IMAGE_VERSION}
                         container_name: SERVICE_D
                         restart: always
                         depends_on:
@@ -301,7 +301,7 @@ categories: infra
                 services:
                     database:
                         env_file: ${DB_ENV_FILE}
-                        image: ${DB_IMAGE}:${DB_VERSION}
+                        image: ${DB_IMAGE}:${DB_IMAGE_VERSION}
                         container_name: db_instance
                         restart: unless-stopped
                         ports:
@@ -317,7 +317,7 @@ categories: infra
                 
                     SERVICE_B:
                         env_file: ${DB_ENV_FILE}
-                        image: ${SERVICE_B_IMAGE}:${SERVICE_B_VERSION}
+                        image: ${SERVICE_B_IMAGE}:${SERVICE_B_IMAGE_VERSION}
                         container_name: SERVICE_B
                         restart: always
                         depends_on:
@@ -332,7 +332,7 @@ categories: infra
                 
                     SERVICE_D:
                         env_file: ${DB_ENV_FILE}
-                        image: ${SERVICE_D_IMAGE}:${SERVICE_D_VERSION}
+                        image: ${SERVICE_D_IMAGE}:${SERVICE_D_IMAGE_VERSION}
                         container_name: SERVICE_D
                         restart: always
                         depends_on:
@@ -358,7 +358,7 @@ categories: infra
                 services:
                   SERVICE_B:
                     env_file: ${DB_ENV_FILE}
-                    image: ${SERVICE_B_IMAGE}:${SERVICE_B_VERSION}
+                    image: ${SERVICE_B_IMAGE}:${SERVICE_B_IMAGE_VERSION}
                     container_name: SERVICE_B
                     restart: always
                     ports:
@@ -370,7 +370,7 @@ categories: infra
                 
                   SERVICE_D:
                     env_file: ${DB_ENV_FILE}
-                    image: ${SERVICE_D_IMAGE}:${SERVICE_D_VERSION}
+                    image: ${SERVICE_D_IMAGE}:${SERVICE_D_IMAGE_VERSION}
                     container_name: SERVICE_D
                     restart: always
                     ports:
