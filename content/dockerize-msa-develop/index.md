@@ -67,8 +67,25 @@ categories: infra
         
         → 서비스는 서비스에만 집중하기 위함 : MSA의 특징인 인터페이스 통신을 살려보자
         
-        - 서비스와 DB : DB 관련 Container 정보를 몰라도 됨
         - 서비스와 서비스 : 다른 서비스 Container 정보를 몰라도 됨
+        - 서비스와 DB : DB 관련 Container 정보를 몰라도 됨
+            ```xml
+            # database.properties
+            schema.name=${DB_SCHEMA_NAME}
+            spring.datasource.username=${DB_USER}
+            spring.datasource.password=${DB_PASSWORD}
+
+            spring.datasource.url=jdbc:${DB_KIND}:${DB_DELIMITER}${DB_HOST}:${DB_PORT}/${DB_NAME}?useUnicode=true&characterEncoding=utf8&currentSchema=${DB_SCHEMA_NAME}
+            spring.datasource.driver-class-name=${DB_DRIVER_CLASS_NAME}
+            spring.jpa.hibernate.dialect=${DB_DIALECT}
+            # dbType=${DB_TYPE}
+
+            # JPA
+            spring.jpa.hibernate.ddl-auto=none
+            spring.jpa.properties.hibernate.format_sql=false
+            spring.jpa.show-sql=false
+            ```
+            
     - 다음과 같은 구조를 가지게 됨
         
         > Postgres, Oracle 버전을 각각 작성했습니다.
@@ -148,7 +165,6 @@ categories: infra
                     SERVICE_B_IMAGE=registry.gitlab.com/...
                     SERVICE_B_IMAGE_VERSION=latest
                     SERVICE_B_NAME=SERVICE_B1
-                    SERVICE_B_IP=0.0.0.0 # 실행할 호스트의 IP로 변경
                     
                     # SERVICE_D Configuration
                     SERVICE_D_IMAGE=registry.gitlab.com/...
@@ -202,7 +218,6 @@ categories: infra
                     SERVICE_B_IMAGE=registry.gitlab.com/...
                     SERVICE_B_IMAGE_VERSION=latest
                     SERVICE_B_NAME=SERVICE_B1
-                    SERVICE_B_IP=0.0.0.0 # 호스트의 IP로 변경
                     
                     # SERVICE_D Configuration
                     SERVICE_D_IMAGE=registry.gitlab.com/...
@@ -257,6 +272,9 @@ categories: infra
                           interval: 10s
                           timeout: 3s
                           retries: 3
+                        networks:
+                          inner_network:
+                            ipv4_address: 172.26.0.2
                 
                     SERVICE_B:
                         env_file: ${DB_ENV_FILE}
@@ -272,6 +290,9 @@ categories: infra
                           NODENAME: ${SERVICE_B_NAME}
                           DB_PORT: ${DB_PORT_OUT}
                           DB_HOST: db_instance
+                        networks:
+                          inner_network:
+                            ipv4_address: 172.26.0.3
                 
                     SERVICE_D:
                         env_file: ${DB_ENV_FILE}
@@ -289,9 +310,19 @@ categories: infra
                           DB_PORT: ${DB_PORT_OUT}
                           DB_HOST: db_instance
                           SERVICE_B_IP: ${SERVICE_B_IP}
+                        networks:
+                          inner_network:
+                            ipv4_address: 172.26.0.4
                 volumes:
                   db_storage:
                     driver: local
+                    
+                networks:
+                  inner_network:
+                    ipam:
+                      driver: default
+                      config:
+                        - subnet: 172.26.0.0/16 
                 ```
                 
             - Oracle
@@ -314,6 +345,9 @@ categories: infra
                           interval: 10s
                           timeout: 3s
                           retries: 3
+                        networks:
+                          inner_network:
+                            ipv4_address: 172.26.0.2
                 
                     SERVICE_B:
                         env_file: ${DB_ENV_FILE}
@@ -329,6 +363,9 @@ categories: infra
                           NODENAME: ${SERVICE_B_NAME}
                           DB_PORT: ${DB_PORT_OUT}
                           DB_HOST: db_instance
+                        networks:
+                          inner_network:
+                            ipv4_address: 172.26.0.3
                 
                     SERVICE_D:
                         env_file: ${DB_ENV_FILE}
@@ -346,9 +383,19 @@ categories: infra
                           DB_PORT: ${DB_PORT_OUT}
                           DB_HOST: db_instance
                           SERVICE_B_IP: ${SERVICE_B_IP}
+                        networks:
+                          inner_network:
+                            ipv4_address: 172.26.0.4
                 volumes:
                   db_storage:
                     driver: local
+                        
+                networks:
+                  inner_network:
+                    ipam:
+                      driver: default
+                      config:
+                        - subnet: 172.26.0.0/16 
                 ```
                 
             - 컨테이너 외부 DB와 연결할 때
@@ -367,6 +414,9 @@ categories: infra
                       NODENAME: ${SERVICE_B_NAME}
                       DB_PORT: ${DB_PORT_OUT}
                       DB_HOST: ${DB_HOST}
+                    networks:
+                      inner_network:
+                        ipv4_address: 172.26.0.3
                 
                   SERVICE_D:
                     env_file: ${DB_ENV_FILE}
@@ -381,6 +431,16 @@ categories: infra
                       DB_PORT: ${DB_PORT_OUT}
                       DB_HOST: ${DB_HOST}
                       SERVICE_B_IP: ${SERVICE_B_IP}
+                    networks:
+                      inner_network:
+                        ipv4_address: 172.26.0.4
+                        
+                networks:
+                  inner_network:
+                    ipam:
+                      driver: default
+                      config:
+                        - subnet: 172.26.0.0/16 
                 ```
                 
     - Compose 동작 확인
@@ -487,21 +547,23 @@ Micro Service 갯수만큼 Docker Build - Push하는 반복작업을 최소화�
 
 ---
 
-참고자료
+_참고자료_
 
-[DinD(docker in docker)와 DooD(docker out of docker) | 아이단은 어디갔을까 (aidanbae.github.io)](https://aidanbae.github.io/code/docker/dinddood/)
+_[DinD(docker in docker)와 DooD(docker out of docker) | 아이단은 어디갔을까 (aidanbae.github.io)](https://aidanbae.github.io/code/docker/dinddood/)_
 
-[`.gitlab-ci.yml` 파일에 Docker 이미지 빌드 단계 추가 - GitLab CI Workshop (infograb.io)](https://workshop.infograb.io/gitlab-ci/33_add_docker_build_stage/2_add_build_stage/)
+_[`.gitlab-ci.yml` 파일에 Docker 이미지 빌드 단계 추가 - GitLab CI Workshop (infograb.io)](https://workshop.infograb.io/gitlab-ci/33_add_docker_build_stage/2_add_build_stage/)_
 
-[CI/CD 프로세스 구축기 2. 파이프라인 구성 | by kyeong su kim | 월요일 오후 9시 | Medium](https://medium.com/monday-9-pm/ci-cd-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EA%B5%AC%EC%B6%95%EA%B8%B0-2-f96b1217279e)
+_[CI/CD 프로세스 구축기 2. 파이프라인 구성 | by kyeong su kim | 월요일 오후 9시 | Medium](https://medium.com/monday-9-pm/ci-cd-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EA%B5%AC%EC%B6%95%EA%B8%B0-2-f96b1217279e)_
 
-[GitLab Runner 를 사용하여 GitLab CI 구성하기 (tistory.com)](https://hihellloitland.tistory.com/65)
+_[GitLab Runner 를 사용하여 GitLab CI 구성하기 (tistory.com)](https://hihellloitland.tistory.com/65)_
 
-[[Gitlab-CI/CD] window에서 Gitlab CI/CD를 docker로 배포하는 방법 (tistory.com)](https://otrodevym.tistory.com/entry/CICD-window%EC%97%90%EC%84%9C-Gitlab-CICD%EB%A5%BC-docker%EB%A1%9C-%EB%B0%B0%ED%8F%AC%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95)
+_[[Gitlab-CI/CD] window에서 Gitlab CI/CD를 docker로 배포하는 방법 (tistory.com)](https://otrodevym.tistory.com/entry/CICD-window%EC%97%90%EC%84%9C-Gitlab-CICD%EB%A5%BC-docker%EB%A1%9C-%EB%B0%B0%ED%8F%AC%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95)_
 
-[[GitLab] docker-compose를 이용하여 GitLab Runner추가하기 (tistory.com)](https://yoonsu.tistory.com/25)
+_[[GitLab] docker-compose를 이용하여 GitLab Runner추가하기 (tistory.com)](https://yoonsu.tistory.com/25)_
 
-[[Gitlab] CI/GitLab Container Registry (tistory.com)](https://ekwkqk12.tistory.com/32)
+_[[Gitlab] CI/GitLab Container Registry (tistory.com)](https://ekwkqk12.tistory.com/32)_
+
+_[Docker Bridge Network 의 함정 (velog.io)](https://velog.io/@hschoi1104/Docker-Bridge-Network-%EC%9D%98-%ED%95%A8%EC%A0%95)_
 
 ---
 
