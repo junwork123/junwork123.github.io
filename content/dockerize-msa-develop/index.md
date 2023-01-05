@@ -100,10 +100,10 @@ categories: infra
                     ```bash
                     #!/bin/bash
                     # initdb.sh for PostgreSql
-
+                    
                     # Create a database and initialize it
-                    export SQL_FILE_PATH="$WORKDIR"/conf/"$DB_TYPE".sql
-                    sudo sed -i "s/{SF1_MANAGER_SCHEMA_NAME}/$DB_SCHEMA_NAME/g" "$SQL_FILE_PATH"
+                    export SQL_FILE_PATH="$CONFIG_PATH"/"$DB_TYPE".sql
+                    sudo sed -i "s/{APP_SERVICE_B_SCHEMA_NAME}/$DB_SCHEMA_NAME/g" "$SQL_FILE_PATH"
                     su - postgres -c "psql -U $DB_USER -c \"CREATE DATABASE $DB_NAME\""
                     su - postgres -c "psql -U $DB_USER -d $DB_NAME -c \"CREATE SCHEMA $DB_SCHEMA_NAME\""
                     su - postgres -c "psql -U $DB_USER -d $DB_NAME -a -f $SQL_FILE_PATH"
@@ -114,9 +114,9 @@ categories: infra
                     ```bash
                     #!/bin/bash
                     # initdb.sh for Oracle
-
+                    
                     # Create a database and initialize it
-                    export SQL_FILE_PATH="$WORKDIR"/conf/"$DB_TYPE".sql
+                    export SQL_FILE_PATH="$CONFIG_PATH"/"$DB_TYPE".sql
                     su - oracle -c "echo \"create user $DB_USER identified by $DB_PASSWORD;\" | sqlplus / as sysdba"
                     su - oracle -c "echo \"grant dba to $DB_USER;\" | sqlplus / as sysdba"
                     su - oracle -c "sqlplus \"$DB_USER/$DB_PASSWORD@$DB_NAME\" < \"$SQL_FILE_PATH\""
@@ -128,20 +128,22 @@ categories: infra
                 
                 ```bash
                 # Database
-                FROM postgres:14 
+                FROM postgres:14
                 
-                ENV APPNAME DBinstaller
-                ENV WORKDIR /home/$APPNAME
+                ENV APPNAME SERVICE_B
+                ENV WORKDIR /usr/src/app
                 WORKDIR $WORKDIR
-                COPY conf $WORKDIR/conf
+                ENV CONFIG_PATH /usr/src/conf
+                COPY ./conf $CONFIG_PATH
                 
                 # 타임존 설정
                 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
                     && echo $TZ > /etc/timezone
                 
                 # update 및 패키지 설치, init 명령어 등록
-                RUN apt-get install -y sudo sed \
-                    && cat $WORKDIR/conf/initdb.sh >> /bin/initdb \
+                RUN apt update \
+                    && apt install -y sudo sed \
+                    && cat $CONFIG_PATH/initdb.sh >> /bin/initdb \
                     && chmod u+x /bin/initdb
                 ```
                 
@@ -151,15 +153,16 @@ categories: infra
                     
                     ```bash
                     # .env for PostgreSql
+                    WORKDIR=/usr/src/app
                     
                     # DB Configuration
-                    DB_IMAGE=registry.gitlab.com/...
-                    DB_IMAGE_VERSION=postgres-7.1.0
+                    DB_HOST=db_instance # 외부 DB와 연결하고 싶을 때 DB IP 입력
+                    DB_ENV_FILE=.env.db
                     DB_PORT_IN=5432
                     DB_PORT_OUT=5432
-                    DB_ENV_FILE=.env.db
+                    DB_IMAGE=registry.gitlab.com/wisenut-research/ctr/dockerize-db
+                    DB_IMAGE_VERSION=postgres-7.1.0
                     DB_DEFAULT_PATH=/var/lib/postgresql/data
-                    # DB_HOST=0.0.0.0 # 외부 DB와 연결하고 싶을 때 DB IP 입력
                     
                     # SERVICE_B Configuration
                     SERVICE_B_IMAGE=registry.gitlab.com/...
@@ -189,8 +192,8 @@ categories: infra
                     
                     # Postgresql
                     POSTGRES_PASSWORD=${DB_PASSWORD}
-                    DB_NAME="db"
-                    DB_SCHEMA_NAME="schema"
+                    DB_NAME="APP_db"
+                    DB_SCHEMA_NAME="APP_schema"
                     DB_KIND="postgresql"
                     DB_DELIMITER="//"
                     DB_DIALECT="org.hibernate.dialect.PostgreSQL10Dialect"
@@ -204,15 +207,16 @@ categories: infra
                     
                     ```bash
                     # .env for Oracle
+                    WORKDIR=/usr/src/app
                     
                     # DB Configuration
-                    DB_IMAGE=registry.gitlab.com/...
-                    DB_IMAGE_VERSION=oracle-7.1.0
+                    DB_HOST=db_instance # 외부 DB와 연결하고 싶을 때 DB IP 입력
+                    DB_ENV_FILE=.env.db
                     DB_PORT_IN=1521
                     DB_PORT_OUT=1521
-                    DB_ENV_FILE=.env.db
+                    DB_IMAGE=registry.gitlab.com/wisenut-research/ctr/dockerize-db
+                    DB_IMAGE_VERSION=oracle-7.1.0
                     DB_DEFAULT_PATH=/opt/oracle/oradata
-                    # DB_HOST=0.0.0.0 # 외부 DB와 연결하고 싶을 때 DB IP 입력
                     
                     # SERVICE_B Configuration
                     SERVICE_B_IMAGE=registry.gitlab.com/...
@@ -243,7 +247,7 @@ categories: infra
                     # Oracle
                     ORACLE_PASSWORD=${DB_PASSWORD}
                     DB_NAME="xe"
-                    DB_SCHEMA_NAME="schema"
+                    DB_SCHEMA_NAME="APP_schema"
                     DB_KIND="oracle:thin"
                     DB_DELIMITER="@"
                     DB_DIALECT="org.hibernate.dialect.Oracle10gDialect"
@@ -257,145 +261,103 @@ categories: infra
                 
                 ```bash
                 # Docker compose
-                services:
-                    database:
-                        env_file: ${DB_ENV_FILE}
-                        image: ${DB_IMAGE}:${DB_IMAGE_VERSION}
-                        container_name: db_instance
-                        restart: unless-stopped
-                        ports:
-                          - ${DB_PORT_IN}:${DB_PORT_OUT}
-                        volumes:
-                          - db_storage:${DB_DEFAULT_PATH}
-                        healthcheck:
-                          test: ["CMD", "pg_isready", "-U", "postgres"]
-                          interval: 10s
-                          timeout: 3s
-                          retries: 3
-                        networks:
-                          inner_network:
-                            ipv4_address: 172.26.0.2
+                x-SERVICE_B-common: &SERVICE_B-common
+                  env_file: ${DB_ENV_FILE}
+                  image: ${SERVICE_B_IMAGE}:${SERVICE_B_IMAGE_VERSION}
+                  container_name: SERVICE_B
+                  restart: always
+                  ports:
+                    - ${SERVICE_B_PORT_IN}:${SERVICE_B_PORT_OUT}
+                  environment:
+                    NODENAME: ${SERVICE_B_NAME}
+                    DB_PORT: ${DB_PORT_OUT}
+                    DB_HOST: ${DB_HOST}
+                  networks:
+                    inner_network:
+                      ipv4_address: 172.26.0.3
                 
-                    SERVICE_B:
-                        env_file: ${DB_ENV_FILE}
-                        image: ${SERVICE_B_IMAGE}:${SERVICE_B_IMAGE_VERSION}
-                        container_name: SERVICE_B
-                        restart: always
-                        depends_on:
-                          database:
-                            condition: service_healthy
-                        ports:
-                          - ${SERVICE_B_PORT_IN}:${SERVICE_B_PORT_OUT}
-                        environment:
-                          NODENAME: ${SERVICE_B_NAME}
-                          DB_PORT: ${DB_PORT_OUT}
-                          DB_HOST: db_instance
-                        networks:
-                          inner_network:
-                            ipv4_address: 172.26.0.3
+                x-SERVICE_D-common: &SERVICE_D-common
+                  env_file: ${DB_ENV_FILE}
+                  image: ${SERVICE_D_IMAGE}:${SERVICE_D_IMAGE_VERSION}
+                  container_name: SERVICE_D
+                  restart: always
+                  ports:
+                    - ${SERVICE_D_PORT_IN}:${SERVICE_D_PORT_OUT}
+                    - ${SERVICE_D_CACHE_PORT_IN}:${SERVICE_D_CACHE_PORT_OUT}
+                  environment:
+                    NODENAME: ${SERVICE_D_NAME}
+                    DB_PORT: ${DB_PORT_OUT}
+                    DB_HOST: ${DB_HOST}
+                  networks:
+                    inner_network:
+                      ipv4_address: 172.26.0.4
                 
-                    SERVICE_D:
-                        env_file: ${DB_ENV_FILE}
-                        image: ${SERVICE_D_IMAGE}:${SERVICE_D_IMAGE_VERSION}
-                        container_name: SERVICE_D
-                        restart: always
-                        depends_on:
-                          database:
-                              condition: service_healthy
-                        ports:
-                          - ${SERVICE_D_PORT_IN}:${SERVICE_D_PORT_OUT}
-                          - ${SERVICE_D_CACHE_PORT_IN}:${SERVICE_D_CACHE_PORT_OUT}
-                        environment:
-                          NODENAME: ${SERVICE_D_NAME}
-                          DB_PORT: ${DB_PORT_OUT}
-                          DB_HOST: db_instance
-                          SERVICE_B_IP: ${SERVICE_B_IP}
-                        networks:
-                          inner_network:
-                            ipv4_address: 172.26.0.4
+                x-database-common: &database-common
+                  env_file: ${DB_ENV_FILE}
+                  image: ${DB_IMAGE}:${DB_IMAGE_VERSION}
+                  container_name: db_instance
+                  restart: unless-stopped
+                  ports:
+                    - ${DB_PORT_IN}:${DB_PORT_OUT}
+                  volumes:
+                    - db_storage:${DB_DEFAULT_PATH}
+                    - package_storage:${WORKDIR}
+                  networks:
+                    inner_network:
+                      ipv4_address: 172.26.0.2
+                
                 volumes:
                   db_storage:
                     driver: local
-                    
+                  package_storage:
+                    driver: local
+                
                 networks:
                   inner_network:
                     ipam:
                       driver: default
                       config:
-                        - subnet: 172.26.0.0/16 
+                        - subnet: 172.26.0.0/16
+                
+                services:
+                  database:
+                    <<: *database-common
+                    healthcheck:
+                      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+                      interval: 10s
+                      timeout: 3s
+                      retries: 3
+                    profiles: ["in_db"]
+                
+                  SERVICE_B:
+                    <<: *SERVICE_B-common
+                    depends_on:
+                      database:
+                        condition: service_healthy
+                    profiles: ["in_db"]
+                
+                  SERVICE_D:
+                    <<: *SERVICE_D-common
+                    depends_on:
+                      database:
+                        condition: service_healthy
+                    profiles: ["in_db"]
+                
+                  SERVICE_B_external_db:
+                    <<: *SERVICE_B-common
+                    profiles: ["ex_db"]
+                
+                  SERVICE_D_external_db:
+                    <<: *SERVICE_D-common
+                    profiles: ["ex_db"]
                 ```
                 
             - Oracle
                 
                 ```bash
-                # Docker compose
-                services:
-                    database:
-                        env_file: ${DB_ENV_FILE}
-                        image: ${DB_IMAGE}:${DB_IMAGE_VERSION}
-                        container_name: db_instance
-                        restart: unless-stopped
-                        ports:
-                          - ${DB_PORT_IN}:${DB_PORT_OUT}
-                        volumes:
-                          - db_storage:${DB_DEFAULT_PATH}
-                        healthcheck:
-                          # test: ps -ef | grep ora_
-                          test: su - oracle -c "sqlplus SELECT INSTANCE_NAME, STATUS FROM V$$INSTANCE;"
-                          interval: 10s
-                          timeout: 3s
-                          retries: 3
-                        networks:
-                          inner_network:
-                            ipv4_address: 172.26.0.2
-                
-                    SERVICE_B:
-                        env_file: ${DB_ENV_FILE}
-                        image: ${SERVICE_B_IMAGE}:${SERVICE_B_IMAGE_VERSION}
-                        container_name: SERVICE_B
-                        restart: always
-                        depends_on:
-                          database:
-                            condition: service_healthy
-                        ports:
-                          - ${SERVICE_B_PORT_IN}:${SERVICE_B_PORT_OUT}
-                        environment:
-                          NODENAME: ${SERVICE_B_NAME}
-                          DB_PORT: ${DB_PORT_OUT}
-                          DB_HOST: db_instance
-                        networks:
-                          inner_network:
-                            ipv4_address: 172.26.0.3
-                
-                    SERVICE_D:
-                        env_file: ${DB_ENV_FILE}
-                        image: ${SERVICE_D_IMAGE}:${SERVICE_D_IMAGE_VERSION}
-                        container_name: SERVICE_D
-                        restart: always
-                        depends_on:
-                          database:
-                              condition: service_healthy
-                        ports:
-                          - ${SERVICE_D_PORT_IN}:${SERVICE_D_PORT_OUT}
-                          - ${SERVICE_D_CACHE_PORT_IN}:${SERVICE_D_CACHE_PORT_OUT}
-                        environment:
-                          NODENAME: ${SERVICE_D_NAME}
-                          DB_PORT: ${DB_PORT_OUT}
-                          DB_HOST: db_instance
-                          SERVICE_B_IP: ${SERVICE_B_IP}
-                        networks:
-                          inner_network:
-                            ipv4_address: 172.26.0.4
-                volumes:
-                  db_storage:
-                    driver: local
-                        
-                networks:
-                  inner_network:
-                    ipam:
-                      driver: default
-                      config:
-                        - subnet: 172.26.0.0/16 
+                # healthcheck 부분만 아래와 같이 바꿔주면 된다.
+                healthcheck:
+                      test: su - oracle -c "sqlplus SELECT INSTANCE_NAME, STATUS FROM V$$INSTANCE;"
                 ```
                 
             - 컨테이너 외부 DB와 연결할 때
@@ -446,21 +408,24 @@ categories: infra
     - Compose 동작 확인
         
         ```bash
-        # 기존과 똑같이 실행
-        docker-compose up -d
+        # 컨테이너 내부 DB로 실행하는 경우
+        docker compose --profile in_db up -d
         
-        # DB 컨테이너에서 초기화 스크립트 실행
-        docker exec -it db_instance initdb
+        # DB 컨테이너에서 스크립트 실행
+        docker exec -it db_instance init
+        
+        # 종료
+        # -v : 컨테이너 볼륨도 같이 제거
+        docker compose --profile in_db down [-v]
         ```
         
         ```bash
-        # 외부 DB 연결시 실행
-        docker compose -f .\docker-compose-external-db.yml up -d
-        ```
+        # 외부 DB와 연결하여 실행하는 경우
+        docker compose --profile ex_db up -d
         
-        ```sql
         # 종료
-        docker compose down -v
+        # -v : 컨테이너 볼륨도 같이 제거
+        docker compose --profile ex_db down [-v]
         ```
         
 
