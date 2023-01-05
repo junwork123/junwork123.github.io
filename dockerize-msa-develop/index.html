@@ -161,8 +161,8 @@ spring.jpa.show-sql=false</code></pre></div>
 <span class="token comment"># initdb.sh for PostgreSql</span>
 
 <span class="token comment"># Create a database and initialize it</span>
-<span class="token builtin class-name">export</span> <span class="token assign-left variable">SQL_FILE_PATH</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$WORKDIR</span>"</span>/conf/<span class="token string">"<span class="token variable">$DB_TYPE</span>"</span>.sql
-<span class="token function">sudo</span> <span class="token function">sed</span> -i <span class="token string">"s/{SF1_MANAGER_SCHEMA_NAME}/<span class="token variable">$DB_SCHEMA_NAME</span>/g"</span> <span class="token string">"<span class="token variable">$SQL_FILE_PATH</span>"</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">SQL_FILE_PATH</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$CONFIG_PATH</span>"</span>/<span class="token string">"<span class="token variable">$DB_TYPE</span>"</span>.sql
+<span class="token function">sudo</span> <span class="token function">sed</span> -i <span class="token string">"s/{APP_SERVICE_B_SCHEMA_NAME}/<span class="token variable">$DB_SCHEMA_NAME</span>/g"</span> <span class="token string">"<span class="token variable">$SQL_FILE_PATH</span>"</span>
 <span class="token function">su</span> - postgres -c <span class="token string">"psql -U <span class="token variable">$DB_USER</span> -c <span class="token entity" title="\&quot;">\"</span>CREATE DATABASE <span class="token variable">$DB_NAME</span><span class="token entity" title="\&quot;">\"</span>"</span>
 <span class="token function">su</span> - postgres -c <span class="token string">"psql -U <span class="token variable">$DB_USER</span> -d <span class="token variable">$DB_NAME</span> -c <span class="token entity" title="\&quot;">\"</span>CREATE SCHEMA <span class="token variable">$DB_SCHEMA_NAME</span><span class="token entity" title="\&quot;">\"</span>"</span>
 <span class="token function">su</span> - postgres -c <span class="token string">"psql -U <span class="token variable">$DB_USER</span> -d <span class="token variable">$DB_NAME</span> -a -f <span class="token variable">$SQL_FILE_PATH</span>"</span></code></pre></div>
@@ -173,7 +173,7 @@ spring.jpa.show-sql=false</code></pre></div>
 <span class="token comment"># initdb.sh for Oracle</span>
 
 <span class="token comment"># Create a database and initialize it</span>
-<span class="token builtin class-name">export</span> <span class="token assign-left variable">SQL_FILE_PATH</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$WORKDIR</span>"</span>/conf/<span class="token string">"<span class="token variable">$DB_TYPE</span>"</span>.sql
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">SQL_FILE_PATH</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$CONFIG_PATH</span>"</span>/<span class="token string">"<span class="token variable">$DB_TYPE</span>"</span>.sql
 <span class="token function">su</span> - oracle -c <span class="token string">"echo <span class="token entity" title="\&quot;">\"</span>create user <span class="token variable">$DB_USER</span> identified by <span class="token variable">$DB_PASSWORD</span>;<span class="token entity" title="\&quot;">\"</span> | sqlplus / as sysdba"</span>
 <span class="token function">su</span> - oracle -c <span class="token string">"echo <span class="token entity" title="\&quot;">\"</span>grant dba to <span class="token variable">$DB_USER</span>;<span class="token entity" title="\&quot;">\"</span> | sqlplus / as sysdba"</span>
 <span class="token function">su</span> - oracle -c <span class="token string">"sqlplus <span class="token entity" title="\&quot;">\"</span><span class="token variable">$DB_USER</span>/<span class="token variable">$DB_PASSWORD</span>@<span class="token variable">$DB_NAME</span><span class="token entity" title="\&quot;">\"</span> &lt; <span class="token entity" title="\&quot;">\"</span><span class="token variable">$SQL_FILE_PATH</span><span class="token entity" title="\&quot;">\"</span>"</span></code></pre></div>
@@ -184,20 +184,22 @@ spring.jpa.show-sql=false</code></pre></div>
 <p>./DB Dockerfile</p>
 <p>다른 DB를 사용하려면 <code class="language-text">FROM</code> 부분만 수정하면 된다.</p>
 <div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># Database</span>
-FROM postgres:14 
+FROM postgres:14
 
-ENV APPNAME DBinstaller
-ENV WORKDIR /home/<span class="token variable">$APPNAME</span>
+ENV APPNAME SERVICE_B
+ENV WORKDIR /usr/src/app
 WORKDIR <span class="token variable">$WORKDIR</span>
-COPY conf <span class="token variable">$WORKDIR</span>/conf
+ENV CONFIG_PATH /usr/src/conf
+COPY ./conf <span class="token variable">$CONFIG_PATH</span>
 
 <span class="token comment"># 타임존 설정</span>
 RUN <span class="token function">ln</span> -snf /usr/share/zoneinfo/<span class="token variable">$TZ</span> /etc/localtime <span class="token punctuation">\</span>
     <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">echo</span> <span class="token variable">$TZ</span> <span class="token operator">></span> /etc/timezone
 
 <span class="token comment"># update 및 패키지 설치, init 명령어 등록</span>
-RUN <span class="token function">apt-get</span> <span class="token function">install</span> -y <span class="token function">sudo</span> <span class="token function">sed</span> <span class="token punctuation">\</span>
-    <span class="token operator">&amp;&amp;</span> <span class="token function">cat</span> <span class="token variable">$WORKDIR</span>/conf/initdb.sh <span class="token operator">>></span> /bin/initdb <span class="token punctuation">\</span>
+RUN <span class="token function">apt</span> update <span class="token punctuation">\</span>
+    <span class="token operator">&amp;&amp;</span> <span class="token function">apt</span> <span class="token function">install</span> -y <span class="token function">sudo</span> <span class="token function">sed</span> <span class="token punctuation">\</span>
+    <span class="token operator">&amp;&amp;</span> <span class="token function">cat</span> <span class="token variable">$CONFIG_PATH</span>/initdb.sh <span class="token operator">>></span> /bin/initdb <span class="token punctuation">\</span>
     <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> u+x /bin/initdb</code></pre></div>
 </li>
 </ul>
@@ -209,15 +211,16 @@ RUN <span class="token function">apt-get</span> <span class="token function">ins
 <li>
 <p>.env 파일(Docker Compose용)</p>
 <div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># .env for PostgreSql</span>
+<span class="token assign-left variable">WORKDIR</span><span class="token operator">=</span>/usr/src/app
 
 <span class="token comment"># DB Configuration</span>
-<span class="token assign-left variable">DB_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
-<span class="token assign-left variable">DB_IMAGE_VERSION</span><span class="token operator">=</span>postgres-7.1.0
+<span class="token assign-left variable">DB_HOST</span><span class="token operator">=</span>db_instance <span class="token comment"># 외부 DB와 연결하고 싶을 때 DB IP 입력</span>
+<span class="token assign-left variable">DB_ENV_FILE</span><span class="token operator">=</span>.env.db
 <span class="token assign-left variable">DB_PORT_IN</span><span class="token operator">=</span><span class="token number">5432</span>
 <span class="token assign-left variable">DB_PORT_OUT</span><span class="token operator">=</span><span class="token number">5432</span>
-<span class="token assign-left variable">DB_ENV_FILE</span><span class="token operator">=</span>.env.db
+<span class="token assign-left variable">DB_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/wisenut-research/ctr/dockerize-db
+<span class="token assign-left variable">DB_IMAGE_VERSION</span><span class="token operator">=</span>postgres-7.1.0
 <span class="token assign-left variable">DB_DEFAULT_PATH</span><span class="token operator">=</span>/var/lib/postgresql/data
-<span class="token comment"># DB_HOST=0.0.0.0 # 외부 DB와 연결하고 싶을 때 DB IP 입력</span>
 
 <span class="token comment"># SERVICE_B Configuration</span>
 <span class="token assign-left variable">SERVICE_B_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
@@ -245,8 +248,8 @@ RUN <span class="token function">apt-get</span> <span class="token function">ins
 
 <span class="token comment"># Postgresql</span>
 <span class="token assign-left variable">POSTGRES_PASSWORD</span><span class="token operator">=</span><span class="token variable">${DB_PASSWORD}</span>
-<span class="token assign-left variable">DB_NAME</span><span class="token operator">=</span><span class="token string">"db"</span>
-<span class="token assign-left variable">DB_SCHEMA_NAME</span><span class="token operator">=</span><span class="token string">"schema"</span>
+<span class="token assign-left variable">DB_NAME</span><span class="token operator">=</span><span class="token string">"APP_db"</span>
+<span class="token assign-left variable">DB_SCHEMA_NAME</span><span class="token operator">=</span><span class="token string">"APP_schema"</span>
 <span class="token assign-left variable">DB_KIND</span><span class="token operator">=</span><span class="token string">"postgresql"</span>
 <span class="token assign-left variable">DB_DELIMITER</span><span class="token operator">=</span><span class="token string">"//"</span>
 <span class="token assign-left variable">DB_DIALECT</span><span class="token operator">=</span><span class="token string">"org.hibernate.dialect.PostgreSQL10Dialect"</span>
@@ -261,15 +264,16 @@ RUN <span class="token function">apt-get</span> <span class="token function">ins
 <li>
 <p>.env 파일(Docker Compose용)</p>
 <div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># .env for Oracle</span>
+<span class="token assign-left variable">WORKDIR</span><span class="token operator">=</span>/usr/src/app
 
 <span class="token comment"># DB Configuration</span>
-<span class="token assign-left variable">DB_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
-<span class="token assign-left variable">DB_IMAGE_VERSION</span><span class="token operator">=</span>oracle-7.1.0
+<span class="token assign-left variable">DB_HOST</span><span class="token operator">=</span>db_instance <span class="token comment"># 외부 DB와 연결하고 싶을 때 DB IP 입력</span>
+<span class="token assign-left variable">DB_ENV_FILE</span><span class="token operator">=</span>.env.db
 <span class="token assign-left variable">DB_PORT_IN</span><span class="token operator">=</span><span class="token number">1521</span>
 <span class="token assign-left variable">DB_PORT_OUT</span><span class="token operator">=</span><span class="token number">1521</span>
-<span class="token assign-left variable">DB_ENV_FILE</span><span class="token operator">=</span>.env.db
+<span class="token assign-left variable">DB_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/wisenut-research/ctr/dockerize-db
+<span class="token assign-left variable">DB_IMAGE_VERSION</span><span class="token operator">=</span>oracle-7.1.0
 <span class="token assign-left variable">DB_DEFAULT_PATH</span><span class="token operator">=</span>/opt/oracle/oradata
-<span class="token comment"># DB_HOST=0.0.0.0 # 외부 DB와 연결하고 싶을 때 DB IP 입력</span>
 
 <span class="token comment"># SERVICE_B Configuration</span>
 <span class="token assign-left variable">SERVICE_B_IMAGE</span><span class="token operator">=</span>registry.gitlab.com/<span class="token punctuation">..</span>.
@@ -298,7 +302,7 @@ RUN <span class="token function">apt-get</span> <span class="token function">ins
 <span class="token comment"># Oracle</span>
 <span class="token assign-left variable">ORACLE_PASSWORD</span><span class="token operator">=</span><span class="token variable">${DB_PASSWORD}</span>
 <span class="token assign-left variable">DB_NAME</span><span class="token operator">=</span><span class="token string">"xe"</span>
-<span class="token assign-left variable">DB_SCHEMA_NAME</span><span class="token operator">=</span><span class="token string">"schema"</span>
+<span class="token assign-left variable">DB_SCHEMA_NAME</span><span class="token operator">=</span><span class="token string">"APP_schema"</span>
 <span class="token assign-left variable">DB_KIND</span><span class="token operator">=</span><span class="token string">"oracle:thin"</span>
 <span class="token assign-left variable">DB_DELIMITER</span><span class="token operator">=</span><span class="token string">"@"</span>
 <span class="token assign-left variable">DB_DIALECT</span><span class="token operator">=</span><span class="token string">"org.hibernate.dialect.Oracle10gDialect"</span>
@@ -315,143 +319,101 @@ RUN <span class="token function">apt-get</span> <span class="token function">ins
 <li>
 <p>Postgres</p>
 <div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># Docker compose</span>
-services:
-    database:
-        env_file: <span class="token variable">${DB_ENV_FILE}</span>
-        image: <span class="token variable">${DB_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${DB_IMAGE_VERSION}</span>
-        container_name: db_instance
-        restart: unless-stopped
-        ports:
-          - <span class="token variable">${DB_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${DB_PORT_OUT}</span>
-        volumes:
-          - db_storage:<span class="token variable">${DB_DEFAULT_PATH}</span>
-        healthcheck:
-          test: <span class="token punctuation">[</span><span class="token string">"CMD"</span>, <span class="token string">"pg_isready"</span>, <span class="token string">"-U"</span>, <span class="token string">"postgres"</span><span class="token punctuation">]</span>
-          interval: 10s
-          timeout: 3s
-          retries: <span class="token number">3</span>
-        networks:
-          inner_network:
-            ipv4_address: <span class="token number">172.26</span>.0.2
+x-SERVICE_B-common: <span class="token operator">&amp;</span>SERVICE_B-common
+  env_file: <span class="token variable">${DB_ENV_FILE}</span>
+  image: <span class="token variable">${SERVICE_B_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_IMAGE_VERSION}</span>
+  container_name: SERVICE_B
+  restart: always
+  ports:
+    - <span class="token variable">${SERVICE_B_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_PORT_OUT}</span>
+  environment:
+    NODENAME: <span class="token variable">${SERVICE_B_NAME}</span>
+    DB_PORT: <span class="token variable">${DB_PORT_OUT}</span>
+    DB_HOST: <span class="token variable">${DB_HOST}</span>
+  networks:
+    inner_network:
+      ipv4_address: <span class="token number">172.26</span>.0.3
 
-    SERVICE_B:
-        env_file: <span class="token variable">${DB_ENV_FILE}</span>
-        image: <span class="token variable">${SERVICE_B_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_IMAGE_VERSION}</span>
-        container_name: SERVICE_B
-        restart: always
-        depends_on:
-          database:
-            condition: service_healthy
-        ports:
-          - <span class="token variable">${SERVICE_B_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_PORT_OUT}</span>
-        environment:
-          NODENAME: <span class="token variable">${SERVICE_B_NAME}</span>
-          DB_PORT: <span class="token variable">${DB_PORT_OUT}</span>
-          DB_HOST: db_instance
-        networks:
-          inner_network:
-            ipv4_address: <span class="token number">172.26</span>.0.3
+x-SERVICE_D-common: <span class="token operator">&amp;</span>SERVICE_D-common
+  env_file: <span class="token variable">${DB_ENV_FILE}</span>
+  image: <span class="token variable">${SERVICE_D_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_IMAGE_VERSION}</span>
+  container_name: SERVICE_D
+  restart: always
+  ports:
+    - <span class="token variable">${SERVICE_D_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_PORT_OUT}</span>
+    - <span class="token variable">${SERVICE_D_CACHE_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_CACHE_PORT_OUT}</span>
+  environment:
+    NODENAME: <span class="token variable">${SERVICE_D_NAME}</span>
+    DB_PORT: <span class="token variable">${DB_PORT_OUT}</span>
+    DB_HOST: <span class="token variable">${DB_HOST}</span>
+  networks:
+    inner_network:
+      ipv4_address: <span class="token number">172.26</span>.0.4
 
-    SERVICE_D:
-        env_file: <span class="token variable">${DB_ENV_FILE}</span>
-        image: <span class="token variable">${SERVICE_D_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_IMAGE_VERSION}</span>
-        container_name: SERVICE_D
-        restart: always
-        depends_on:
-          database:
-              condition: service_healthy
-        ports:
-          - <span class="token variable">${SERVICE_D_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_PORT_OUT}</span>
-          - <span class="token variable">${SERVICE_D_CACHE_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_CACHE_PORT_OUT}</span>
-        environment:
-          NODENAME: <span class="token variable">${SERVICE_D_NAME}</span>
-          DB_PORT: <span class="token variable">${DB_PORT_OUT}</span>
-          DB_HOST: db_instance
-          SERVICE_B_IP: <span class="token variable">${SERVICE_B_IP}</span>
-        networks:
-          inner_network:
-            ipv4_address: <span class="token number">172.26</span>.0.4
+x-database-common: <span class="token operator">&amp;</span>database-common
+  env_file: <span class="token variable">${DB_ENV_FILE}</span>
+  image: <span class="token variable">${DB_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${DB_IMAGE_VERSION}</span>
+  container_name: db_instance
+  restart: unless-stopped
+  ports:
+    - <span class="token variable">${DB_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${DB_PORT_OUT}</span>
+  volumes:
+    - db_storage:<span class="token variable">${DB_DEFAULT_PATH}</span>
+    - package_storage:<span class="token variable">${WORKDIR}</span>
+  networks:
+    inner_network:
+      ipv4_address: <span class="token number">172.26</span>.0.2
+
 volumes:
   db_storage:
     driver: <span class="token builtin class-name">local</span>
-    
+  package_storage:
+    driver: <span class="token builtin class-name">local</span>
+
 networks:
   inner_network:
     ipam:
       driver: default
       config:
-        - subnet: <span class="token number">172.26</span>.0.0/16 </code></pre></div>
+        - subnet: <span class="token number">172.26</span>.0.0/16
+
+services:
+  database:
+    <span class="token operator">&lt;&lt;</span>: *database-common
+    healthcheck:
+      test: <span class="token punctuation">[</span> <span class="token string">"CMD"</span>, <span class="token string">"pg_isready"</span>, <span class="token string">"-U"</span>, <span class="token string">"postgres"</span> <span class="token punctuation">]</span>
+      interval: 10s
+      timeout: 3s
+      retries: <span class="token number">3</span>
+    profiles: <span class="token punctuation">[</span><span class="token string">"in_db"</span><span class="token punctuation">]</span>
+
+  SERVICE_B:
+    <span class="token operator">&lt;&lt;</span>: *SERVICE_B-common
+    depends_on:
+      database:
+        condition: service_healthy
+    profiles: <span class="token punctuation">[</span><span class="token string">"in_db"</span><span class="token punctuation">]</span>
+
+  SERVICE_D:
+    <span class="token operator">&lt;&lt;</span>: *SERVICE_D-common
+    depends_on:
+      database:
+        condition: service_healthy
+    profiles: <span class="token punctuation">[</span><span class="token string">"in_db"</span><span class="token punctuation">]</span>
+
+  SERVICE_B_external_db:
+    <span class="token operator">&lt;&lt;</span>: *SERVICE_B-common
+    profiles: <span class="token punctuation">[</span><span class="token string">"ex_db"</span><span class="token punctuation">]</span>
+
+  SERVICE_D_external_db:
+    <span class="token operator">&lt;&lt;</span>: *SERVICE_D-common
+    profiles: <span class="token punctuation">[</span><span class="token string">"ex_db"</span><span class="token punctuation">]</span></code></pre></div>
 </li>
 <li>
 <p>Oracle</p>
-<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># Docker compose</span>
-services:
-    database:
-        env_file: <span class="token variable">${DB_ENV_FILE}</span>
-        image: <span class="token variable">${DB_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${DB_IMAGE_VERSION}</span>
-        container_name: db_instance
-        restart: unless-stopped
-        ports:
-          - <span class="token variable">${DB_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${DB_PORT_OUT}</span>
-        volumes:
-          - db_storage:<span class="token variable">${DB_DEFAULT_PATH}</span>
-        healthcheck:
-          <span class="token comment"># test: ps -ef | grep ora_</span>
-          test: <span class="token function">su</span> - oracle -c <span class="token string">"sqlplus SELECT INSTANCE_NAME, STATUS FROM V$<span class="token environment constant">$INSTANCE</span>;"</span>
-          interval: 10s
-          timeout: 3s
-          retries: <span class="token number">3</span>
-        networks:
-          inner_network:
-            ipv4_address: <span class="token number">172.26</span>.0.2
-
-    SERVICE_B:
-        env_file: <span class="token variable">${DB_ENV_FILE}</span>
-        image: <span class="token variable">${SERVICE_B_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_IMAGE_VERSION}</span>
-        container_name: SERVICE_B
-        restart: always
-        depends_on:
-          database:
-            condition: service_healthy
-        ports:
-          - <span class="token variable">${SERVICE_B_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_PORT_OUT}</span>
-        environment:
-          NODENAME: <span class="token variable">${SERVICE_B_NAME}</span>
-          DB_PORT: <span class="token variable">${DB_PORT_OUT}</span>
-          DB_HOST: db_instance
-        networks:
-          inner_network:
-            ipv4_address: <span class="token number">172.26</span>.0.3
-
-    SERVICE_D:
-        env_file: <span class="token variable">${DB_ENV_FILE}</span>
-        image: <span class="token variable">${SERVICE_D_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_IMAGE_VERSION}</span>
-        container_name: SERVICE_D
-        restart: always
-        depends_on:
-          database:
-              condition: service_healthy
-        ports:
-          - <span class="token variable">${SERVICE_D_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_PORT_OUT}</span>
-          - <span class="token variable">${SERVICE_D_CACHE_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_CACHE_PORT_OUT}</span>
-        environment:
-          NODENAME: <span class="token variable">${SERVICE_D_NAME}</span>
-          DB_PORT: <span class="token variable">${DB_PORT_OUT}</span>
-          DB_HOST: db_instance
-          SERVICE_B_IP: <span class="token variable">${SERVICE_B_IP}</span>
-        networks:
-          inner_network:
-            ipv4_address: <span class="token number">172.26</span>.0.4
-volumes:
-  db_storage:
-    driver: <span class="token builtin class-name">local</span>
-        
-networks:
-  inner_network:
-    ipam:
-      driver: default
-      config:
-        - subnet: <span class="token number">172.26</span>.0.0/16 </code></pre></div>
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># healthcheck 부분만 아래와 같이 바꿔주면 된다.</span>
+healthcheck:
+      test: <span class="token function">su</span> - oracle -c <span class="token string">"sqlplus SELECT INSTANCE_NAME, STATUS FROM V$<span class="token environment constant">$INSTANCE</span>;"</span></code></pre></div>
 </li>
 <li>
 <p>컨테이너 외부 DB와 연결할 때</p>
@@ -502,15 +464,21 @@ networks:
 </li>
 <li>
 <p>Compose 동작 확인</p>
-<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># 기존과 똑같이 실행</span>
-<span class="token function">docker-compose</span> up -d
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># 컨테이너 내부 DB로 실행하는 경우</span>
+<span class="token function">docker</span> compose --profile in_db up -d
 
-<span class="token comment"># DB 컨테이너에서 초기화 스크립트 실행</span>
-<span class="token function">docker</span> <span class="token builtin class-name">exec</span> -it db_instance initdb</code></pre></div>
-<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># 외부 DB 연결시 실행</span>
-<span class="token function">docker</span> compose -f .<span class="token punctuation">\</span>docker-compose-external-db.yml up -d</code></pre></div>
-<div class="gatsby-highlight" data-language="sql"><pre class="language-sql"><code class="language-sql"><span class="token comment"># 종료</span>
-docker compose down <span class="token operator">-</span>v</code></pre></div>
+<span class="token comment"># DB 컨테이너에서 스크립트 실행</span>
+<span class="token function">docker</span> <span class="token builtin class-name">exec</span> -it db_instance init
+
+<span class="token comment"># 종료</span>
+<span class="token comment"># -v : 컨테이너 볼륨도 같이 제거</span>
+<span class="token function">docker</span> compose --profile in_db down <span class="token punctuation">[</span>-v<span class="token punctuation">]</span></code></pre></div>
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># 외부 DB와 연결하여 실행하는 경우</span>
+<span class="token function">docker</span> compose --profile ex_db up -d
+
+<span class="token comment"># 종료</span>
+<span class="token comment"># -v : 컨테이너 볼륨도 같이 제거</span>
+<span class="token function">docker</span> compose --profile ex_db down <span class="token punctuation">[</span>-v<span class="token punctuation">]</span></code></pre></div>
 </li>
 </ul>
 </li>
