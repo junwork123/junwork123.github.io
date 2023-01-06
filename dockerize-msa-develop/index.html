@@ -106,7 +106,9 @@
 <li>
 <p>docker 이미지를 Registry에 등록</p>
 <p>각 Dockerfile마다 Container Registry에 등록하여 이미지를 pull할 수 있도록 등록</p>
-<p>(아래 명령어들은 프로젝트 메뉴 > Packages and registries > Container Registry에서 복사 가능!)</p>
+<blockquote>
+<p>💡 아래 코드는 프로젝트 메뉴 > Packages and registries > Container Registry에서 확인!</p>
+</blockquote>
 <div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># Gitlab의 Private image hub에 저장할 수 있도록 로그인</span>
 <span class="token function">docker</span> login registry.gitlab.com
 
@@ -147,7 +149,8 @@ spring.jpa.show-sql=false</code></pre></div>
 <p>필요한 부분만 골라서 사용하시면 됩니다.</p>
 </blockquote>
 <ul>
-<li>DB 설정파일
+<li>
+<p>DB 설정파일</p>
 <ul>
 <li>
 <p>/conf/DB설정할 SQL파일(*.sql) → 각자 필요에 맞게 작성</p>
@@ -204,7 +207,8 @@ RUN <span class="token function">apt</span> update <span class="token punctuatio
 </li>
 </ul>
 </li>
-<li>환경변수 설정파일(.env)
+<li>
+<p>환경변수 설정파일(.env)</p>
 <ul>
 <li>Postgres
 <ul>
@@ -314,7 +318,12 @@ RUN <span class="token function">apt</span> update <span class="token punctuatio
 </li>
 </ul>
 </li>
-<li>Docker-Compose.yml
+<li>
+<p>Docker-Compose.yml</p>
+<blockquote>
+<p>💡 중복되는 환경 변수와 설정을 최소화하기 위해 YAML Merge 방식을 사용</p>
+<p>💡 <code class="language-text">profile</code> 옵션을 활용하여 내부 DB, 외부 DB 실행환경을 쉽게 전환토록 작성</p>
+</blockquote>
 <ul>
 <li>
 <p>Postgres</p>
@@ -414,49 +423,6 @@ services:
 <div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># healthcheck 부분만 아래와 같이 바꿔주면 된다.</span>
 healthcheck:
       test: <span class="token function">su</span> - oracle -c <span class="token string">"sqlplus SELECT INSTANCE_NAME, STATUS FROM V$<span class="token environment constant">$INSTANCE</span>;"</span></code></pre></div>
-</li>
-<li>
-<p>컨테이너 외부 DB와 연결할 때</p>
-<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token comment"># Docker compose</span>
-services:
-  SERVICE_B:
-    env_file: <span class="token variable">${DB_ENV_FILE}</span>
-    image: <span class="token variable">${SERVICE_B_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_IMAGE_VERSION}</span>
-    container_name: SERVICE_B
-    restart: always
-    ports:
-      - <span class="token variable">${SERVICE_B_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_B_PORT_OUT}</span>
-    environment:
-      NODENAME: <span class="token variable">${SERVICE_B_NAME}</span>
-      DB_PORT: <span class="token variable">${DB_PORT_OUT}</span>
-      DB_HOST: <span class="token variable">${DB_HOST}</span>
-    networks:
-      inner_network:
-        ipv4_address: <span class="token number">172.26</span>.0.3
-
-  SERVICE_D:
-    env_file: <span class="token variable">${DB_ENV_FILE}</span>
-    image: <span class="token variable">${SERVICE_D_IMAGE}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_IMAGE_VERSION}</span>
-    container_name: SERVICE_D
-    restart: always
-    ports:
-      - <span class="token variable">${SERVICE_D_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_PORT_OUT}</span>
-      - <span class="token variable">${SERVICE_D_CACHE_PORT_IN}</span><span class="token builtin class-name">:</span><span class="token variable">${SERVICE_D_CACHE_PORT_OUT}</span>
-    environment:
-      NODENAME: <span class="token variable">${SERVICE_D_NAME}</span>
-      DB_PORT: <span class="token variable">${DB_PORT_OUT}</span>
-      DB_HOST: <span class="token variable">${DB_HOST}</span>
-      SERVICE_B_IP: <span class="token variable">${SERVICE_B_IP}</span>
-    networks:
-      inner_network:
-        ipv4_address: <span class="token number">172.26</span>.0.4
-        
-networks:
-  inner_network:
-    ipam:
-      driver: default
-      config:
-        - subnet: <span class="token number">172.26</span>.0.0/16 </code></pre></div>
 </li>
 </ul>
 </li>
