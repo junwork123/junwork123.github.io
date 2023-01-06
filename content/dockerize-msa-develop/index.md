@@ -50,7 +50,7 @@ categories: infra
     
     각 Dockerfile마다 Container Registry에 등록하여 이미지를 pull할 수 있도록 등록
     
-    (아래 명령어들은 프로젝트 메뉴 > Packages and registries > Container Registry에서 복사 가능!)
+    > 💡 아래 코드는 프로젝트 메뉴 > Packages and registries > Container Registry에서 확인!
     
     ```bash
     # Gitlab의 Private image hub에 저장할 수 있도록 로그인
@@ -257,6 +257,10 @@ categories: infra
                     ```
                     
         - Docker-Compose.yml
+            > 💡 중복되는 환경 변수와 설정을 최소화하기 위해 YAML Merge 방식을 사용
+            > 
+            > 💡 `profile` 옵션을 활용하여 내부 DB, 외부 DB 실행환경을 쉽게 전환토록 작성
+
             - Postgres
                 
                 ```bash
@@ -358,51 +362,6 @@ categories: infra
                 # healthcheck 부분만 아래와 같이 바꿔주면 된다.
                 healthcheck:
                       test: su - oracle -c "sqlplus SELECT INSTANCE_NAME, STATUS FROM V$$INSTANCE;"
-                ```
-                
-            - 컨테이너 외부 DB와 연결할 때
-                
-                ```bash
-                # Docker compose
-                services:
-                  SERVICE_B:
-                    env_file: ${DB_ENV_FILE}
-                    image: ${SERVICE_B_IMAGE}:${SERVICE_B_IMAGE_VERSION}
-                    container_name: SERVICE_B
-                    restart: always
-                    ports:
-                      - ${SERVICE_B_PORT_IN}:${SERVICE_B_PORT_OUT}
-                    environment:
-                      NODENAME: ${SERVICE_B_NAME}
-                      DB_PORT: ${DB_PORT_OUT}
-                      DB_HOST: ${DB_HOST}
-                    networks:
-                      inner_network:
-                        ipv4_address: 172.26.0.3
-                
-                  SERVICE_D:
-                    env_file: ${DB_ENV_FILE}
-                    image: ${SERVICE_D_IMAGE}:${SERVICE_D_IMAGE_VERSION}
-                    container_name: SERVICE_D
-                    restart: always
-                    ports:
-                      - ${SERVICE_D_PORT_IN}:${SERVICE_D_PORT_OUT}
-                      - ${SERVICE_D_CACHE_PORT_IN}:${SERVICE_D_CACHE_PORT_OUT}
-                    environment:
-                      NODENAME: ${SERVICE_D_NAME}
-                      DB_PORT: ${DB_PORT_OUT}
-                      DB_HOST: ${DB_HOST}
-                      SERVICE_B_IP: ${SERVICE_B_IP}
-                    networks:
-                      inner_network:
-                        ipv4_address: 172.26.0.4
-                        
-                networks:
-                  inner_network:
-                    ipam:
-                      driver: default
-                      config:
-                        - subnet: 172.26.0.0/16 
                 ```
                 
     - Compose 동작 확인
